@@ -47,6 +47,10 @@ func handleConnection(tcpClient *network.TcpClient) {
 		message, err := tcpClient.Read()
 		if err != nil {
 			base.LogError(err)
+			//监听到客户端退出，关闭连接
+			tcpClient.Close()
+			util.Clients.Delete(tcpClient.GetIP())
+			util.Clients.Delete(tcpClient.GetUserId())
 			return
 		}
 		//输出收到的日志信息

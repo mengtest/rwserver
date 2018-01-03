@@ -5,9 +5,10 @@ import (
 	"sync"
 )
 
-//定义全局存储在线用户，键值为IP或用户ID（建立连接时为IP,登录认证后为userId）
+//定义全局存储在线用户，键值为（IP+SN）或用户ID（建立连接时为IP,登录认证后为userId）
 var Clients = NewClientMap()
-
+//定义全局存储IP连接个数，键值为IP
+var ClientSns = NewClientSnMap()
 
 //map 并发存取
 type ClientMap struct {
@@ -62,6 +63,64 @@ func (m *ClientMap) Check(k string) bool {
 }
 
 func (m *ClientMap) Delete(k string) {
+	m.lock.Lock()
+	defer m.lock.Unlock()
+	delete(m.bm, k)
+}
+
+
+//###################################################################################
+
+type ClientSnMap struct {
+	lock *sync.RWMutex
+	bm   map[string]int
+}
+
+func NewClientSnMap() *ClientSnMap {
+	return &ClientSnMap{
+		lock: new(sync.RWMutex),
+		bm:   make(map[string]int),
+	}
+}
+
+func (m *ClientSnMap) GetMap() map[string]int {
+	return m.bm
+}
+
+//Get from maps return the k's value
+func (m *ClientSnMap) Get(k string)int {
+	m.lock.RLock()
+	defer m.lock.RUnlock()
+	if val, ok := m.bm[k]; ok {
+		return val
+	}
+	return 0
+}
+
+func (m *ClientSnMap) Set(k string,v int) bool {
+	m.lock.Lock()
+	defer m.lock.Unlock()
+	if val, ok := m.bm[k]; !ok {
+		m.bm[k] = v
+	} else if val != v {
+		m.bm[k] = v
+	} else {
+		return false
+	}
+	return true
+}
+
+// Returns true if k is exist in the map.
+func (m *ClientSnMap) Check(k string) bool {
+	m.lock.RLock()
+	defer m.lock.RUnlock()
+	if _, ok := m.bm[k]; !ok {
+		return false
+	}
+	return true
+}
+
+func (m *ClientSnMap) Delete(k string) {
 	m.lock.Lock()
 	defer m.lock.Unlock()
 	delete(m.bm, k)

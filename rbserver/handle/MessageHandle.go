@@ -5,21 +5,20 @@ import (
 	"../../rbwork/base"
 	"../../rbwork/network"
 	"reflect"
-	"../util"
-	"time"
+	"../service"
 )
 
 func HandleMsg(tcpClient *network.TcpClient,msg string)  {
 	umap,err:=base.Json2map(msg)
 	if err !=nil {
-		tcpClient.Write(base.Struct2Json(R.ErrorMsg("无效请求")))
+		tcpClient.Write(base.Struct2Json(R.ErrorMsg("非法报文")))
 		return
 	}
 	cmd:=umap["cmd"]
 	requestId:=umap["requestId"]
 	type1:=reflect.TypeOf(cmd).String()
 	if cmd ==nil || type1 !="string" {
-		tcpClient.Write(base.Struct2Json(R.ErrorMsg("无效CMD")))
+		tcpClient.Write(base.Struct2Json(R.ErrorMsg("无效请求")))
 		return
 	}
 	type2:=reflect.TypeOf(requestId).String()
@@ -28,130 +27,19 @@ func HandleMsg(tcpClient *network.TcpClient,msg string)  {
 		return
 	}
 
-	switch cmd {
-	case Login:
-		login(tcpClient,umap)
-		return
-	case Chat:
-		chat(tcpClient,umap)
-		return
-	case Move:
-		move(tcpClient,umap)
-		return
-	case Ping:
-		ping(tcpClient)
-		return
-	default:
+	service:=&service.Service{}
+	sv := reflect.ValueOf(&service).Elem()
+
+	params := make([]reflect.Value,2)
+	params[0] = reflect.ValueOf(tcpClient)
+	params[1] = reflect.ValueOf(umap)
+
+    //被调用方法名必须要大写,否则会抛异常
+	m:=sv.MethodByName(cmd.(string))
+	if m.IsValid() {
+		m.Call(params)
+	}else{
 		tcpClient.Write(base.Struct2Json(R.TcpErrorMsg(cmd.(string),requestId.(string),"无效请求")))
-		return
 	}
 
-}
-
-//登录授权校验
-func login(tcpClient *network.TcpClient,umap map[string]interface{})  {
-	strToken:=umap["token"].(string)
-	requestId:=umap["requestId"].(string)
-	claims,err :=base.DecodeToken(strToken)
-	if err != nil {
-		tcpClient.Write(base.Struct2Json(R.TcpErrorMsg("login",requestId,"token无效")))
-		return
-	}
-	if umap["mac"].(string) != claims["mac"].(string) {
-		tcpClient.Write(base.Struct2Json(R.TcpErrorMsg("login",requestId,"token无效,请先登录")))
-		return
-	}
-	userId:=claims["uid"].(string)
-	tcpClient.SetIsLogin(true)
-	tcpClient.SetUserId(userId)
-
-	util.Clients.Delete(tcpClient.GetIP()) //清除游客模式连接
-	util.Clients.Set(userId,tcpClient)     //设置用户ID为主键
-
-	tcpClient.Write(base.Struct2Json(R.TcpOK("login",requestId)))
-}
-
-//聊天消息
-func chat(tcpClient *network.TcpClient,umap map[string]interface{})  {
-	requestId:=umap["requestId"].(string)
-	if !tcpClient.GetIsLogin() {
-		tcpClient.Write(base.Struct2Json(R.TcpErrorMsg("chat",requestId,"未授权")))
-       return
-	}
-	ty0:=reflect.TypeOf(umap["chatType"]).String()
-	ty1:=reflect.TypeOf(umap["toUserId"]).String()
-	ty2:=reflect.TypeOf(umap["msg"]).String()
-	if ty0!="string" || ty1 !="string" || ty2 !="string"{
-		tcpClient.Write(base.Struct2Json(R.TcpErrorMsg("chat",requestId,"请求参数错误")))
-		return
-	}
-
-	switch umap["chatType"].(string) {
-	case "0":
-		//世界发送消息
-		for _,t:= range util.Clients.GetMap() {
-			t.Write(base.Struct2Json(R.TcpOkMsg("chat",requestId,umap["msg"].(string))))
-		}
-		return
-	case "1": //指定用户说话
-		util.Clients.Get(umap["toUserId"].(string)).Write(base.Struct2Json(R.TcpOkMsg("chat",requestId,umap["msg"].(string))))
-		return
-	default:
-		return
-	}
-}
-
-//获取角色列表
-func getRoles(tcpClient *network.TcpClient,umap map[string]interface{})  {
-
-}
-
-//选择角色进入
-func loginRole(tcpClient *network.TcpClient,umap map[string]interface{})  {
-
-}
-
-//移动
-func move(tcpClient *network.TcpClient,umap map[string]interface{})  {
-
-}
-
-//攻击敌人
-func attack(tcpClient *network.TcpClient,umap map[string]interface{})  {
-
-}
-
-//接任务
-func acceptTask(tcpClient *network.TcpClient,umap map[string]interface{})  {
-
-}
-
-//放弃任务
-func abandonTask(tcpClient *network.TcpClient,umap map[string]interface{})  {
-
-}
-
-//完成任务
-func finishTask(tcpClient *network.TcpClient,umap map[string]interface{})  {
-
-}
-
-//升级
-func upgrade(tcpClient *network.TcpClient,umap map[string]interface{})  {
-
-}
-
-//获取物品（装备、物品）
-func getGoods(tcpClient *network.TcpClient,umap map[string]interface{})  {
-
-}
-
-//丢弃物品
-func discardGoods(tcpClient *network.TcpClient,umap map[string]interface{})  {
-
-}
-
-//ping 心跳时间更新
-func ping(tcpClient *network.TcpClient)  {
-	tcpClient.SetTime(time.Now().Unix())
 }

@@ -33,7 +33,7 @@ func sendMessage(conn *net.TCPConn) {
 	for i:=0;i<10 ;i++ {
 		//time.Sleep(1 * time.Microsecond)
 		//content:="{\"code\":\"asdjkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkweqweopqweqopopopopopopopopopopopopopopopopopopopopopopopopopopopopopopopopopopopopopopopopopopopopopop\",\"msg\":\"weweeweeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee\"}"
-		content:="{\"cmd\":\"login\",\"token\":\"2323123\",\"requestId\":\""+strconv.Itoa(i)+"\"}"
+		content:="{\"cmd\":\"Login\",\"token\":\"2323123\",\"requestId\":\""+strconv.Itoa(i)+"\"}"
 		b, _ := base.EncodeHead2Byte(string(content))
 		conn.Write(b)
 

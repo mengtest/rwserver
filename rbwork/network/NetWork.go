@@ -12,16 +12,19 @@ import (
 
 type TcpClient struct {
 	ip  string            //客户端IP
+	sn  int               //相同IP客户端连接序列号
+	mac  string           //客户端mac地址
 	conn net.Conn         //客户端连接
 	reader *bufio.Reader  //客户端输入读取缓冲区
 	isLogin bool          //是否通过登录授权访问
 	timestamp int64       //上次心跳检测收到返回的时间戳（秒）
-	userId string         //用户
+	userId string         //用户ID
+	roleId string         //角色ID
 }
 
 func NewTcpClient(conn net.Conn) *TcpClient {
 	ip:=strings.Split(conn.RemoteAddr().String(),":")[0] //获取客户端IP
-	return &TcpClient{ip: ip, conn: conn, reader: bufio.NewReader(conn),isLogin:false,timestamp:time.Now().Unix()}
+	return &TcpClient{ip: ip,sn:0, conn: conn, reader: bufio.NewReader(conn),isLogin:false,timestamp:time.Now().Unix()}
 }
 
 func (c *TcpClient) LocalAddr() net.Addr {
