@@ -6,8 +6,8 @@ import (
 	"log"
 	"os"
 	"math/rand"
-
 	"strconv"
+    "../util"
 )
 
 func main() {
@@ -47,7 +47,8 @@ func handleConnection(conn net.Conn) {
 			Log(conn.RemoteAddr().String(), " connection error: ", err)
 			return //出错后返回
 		}
-
+        util.Count=2
+		Log("user count",util.Count);
 		Log(conn.RemoteAddr().String(), "receive data string:\n", string(buffer[:n]))
 
 	}
