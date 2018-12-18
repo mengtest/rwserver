@@ -3,7 +3,6 @@ package main
 import (
 	"fmt"
 	"net"
-	"log"
 	"os"
 	"math/rand"
 	"strconv"
@@ -19,14 +18,14 @@ func main() {
 	//defer延迟关闭改资源，以免引起内存泄漏
 	defer netListen.Close()
 
-	Log("Waiting for clients")
+	util.Log("Waiting for clients")
 	for {
 		conn, err := netListen.Accept()  //第二步:获取连接
 		if err != nil {
 			continue  //出错退出当前一次循环
 		}
 
-		Log(conn.RemoteAddr().String(), " tcp connect success")
+		util.Log(conn.RemoteAddr().String(), " tcp connect success")
 		//handleConnection(conn)  //正常连接就处理
 		//这句代码的前面加上一个 go，就可以让服务器并发处理不同的Client发来的请求
 		go handleConnection(conn) //使用goroutine来处理用户的请求
@@ -44,20 +43,16 @@ func handleConnection(conn net.Conn) {
 		words := "golang socket server : " + strconv.Itoa(rand.Intn(100)) //向链接中写数据
 		conn.Write([]byte(words))
 		if err != nil {
-			Log(conn.RemoteAddr().String(), " connection error: ", err)
+			util.Log(conn.RemoteAddr().String(), " connection error: ", err)
 			return //出错后返回
 		}
         util.Count=2
-		Log("user count",util.Count);
-		Log(conn.RemoteAddr().String(), "receive data string:\n", string(buffer[:n]))
-
+		util.Log("user count",util.Count);
+		util.Log(conn.RemoteAddr().String(), "receive data string:\n", string(buffer[:n]))
 	}
 }
 
-//log输出
-func Log(v ...interface{}) {
-	log.Println(v...)
-}
+
 
 //处理error
 func CheckError(err error) {
