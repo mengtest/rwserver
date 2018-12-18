@@ -3,7 +3,6 @@ package main
 import (
 	"fmt"
 	"net"
-	"encoding/binary"
 	"time"
 	rw "../util"
 )
@@ -32,13 +31,14 @@ func Sender(conn net.Conn) {
 
 	//for i := 0; i < 100; i++ {
 		words := "{\"Id\":1,\"Name\":\"golang\",\"Message\":\"message\"}"
+
 		rw.Log("发送报文",words)
 		var headSize int
-		var headBytes = make([]byte, 2)
-		content := []byte(words)
-		headSize = len(content)
-		binary.BigEndian.PutUint16(headBytes, uint16(headSize))
-		conn.Write(headBytes)
+	    content := []byte(words)
+	    headSize = len(content)
+	    strHeadLen:=string(uint16(headSize))
+	    words=strHeadLen+strHeadLen
+	    content=[]byte(words)
 		conn.Write(content)
 
 	//}

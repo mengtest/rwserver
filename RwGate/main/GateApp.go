@@ -9,7 +9,7 @@ import (
 )
 
 const (
-	HEAD_SIZE  int    = 2
+	HEAD_SIZE  int    = 4
 )
 
 func main() {
