@@ -4,9 +4,12 @@ import (
 	"fmt"
 	"net"
 	"os"
-	"math/rand"
-	"strconv"
-    "../util"
+	rw "../util"
+	"encoding/binary"
+)
+
+const (
+	HEAD_SIZE  int    = 2
 )
 
 func main() {
@@ -18,14 +21,14 @@ func main() {
 	//defer延迟关闭改资源，以免引起内存泄漏
 	defer netListen.Close()
 
-	util.Log("Waiting for clients")
+	rw.Log("Waiting for clients")
 	for {
 		conn, err := netListen.Accept()  //第二步:获取连接
 		if err != nil {
 			continue  //出错退出当前一次循环
 		}
 
-		util.Log(conn.RemoteAddr().String(), " tcp connect success")
+		rw.Log(conn.RemoteAddr().String(), " tcp connect success")
 		//handleConnection(conn)  //正常连接就处理
 		//这句代码的前面加上一个 go，就可以让服务器并发处理不同的Client发来的请求
 		go handleConnection(conn) //使用goroutine来处理用户的请求
@@ -33,22 +36,32 @@ func main() {
 }
 //处理连接
 func handleConnection(conn net.Conn) {
-
-	buffer := make([]byte, 2048)
+	var (
+		buffer      = rw.NewBuffer(conn, 16)
+		headBuf     []byte
+		contentSize int  //定义报文长度变量
+		contentBuf  []byte
+	)
 
 	for {  //无限循环
-
-		n, err := conn.Read(buffer) //第三步:读取从该端口传来的内容
-		//words := "ok" //向链接中写数据,向链接既可以先读也可以先写，看自己的需要
-		words := "golang socket server : " + strconv.Itoa(rand.Intn(100)) //向链接中写数据
-		conn.Write([]byte(words))
+		_, err := buffer.ReadFromReader()
 		if err != nil {
-			util.Log(conn.RemoteAddr().String(), " connection error: ", err)
-			return //出错后返回
+			fmt.Println(err)
+			return
 		}
-        util.Count=2
-		util.Log("user count",util.Count);
-		util.Log(conn.RemoteAddr().String(), "receive data string:\n", string(buffer[:n]))
+		for {
+			headBuf, err = buffer.Seek(HEAD_SIZE);
+			if err != nil {
+				break
+			}
+			contentSize = int(binary.BigEndian.Uint16(headBuf))
+			if (buffer.Len() >= contentSize-HEAD_SIZE) {
+				contentBuf = buffer.Read(HEAD_SIZE, contentSize)
+				rw.Log("收到请求",string(contentBuf))
+				continue
+			}
+			break
+		}
 	}
 }
 

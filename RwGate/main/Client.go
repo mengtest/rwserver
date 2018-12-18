@@ -3,37 +3,44 @@ package main
 import (
 	"fmt"
 	"net"
-	"os"
+	"encoding/binary"
+	"time"
+	rw "../util"
 )
 
-func sender(conn net.Conn) {
 
-	words := "hello world!"
-	conn.Write([]byte(words))    //向tcpconn中写入数据
-	fmt.Println("send over")
+func main() {
+	conn, err := net.Dial("tcp", "localhost:1024")
+	if err != nil {
+		fmt.Println("Error dialing", err.Error())
+		return // 终止程序
+	}
+
+	go Sender(conn)
+
+	for {
+
+		time.Sleep(1 * 1e9)
+
+	}
+
 
 }
 
-func main() {
-	server := "127.0.0.1:1024"
-	//net参数是"tcp4"、"tcp6"、"tcp"
-	//addr表示域名或IP地址加端口号
-	tcpAddr, err := net.ResolveTCPAddr("tcp4", server) //获取一个TCPAddr
-	if err != nil {
-		fmt.Fprintf(os.Stderr, "Fatal error: %s", err.Error())
-		os.Exit(1)
-	}
 
-	//net参数是"tcp4"、"tcp6"、"tcp"
-	//laddr表示本机地址，一般设为nil
-	//raddr表示远程地址
-	conn, err := net.DialTCP("tcp", nil, tcpAddr) //建立一个TCP连接
-	if err != nil {
-		fmt.Fprintf(os.Stderr, "Fatal error: %s", err.Error())
-		os.Exit(1)
-	}
+func Sender(conn net.Conn) {
 
-	fmt.Println("connect success")
-	sender(conn)
+	//for i := 0; i < 100; i++ {
+		words := "{\"Id\":1,\"Name\":\"golang\",\"Message\":\"message\"}"
+		rw.Log("发送报文",words)
+		var headSize int
+		var headBytes = make([]byte, 2)
+		content := []byte(words)
+		headSize = len(content)
+		binary.BigEndian.PutUint16(headBytes, uint16(headSize))
+		conn.Write(headBytes)
+		conn.Write(content)
+
+	//}
 
 }

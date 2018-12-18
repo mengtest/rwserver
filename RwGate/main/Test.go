@@ -11,5 +11,6 @@ func main()  {
 	if err != nil {
 		panic(err)
 	}
-	util.Log("i=",i)
+	j:=strconv.IntSize;
+	util.Log("i=",i,"j=",j)
 }
