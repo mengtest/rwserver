@@ -3,11 +3,10 @@ package main
 import (
 	"fmt"
 	"net"
-	rw "../util"
+	RW "../../RwBase/base"
 	"time"
 )
 
-var quitSemaphore chan bool
 
 func main() {
 
@@ -30,7 +29,7 @@ func sendMessage(conn *net.TCPConn) {
 
 		time.Sleep(1 * time.Microsecond)
 		content:="{\"code\":\"asdjkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkweqweopqweqopopopopopopopopopopopopopopopopopopopopopopopopopopopopopopopopopopopopopopopopopopopopopop\",\"msg\":\"weweeweeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee\"}"
-		b, _ := rw.Encode(string(content))
+		b, _ := RW.Encode(string(content))
 		conn.Write(b)
 
 }

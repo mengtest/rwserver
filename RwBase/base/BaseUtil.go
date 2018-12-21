@@ -1,4 +1,5 @@
-package util
+package base
+
 import (
 	"bufio"
 	"bytes"
@@ -8,12 +9,12 @@ import (
 func Encode(message string) ([]byte, error) {
 	var length int32 = int32(len(message))
 	var pkg *bytes.Buffer = new(bytes.Buffer)
-	err := binary.Write(pkg, binary.LittleEndian, length)
+	err := binary.Write(pkg, binary.BigEndian, length)
 	if err != nil {
 		return nil, err
 	}
 
-	err = binary.Write(pkg, binary.LittleEndian, []byte(message))
+	err = binary.Write(pkg, binary.BigEndian, []byte(message))
 	if err != nil {
 		return nil, err
 	}
@@ -22,10 +23,13 @@ func Encode(message string) ([]byte, error) {
 }
 
 func Decode(reader *bufio.Reader) (string, error) {
-	lengthByte, _ := reader.Peek(4)
+	lengthByte, err := reader.Peek(4)
+	if err != nil {
+		return "", err
+	}
 	lengthBuff := bytes.NewBuffer(lengthByte)
 	var length int32
-	err := binary.Read(lengthBuff, binary.LittleEndian, &length)
+	err = binary.Read(lengthBuff, binary.LittleEndian, &length) //将接受到的大端字节码转成小端
 	if err != nil {
 		return "", err
 	}

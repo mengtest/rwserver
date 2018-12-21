@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"net"
 	"os"
-	rw "../util"
+	RW "../../RwBase/base"
 	"bufio"
 )
 
@@ -17,14 +17,14 @@ func main() {
 	//defer延迟关闭改资源，以免引起内存泄漏
 	defer netListen.Close()
 
-	rw.Log("Waiting for clients")
+	RW.Log("Waiting for clients")
 	for {
 		conn, err := netListen.Accept()  //第二步:获取连接
 		if err != nil {
 			continue  //出错退出当前一次循环
 		}
 
-		rw.Log(conn.RemoteAddr().String(), " tcp connect success")
+		RW.Log(conn.RemoteAddr().String(), " tcp connect success")
 		//将连接加入全局map
 
 		//handleConnection(conn)  //正常连接就处理
@@ -37,12 +37,12 @@ func handleConnection(conn net.Conn) {
 
 	reader := bufio.NewReader(conn)
 	for {
-		message, err := rw.Decode(reader)
+		message, err := RW.Decode(reader)
 		if err != nil {
 			return
 		}
 
-		rw.Log(err,"accept:[",conn.RemoteAddr().String() ,"]:" , string(message))
+		RW.Log(err,"accept:[",conn.RemoteAddr().String() ,"]:" , message)
 
 		//b, err := rw.Encode(conn.RemoteAddr().String() + ":" + string(message))
 		//if err != nil {
