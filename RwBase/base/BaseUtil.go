@@ -9,12 +9,12 @@ import (
 func Encode(message string) ([]byte, error) {
 	var length int32 = int32(len(message))
 	var pkg *bytes.Buffer = new(bytes.Buffer)
-	err := binary.Write(pkg, binary.BigEndian, length)
+	err := binary.Write(pkg, binary.LittleEndian, length)
 	if err != nil {
 		return nil, err
 	}
 
-	err = binary.Write(pkg, binary.BigEndian, []byte(message))
+	err = binary.Write(pkg, binary.LittleEndian, []byte(message))
 	if err != nil {
 		return nil, err
 	}
