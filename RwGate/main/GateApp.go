@@ -5,11 +5,7 @@ import (
 	"net"
 	"os"
 	rw "../util"
-	"encoding/binary"
-)
-
-const (
-	HEAD_SIZE  int    = 4
+	"bufio"
 )
 
 func main() {
@@ -29,6 +25,8 @@ func main() {
 		}
 
 		rw.Log(conn.RemoteAddr().String(), " tcp connect success")
+		//将连接加入全局map
+
 		//handleConnection(conn)  //正常连接就处理
 		//这句代码的前面加上一个 go，就可以让服务器并发处理不同的Client发来的请求
 		go handleConnection(conn) //使用goroutine来处理用户的请求
@@ -36,32 +34,22 @@ func main() {
 }
 //处理连接
 func handleConnection(conn net.Conn) {
-	var (
-		buffer      = rw.NewBuffer(conn, 16)
-		headBuf     []byte
-		contentSize int  //定义报文长度变量
-		contentBuf  []byte
-	)
 
-	for {  //无限循环
-		_, err := buffer.ReadFromReader()
+	reader := bufio.NewReader(conn)
+	for {
+		message, err := rw.Decode(reader)
 		if err != nil {
-			fmt.Println(err)
 			return
 		}
-		for {
-			headBuf, err = buffer.Seek(HEAD_SIZE);
-			if err != nil {
-				break
-			}
-			contentSize = int(binary.BigEndian.Uint16(headBuf))
-			if (buffer.Len() >= contentSize-HEAD_SIZE) {
-				contentBuf = buffer.Read(HEAD_SIZE, contentSize)
-				rw.Log("收到请求",string(contentBuf))
-				continue
-			}
-			break
-		}
+
+		rw.Log(err,"accept:[",conn.RemoteAddr().String() ,"]:" , string(message))
+
+		//b, err := rw.Encode(conn.RemoteAddr().String() + ":" + string(message))
+		//if err != nil {
+		//	continue
+		//}
+		//conn.Write(b)
+
 	}
 }
 

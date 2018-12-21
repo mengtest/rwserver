@@ -3,44 +3,37 @@ package main
 import (
 	"fmt"
 	"net"
-	"time"
 	rw "../util"
+	"time"
 )
 
+var quitSemaphore chan bool
 
 func main() {
-	conn, err := net.Dial("tcp", "localhost:1024")
-	if err != nil {
-		fmt.Println("Error dialing", err.Error())
-		return // 终止程序
+
+	var tcpAddr *net.TCPAddr
+	tcpAddr, _ = net.ResolveTCPAddr("tcp", "127.0.0.1:1024")
+
+	conn, _ := net.DialTCP("tcp", nil, tcpAddr)
+	defer conn.Close()
+	fmt.Println("connected!")
+	for i:=0;i<100 ;i++ {
+	 	sendMessage(conn)
 	}
-
-	go Sender(conn)
-
-	for {
-
-		time.Sleep(1 * 1e9)
-
-	}
-
+	var msg string
+	fmt.Scanln(&msg)
 
 }
 
 
-func Sender(conn net.Conn) {
+func sendMessage(conn *net.TCPConn) {
 
-	//for i := 0; i < 100; i++ {
-		words := "{\"Id\":1,\"Name\":\"golang\",\"Message\":\"message\"}"
-
-		rw.Log("发送报文",words)
-		var headSize int
-	    content := []byte(words)
-	    headSize = len(content)
-	    strHeadLen:=string(uint16(headSize))
-	    words=strHeadLen+strHeadLen
-	    content=[]byte(words)
-		conn.Write(content)
-
-	//}
+		time.Sleep(1 * time.Microsecond)
+		content:="{\"code\":\"asdjkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkweqweopqweqopopopopopopopopopopopopopopopopopopopopopopopopopopopopopopopopopopopopopopopopopopopopopop\",\"msg\":\"weweeweeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee\"}"
+		b, _ := rw.Encode(string(content))
+		conn.Write(b)
 
 }
+
+
+
