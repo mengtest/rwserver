@@ -41,6 +41,9 @@ func handleConnection(conn net.Conn) {
 		if err != nil {
 			return
 		}
+		if message == "" {
+			break
+		}
 
 		RW.Log(err,"accept:[",conn.RemoteAddr().String() ,"]:" , message)
 

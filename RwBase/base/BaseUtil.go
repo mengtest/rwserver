@@ -29,7 +29,7 @@ func Decode(reader *bufio.Reader) (string, error) {
 	}
 	lengthBuff := bytes.NewBuffer(lengthByte)
 	var length int32
-	err = binary.Read(lengthBuff, binary.LittleEndian, &length) //将接受到的大端字节码转成小端
+	err = binary.Read(lengthBuff, binary.LittleEndian, &length)
 	if err != nil {
 		return "", err
 	}

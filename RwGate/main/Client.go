@@ -16,9 +16,9 @@ func main() {
 	conn, _ := net.DialTCP("tcp", nil, tcpAddr)
 	defer conn.Close()
 	fmt.Println("connected!")
-	for i:=0;i<100 ;i++ {
-	 	sendMessage(conn)
-	}
+	time.Sleep(1 * time.Microsecond)
+	go sendMessage(conn)
+
 	var msg string
 	fmt.Scanln(&msg)
 
@@ -26,12 +26,12 @@ func main() {
 
 
 func sendMessage(conn *net.TCPConn) {
-
-		time.Sleep(1 * time.Microsecond)
+	for i:=0;i<1000 ;i++ {
+		//time.Sleep(1 * time.Microsecond)
 		content:="{\"code\":\"asdjkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkweqweopqweqopopopopopopopopopopopopopopopopopopopopopopopopopopopopopopopopopopopopopopopopopopopopopop\",\"msg\":\"weweeweeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee\"}"
 		b, _ := RW.Encode(string(content))
 		conn.Write(b)
-
+	}
 }
 
 
