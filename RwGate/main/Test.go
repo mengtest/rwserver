@@ -4,9 +4,13 @@ import (
 	"bufio"
 	"fmt"
 	"strings"
+	RwUtil "../../RwBase/base"
 )
 
 func main()  {
+	mb,_:=RwUtil.Encode("{3456712}")
+	fmt.Println(mb)
+
 	// 7: 读取缓冲区中数据字节数(只有执行读才会使用到缓冲区, 否则是没有的)
 	inputReadBuf4 := strings.NewReader("中文1234567890")
 	reader4 := bufio.NewReader(inputReadBuf4)

@@ -7,8 +7,17 @@ import (
 )
 
 func Encode(message string) ([]byte, error) {
-	var length int32 = int32(len(message))
-	var pkg *bytes.Buffer = new(bytes.Buffer)
+	var length  = int32(len(message))
+	var pkg  = new(bytes.Buffer)
+
+	//if(length>9 && length<99){
+	//	binary.Write(pkg, binary.BigEndian, 0)
+	//}
+	//if(length>99 && length<999){
+	//	binary.Write(pkg, binary.BigEndian, 0)
+	//	binary.Write(pkg, binary.BigEndian, 0)
+	//}
+
 	err := binary.Write(pkg, binary.BigEndian, length)
 	if err != nil {
 		return nil, err
