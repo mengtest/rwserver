@@ -26,7 +26,7 @@ func main() {
 
 
 func sendMessage(conn *net.TCPConn) {
-	for i:=0;i<1000 ;i++ {
+	for i:=0;i<10 ;i++ {
 		//time.Sleep(1 * time.Microsecond)
 		content:="{\"code\":\"asdjkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkweqweopqweqopopopopopopopopopopopopopopopopopopopopopopopopopopopopopopopopopopopopopopopopopopopopopop\",\"msg\":\"weweeweeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee\"}"
 		b, _ := RW.Encode(string(content))
