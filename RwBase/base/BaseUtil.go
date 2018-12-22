@@ -9,12 +9,12 @@ import (
 func Encode(message string) ([]byte, error) {
 	var length int32 = int32(len(message))
 	var pkg *bytes.Buffer = new(bytes.Buffer)
-	err := binary.Write(pkg, binary.LittleEndian, length)
+	err := binary.Write(pkg, binary.BigEndian, length)
 	if err != nil {
 		return nil, err
 	}
 
-	err = binary.Write(pkg, binary.LittleEndian, []byte(message))
+	err = binary.Write(pkg, binary.BigEndian, []byte(message))
 	if err != nil {
 		return nil, err
 	}
@@ -27,6 +27,8 @@ func Decode(reader *bufio.Reader) (string, error) {
 	if err != nil {
 		return "", err
 	}
+
+
 	lengthBuff := bytes.NewBuffer(lengthByte)
 	var length int32
 	err = binary.Read(lengthBuff, binary.BigEndian, &length)

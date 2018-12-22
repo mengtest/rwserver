@@ -30,6 +30,7 @@ func main() {
 		//handleConnection(conn)  //正常连接就处理
 		//这句代码的前面加上一个 go，就可以让服务器并发处理不同的Client发来的请求
 		go handleConnection(conn) //使用goroutine来处理用户的请求
+
 	}
 }
 //处理连接
@@ -38,13 +39,14 @@ func handleConnection(conn net.Conn) {
 	for {
 		message, err := RwUtil.Decode(reader)
 		if err != nil {
+			RwUtil.Log("err","端户断开连接")
 			return
 		}
 		if message == "" {
-			break
+			continue
 		}
 
-		RwUtil.Log(err,"accept:[",conn.RemoteAddr().String() ,"]:" , message)
+		RwUtil.Log("accept:[",conn.RemoteAddr().String() ,"]:" , message)
 
 		//b, err := rw.Encode(conn.RemoteAddr().String() + ":" + string(message))
 		//if err != nil {

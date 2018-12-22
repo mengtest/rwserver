@@ -5,23 +5,24 @@ import java.io.*;
 import java.net.Socket;
 import java.net.UnknownHostException;
 
-public class Test {
+
+public class TestMain {
     public static void main(String[] args) {
         try {
             //创建一个客户端socket
-            Socket socket = new Socket("localhost",1024);
+            Socket socket = new Socket("127.0.0.1",1024);
             //向服务器端传递信息
             DataOutputStream ots = new DataOutputStream(socket.getOutputStream());
-            String content="用户名：admin;密码：123";
-
-            //java默认是通信进行大端传输，所以这里不用管大小端
-            byte[] wb=content.getBytes("utf-8");
-            int ln=wb.length;
-            byte[] lengthbytes = integerToBytes(ln, 4);
-
-            ots.write(lengthbytes);
-            ots.write(wb);
-            ots.flush();
+            String content="{23213891271237192731928371231233012931231wewqeqweqweqwedfsdfsdfsdfqeweqweqeqwe209381293891289381902389}";
+            content="{\"cmd\":\"1000\"}";
+            for (int i = 0; i < 10; i++) {
+                //java默认是通信进行大端传输，所以这里不用管大小端
+                byte[] wb=content.getBytes("UTF-8");
+                int ln=wb.length;
+                byte[] lengthbytes = integerToBytes(ln, 4);
+                ots.write(unitByteArray(lengthbytes,wb));
+                ots.flush();
+            }
             ots.close();
             socket.close();
         } catch (UnknownHostException e) {
@@ -31,17 +32,20 @@ public class Test {
         }
     }
 
+    public static byte[] integerToBytes(int num, int len) {
+        byte[] bytes = ByteBuffer.allocate(len).putInt(num).array();
+        return  bytes;
+    }
 
-    public static byte[] integerToBytes(int integer, int len) {
-        ByteArrayOutputStream bo = new ByteArrayOutputStream();
-        for (int i = 0; i < len; i ++) {
-            bo.write(integer);
-            integer = integer >> 8;
-        }
-        return bo.toByteArray();
+    public static byte[] unitByteArray(byte[] byte1,byte[] byte2){
+        byte[] unitByte = new byte[byte1.length + byte2.length];
+        System.arraycopy(byte1, 0, unitByte, 0, byte1.length);
+        System.arraycopy(byte2, 0, unitByte, byte1.length, byte2.length);
+        return unitByte;
     }
 
 }
+
 
 
 ```

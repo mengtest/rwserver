@@ -63,7 +63,7 @@ func (c *TcpClient) Read() ([]byte, error) {
 	lengthBuff := bytes.NewBuffer(lengthByte)
 	var length int32
 	// 通过Read接口可以将buf中得内容填充到data参数表示的数据结构中
-	err = binary.Read(lengthBuff, binary.LittleEndian, &length)
+	err = binary.Read(lengthBuff, binary.BigEndian, &length)
 	if err != nil {
 		return nil, err
 	}
