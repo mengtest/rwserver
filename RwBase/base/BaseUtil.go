@@ -29,11 +29,12 @@ func Decode(reader *bufio.Reader) (string, error) {
 	}
 	lengthBuff := bytes.NewBuffer(lengthByte)
 	var length int32
-	err = binary.Read(lengthBuff, binary.LittleEndian, &length)
+	err = binary.Read(lengthBuff, binary.BigEndian, &length)
 	if err != nil {
 		return "", err
 	}
-	if int32(reader.Buffered()) < length+4 {
+	ln:=int32(reader.Buffered())
+	if ln < length+4 {
 		return "", err
 	}
 

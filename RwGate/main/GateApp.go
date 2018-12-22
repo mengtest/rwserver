@@ -4,7 +4,8 @@ import (
 	"fmt"
 	"net"
 	"os"
-	RW "../../RwBase/base"
+	RwUtil "../../RwBase/base"
+	//RwNet "../../RwBase/network"
 	"bufio"
 )
 
@@ -12,19 +13,18 @@ func main() {
 
 	//建立socket，监听端口  第一步:绑定端口
 	netListen, err := net.Listen("tcp", "localhost:1024")
-	//netListen, err := net.Listen("tcp", "127.0.0.1:9800")
 	CheckError(err)
 	//defer延迟关闭改资源，以免引起内存泄漏
 	defer netListen.Close()
 
-	RW.Log("Waiting for clients")
+	RwUtil.Log("Waiting for clients")
 	for {
 		conn, err := netListen.Accept()  //第二步:获取连接
 		if err != nil {
 			continue  //出错退出当前一次循环
 		}
 
-		RW.Log(conn.RemoteAddr().String(), " tcp connect success")
+		RwUtil.Log(conn.RemoteAddr().String(), " tcp connect success")
 		//将连接加入全局map
 
 		//handleConnection(conn)  //正常连接就处理
@@ -34,10 +34,9 @@ func main() {
 }
 //处理连接
 func handleConnection(conn net.Conn) {
-
 	reader := bufio.NewReader(conn)
 	for {
-		message, err := RW.Decode(reader)
+		message, err := RwUtil.Decode(reader)
 		if err != nil {
 			return
 		}
@@ -45,7 +44,7 @@ func handleConnection(conn net.Conn) {
 			break
 		}
 
-		RW.Log(err,"accept:[",conn.RemoteAddr().String() ,"]:" , message)
+		RwUtil.Log(err,"accept:[",conn.RemoteAddr().String() ,"]:" , message)
 
 		//b, err := rw.Encode(conn.RemoteAddr().String() + ":" + string(message))
 		//if err != nil {
@@ -54,6 +53,7 @@ func handleConnection(conn net.Conn) {
 		//conn.Write(b)
 
 	}
+
 }
 
 
@@ -65,3 +65,5 @@ func CheckError(err error) {
 		os.Exit(1)
 	}
 }
+
+
