@@ -28,9 +28,9 @@ func main() {
 func sendMessage(conn *net.TCPConn) {
 	for i:=0;i<10 ;i++ {
 		//time.Sleep(1 * time.Microsecond)
-		//content:="{\"code\":\"asdjkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkweqweopqweqopopopopopopopopopopopopopopopopopopopopopopopopopopopopopopopopopopopopopopopopopopopopopop\",\"msg\":\"weweeweeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee\"}"
-		content:="{3456712},{3456712},{3456712},{3456712},{3456712},{3456712},{3456712},{3456712},{3456712},{3456712},{3456712},{3456712},{3456712},{3456712},{3456712},{3456712},{3456712},{3456712},{3456712},{3456712},{3456712},{3456712},{3456712},{3456712},{3456712},{3456712},{3456712},{3456712},{3456712},{3456712},"
-		b, _ := RW.Encode(string(content))
+		content:="{\"code\":\"asdjkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkweqweopqweqopopopopopopopopopopopopopopopopopopopopopopopopopopopopopopopopopopopopopopopopopopopopopop\",\"msg\":\"weweeweeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee\"}"
+		//content:="{3456712},{3456712},{3456712},{3456712},{3456712},{3456712},{3456712},{3456712},{3456712},{3456712},{3456712},{3456712},{3456712},{3456712},{3456712},{3456712},{3456712},{3456712},{3456712},"
+		b, _ := RW.EncodeHead2Byte(string(content))
 		conn.Write(b)
 	}
 }

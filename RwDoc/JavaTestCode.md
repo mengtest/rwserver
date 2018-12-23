@@ -19,7 +19,7 @@ public class TestMain {
                 //java默认是通信进行大端传输，所以这里不用管大小端
                 byte[] wb=content.getBytes("UTF-8");
                 int ln=wb.length;
-                byte[] lengthbytes = integerToBytes(ln, 4);
+                byte[] lengthbytes = integerToBytes(ln, 2);
                 ots.write(unitByteArray(lengthbytes,wb));
                 ots.flush();
             }
