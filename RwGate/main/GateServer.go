@@ -24,7 +24,6 @@ func main() {
 		}
         //实例化TcpClient,方便进行统一管理
 		client := rwnet.NewTcpClient(conn)
-
 		rw.LogInfo(client.GetIP(), "===>tcp connect success")
 		//将连接加入全局map
 

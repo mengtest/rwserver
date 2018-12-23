@@ -1,7 +1,12 @@
 package main
 
-import  "github.com/astaxie/beego"
+import (
+	"log"
+	"net/http"
+	route "../route"
+)
 
 func main() {
-	beego.Run()
+	router := route.NewRouter()
+	log.Fatal(http.ListenAndServe(":8080", router))
 }
