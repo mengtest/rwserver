@@ -10,7 +10,7 @@ import (
 
 func Index(w http.ResponseWriter, r *http.Request)  {
 	//302重定向到更新页面
-	url :=  TQC.UPDATE_HOST+ r.RequestURI
+	url :=  TQC.UpdateHost+ r.RequestURI
 	http.Redirect(w,r,url,http.StatusMovedPermanently)
 }
 
