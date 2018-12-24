@@ -44,8 +44,8 @@ type Routes []Route
 
 var routes = Routes{
 	Route{Name: "Index", Method: "GET", Pattern: "/", HandlerFunc: Ctrl.Index},
-	Route{Name: "Login", Method: "GET", Pattern: "/user/login", HandlerFunc: Ctrl.Update},
-	Route{Name: "Register", Method: "GET", Pattern: "/user/register", HandlerFunc: Ctrl.FileMd5Check},
+	Route{Name: "Login", Method: "GET", Pattern: "/update", HandlerFunc: Ctrl.Update},
+	Route{Name: "Register", Method: "GET", Pattern: "/update/checkMd5", HandlerFunc: Ctrl.FileMd5Check},
 }
 
 
