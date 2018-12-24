@@ -1,7 +1,7 @@
 package controller
 
 import (
-	R "../../RwStruct/base"
+	R "../../TQStruct/base"
 	"encoding/json"
 	"fmt"
 	"net/http"

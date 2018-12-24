@@ -2,9 +2,9 @@ package route
 
 import (
 	"github.com/gorilla/mux"
-	"log"
+	TQ "../../TQBase/base"
 	"net/http"
-	controller "../controller"
+	Ctrl "../controller"
 	"time"
 )
 
@@ -28,7 +28,7 @@ func logger(inner http.Handler, name string) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		start := time.Now()
 		inner.ServeHTTP(w, r)
-		log.Printf("Request===>: %s\t%s\t%s\t%s", r.Method, r.RequestURI, name, time.Since(start))
+		TQ.LogInfo("Request===>", r.Method, r.RequestURI, name, time.Since(start))
 	})
 }
 
@@ -43,9 +43,9 @@ type Route struct {
 type Routes []Route
 
 var routes = Routes{
-	Route{Name: "Index", Method: "GET", Pattern: "/", HandlerFunc: controller.Index},
-	Route{Name: "Login", Method: "GET", Pattern: "/user/login", HandlerFunc: controller.Login},
-	Route{Name: "Register", Method: "GET", Pattern: "/user/register", HandlerFunc: controller.Register},
+	Route{Name: "Index", Method: "GET", Pattern: "/", HandlerFunc: Ctrl.Index},
+	Route{Name: "Login", Method: "GET", Pattern: "/user/login", HandlerFunc: Ctrl.Login},
+	Route{Name: "Register", Method: "GET", Pattern: "/user/register", HandlerFunc: Ctrl.Register},
 }
 
 

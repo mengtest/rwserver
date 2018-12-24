@@ -4,11 +4,11 @@ import (
 	"github.com/lestrrat/go-file-rotatelogs"
 	"github.com/pkg/errors"
 	"github.com/rifflock/lfshook"
-	"github.com/shiena/ansicolor"
 	log "github.com/sirupsen/logrus"
-	"os"
 	"path"
 	"time"
+	"github.com/shiena/ansicolor"
+	"os"
 )
 
 
@@ -32,7 +32,7 @@ func Init(logDir string,logFileName string) {
 		log.ErrorLevel: writer,
 		log.FatalLevel: writer,
 		log.PanicLevel: writer,
-	},&log.TextFormatter{ForceColors: true}) //开启颜色
+	},&log.TextFormatter{ForceColors: true,TimestampFormat:"yyyy-MM-dd HH:mm:ss.SSS"}) //开启颜色
 
 	log.SetOutput(ansicolor.NewAnsiColorWriter(os.Stdout))
 	log.AddHook(lfHook)
@@ -48,4 +48,8 @@ func LogInfo(args ...interface{})  {
 
 func LogError(args ...interface{})  {
 	log.Error(args)
+}
+
+func LogFatal(args ...interface{})  {
+	log.Fatal(args)
 }
