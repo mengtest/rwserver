@@ -11,7 +11,7 @@ import (
 func main() {
 
 	var tcpAddr *net.TCPAddr
-	tcpAddr, _ = net.ResolveTCPAddr("tcp", "localhost:1024")
+	tcpAddr, _ = net.ResolveTCPAddr("tcp", "localhost:9090")
 
 	conn, _ := net.DialTCP("tcp", nil, tcpAddr)
 	defer conn.Close()
