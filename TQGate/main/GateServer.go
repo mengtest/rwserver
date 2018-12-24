@@ -10,7 +10,7 @@ import (
 func main() {
 	TQ.Init(TQ.GetCurrentDirectory(),"GateServer.log")
 	//建立socket，监听端口  第一步:绑定端口
-	netListen, err := net.Listen("tcp", "localhost:1024")
+	netListen, err := net.Listen("tcp", "localhost:9090")
 	CheckError(err)
 	//defer延迟关闭改资源，以免引起内存泄漏
 	defer netListen.Close()

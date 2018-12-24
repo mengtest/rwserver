@@ -1,5 +1,7 @@
 package base
 
+import ( TQ "../../TQBase/base")
+
 //定义返回结构体  字段后面跟`json:"fieldName"` 可以设定显示别名  注意字段首字母必须大写，否则返回前端的时候不显示
 type R struct {
 	Code int   `json:"code"`
@@ -33,6 +35,12 @@ func ErrorCodeMsg(code int,message string) R{
 
 func (r R) SetData(data struct{}) R{
 	r.Data=data
+	return r
+}
+
+func (r R) OutLog() R{
+	//异步输出该结构体
+    go TQ.LogStruct(r)
 	return r
 }
 

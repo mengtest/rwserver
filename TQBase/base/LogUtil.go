@@ -53,3 +53,9 @@ func LogError(args ...interface{})  {
 func LogFatal(args ...interface{})  {
 	log.Fatal(args)
 }
+
+func LogErr(err error){
+	if err != nil {
+		log.Error(err)
+	}
+}
