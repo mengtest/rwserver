@@ -24,6 +24,6 @@ func Init(dataSourceName string) {
 	}
 	db.SetMaxOpenConns(1000)
 	db.SetMaxIdleConns(10)
-	db.Ping()
+	DB=db
 	base.LogInfo("connect database success")
 }

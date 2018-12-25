@@ -6,7 +6,7 @@ import ( TQ "../../TQBase/base")
 type R struct {
 	Code int   `json:"code"`
 	Msg string  `json:"msg"`
-	Data struct{} `json:"data"`
+	Data interface{} `json:"data"`
 }
 
 func OK() R{
@@ -33,7 +33,7 @@ func ErrorCodeMsg(code int,message string) R{
 	return R{Code: code, Msg: message}
 }
 
-func (r R) SetData(data struct{}) R{
+func (r R) SetData(data interface{}) R{
 	r.Data=data
 	return r
 }
