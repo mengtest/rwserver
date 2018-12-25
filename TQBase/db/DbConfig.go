@@ -8,21 +8,21 @@ package db
  */
 
 import (
-"database/sql"
-TQ "../base"
+     "database/sql"
+     "../base"
+	 "github.com/jmoiron/sqlx"
 )
 
-var MySQL *sql.DB
+var DB *sql.DB
 
-func InitMySQL(dataSourceName string) {
+func Init(dataSourceName string) {
 	//dataSourceName=root:@tcp(127.0.0.1:3306)/tianqi?charset=utf8
-	var err error
-	MySQL, err = sql.Open("mysql", dataSourceName)
+	db, err := sqlx.Connect("mysql", dataSourceName)
 	if err != nil {
-		TQ.LogError("数据初始化连接失败",err)
+		base.LogError("数据初始化连接失败",err)
 		return
 	}
-	MySQL.SetMaxOpenConns(1000)
-	MySQL.SetMaxIdleConns(10)
-	MySQL.Ping()
+	db.SetMaxOpenConns(1000)
+	db.SetMaxIdleConns(10)
+	db.Ping()
 }
