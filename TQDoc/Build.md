@@ -10,7 +10,7 @@ linux下创建so比较方便，直接通过如下命令：
 ```
 go build -buildmode=c-shared -o libtq.so
 ```
-windows需要安装gcc编译器,windows下go不支持生成动态库，需要另外的方式进行编译
+windows下go不支持生成动态库，需要安装gcc编译器,需要另外的方式进行编译
 https://stackoverflow.com/questions/40573401/building-a-dll-with-go-1-7  
 编译静态库
 go build -buildmode=c-archive -o libtq.a  
