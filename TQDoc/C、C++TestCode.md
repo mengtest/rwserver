@@ -1,8 +1,8 @@
-###tcp c++测试代码,服务端对半包粘包已处理
+###tcp c/c++测试代码,服务端对半包粘包已处理
 1.启动TQGate的GateServer  
 2.运行测试代码
 ```
-bool RwSocket::SendMsg(char* data)
+bool SendMsg(char* data)
 {
 	int len = strlen(data);
 
