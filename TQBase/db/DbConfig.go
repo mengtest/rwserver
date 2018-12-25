@@ -8,12 +8,12 @@ package db
  */
 
 import (
-     "database/sql"
      "../base"
 	 "github.com/jmoiron/sqlx"
+	_"github.com/go-sql-driver/mysql"  //注意驱动包要引入
 )
 
-var DB *sql.DB
+var DB *sqlx.DB
 
 func Init(dataSourceName string) {
 	//dataSourceName=root:@tcp(127.0.0.1:3306)/tianqi?charset=utf8
@@ -25,4 +25,5 @@ func Init(dataSourceName string) {
 	db.SetMaxOpenConns(1000)
 	db.SetMaxIdleConns(10)
 	db.Ping()
+	base.LogInfo("connect database success")
 }

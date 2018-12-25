@@ -2,10 +2,10 @@ package route
 
 import (
 	"github.com/gorilla/mux"
-	TQ "../../TQBase/base"
 	"net/http"
 	Ctrl "../controller"
 	"time"
+	tb "../../TQBase/base"
 )
 
 func NewRouter() *mux.Router {
@@ -28,7 +28,8 @@ func logger(inner http.Handler, name string) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		start := time.Now()
 		inner.ServeHTTP(w, r)
-		TQ.LogInfo("Request===>", r.Method, r.RequestURI, name, time.Since(start))
+		r.ParseForm()
+		tb.LogInfo("Request===>", r.Method, r.RequestURI,time.Since(start),r.Form)
 	})
 }
 
@@ -44,7 +45,7 @@ type Routes []Route
 
 var routes = Routes{
 	Route{Name: "Index", Method: "GET", Pattern: "/", HandlerFunc: Ctrl.Index},
-	Route{Name: "Update", Method: "GET", Pattern: "/update", HandlerFunc: Ctrl.Update},
+	Route{Name: "Update", Method: "GET", Pattern: "/update", HandlerFunc: Ctrl.CheckVersion},
 	Route{Name: "CheckMd5", Method: "GET", Pattern: "/update/checkMd5", HandlerFunc: Ctrl.FileMd5Check},
 }
 

@@ -30,13 +30,14 @@ func GetCurrentDirectory() string {
 }
 
 //打印结构体
-func LogStruct(v interface{})  {
+func LogStruct(prefix string,v interface{})  {
 	if v==nil {
        return
 	}
 	b, err := json.Marshal(v)
 	if err == nil {
-       LogInfo(string(b))
+       LogInfo(prefix,string(b))
 	}
 }
+
 

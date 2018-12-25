@@ -13,20 +13,10 @@ func Index(w http.ResponseWriter, r *http.Request)  {
 	http.Redirect(w,r,url,http.StatusMovedPermanently)
 }
 
-func Update(w http.ResponseWriter, r *http.Request)  {
+func CheckVersion(w http.ResponseWriter, r *http.Request)  {
 	hc:=tNet.GetHttpClient(w,r)
-	params:=hc.GetParam()
-	logonVersion:=params.Get("lv")
-	clientVersion:=params.Get("cv")
-	//请求校验
-	if logonVersion=="" {
-		hc.ReturnMsg(R.ErrorMsg("请输入登录器版本号"))
-		return
-	}
-	if clientVersion=="" {
-		hc.ReturnMsg(R.ErrorMsg("请输入客户端版本号"))
-		return
-	}
+	//获取最新版本信息
+
 	hc.ReturnMsg(R.OK())
 }
 

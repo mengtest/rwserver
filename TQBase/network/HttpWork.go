@@ -19,7 +19,6 @@ func GetHttpClient(w http.ResponseWriter,r *http.Request) *HttpClient {
 
 //获取请求参数
 func (hc *HttpClient) GetParam() url.Values{
-	hc.r.ParseForm()
 	value := hc.r.Form
 	return value
 }

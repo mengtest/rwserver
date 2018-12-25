@@ -40,7 +40,7 @@ func (r R) SetData(data struct{}) R{
 
 func (r R) OutLog() R{
 	//异步输出该结构体
-    go TQ.LogStruct(r)
+    go TQ.LogStruct("Response<===",r)
 	return r
 }
 
