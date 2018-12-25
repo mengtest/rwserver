@@ -2,10 +2,9 @@ package controller
 
 import (
 	R "../../TQStruct/base"
-	TQ "../../TQBase/base"
 	TQC "../../TQBase/constant"
-	"encoding/json"
 	"net/http"
+	tNet "../../TQBase/network"
 )
 
 func Index(w http.ResponseWriter, r *http.Request)  {
@@ -15,33 +14,35 @@ func Index(w http.ResponseWriter, r *http.Request)  {
 }
 
 func Update(w http.ResponseWriter, r *http.Request)  {
-	logonVersion, err1 := r.URL.Query()["lv"]
-	clientVersion, err2 := r.URL.Query()["cv"]
+	hc:=tNet.GetHttpClient(w,r)
+	params:=hc.GetParam()
+	logonVersion:=params.Get("lv")
+	clientVersion:=params.Get("cv")
 	//请求校验
-	if !err1 || len(logonVersion) < 1 {
-		TQ.LogErr(json.NewEncoder(w).Encode(R.ErrorMsg("请输入登录器版本号").OutLog()))
+	if logonVersion=="" {
+		hc.ReturnMsg(R.ErrorMsg("请输入登录器版本号"))
 		return
 	}
-	if !err2 || len(clientVersion) < 1 {
-		TQ.LogErr(json.NewEncoder(w).Encode(R.ErrorMsg("请输入客户端版本号").OutLog()))
+	if clientVersion=="" {
+		hc.ReturnMsg(R.ErrorMsg("请输入客户端版本号"))
 		return
 	}
-	TQ.LogErr(json.NewEncoder(w).Encode(R.OK().OutLog()))
-
+	hc.ReturnMsg(R.OK())
 }
 
 func FileMd5Check(w http.ResponseWriter, r *http.Request)  {
-	fileName, err1 := r.URL.Query()["fileName"]
-	md5, err2 := r.URL.Query()["md5"]
+	hc:=tNet.GetHttpClient(w,r)
+	params:=hc.GetParam()
+	fileName:=params.Get("fileName")
+	md5:=params.Get("md5")
 	//请求校验
-	if !err1 || len(fileName) < 1 {
-		TQ.LogErr(json.NewEncoder(w).Encode(R.ErrorMsg("请输入文件名").OutLog()))
+	if fileName=="" {
+		hc.ReturnMsg(R.ErrorMsg("请输入文件名"))
 		return
 	}
-	if !err2 || len(md5) < 1 {
-		TQ.LogErr(json.NewEncoder(w).Encode(R.ErrorMsg("请输入md5值").OutLog()))
+	if md5 == "" {
+		hc.ReturnMsg(R.ErrorMsg("请输入md5值"))
 		return
 	}
-	TQ.LogErr(json.NewEncoder(w).Encode(R.OK().OutLog()))
-
+	hc.ReturnMsg(R.OK())
 }

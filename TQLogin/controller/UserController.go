@@ -6,6 +6,7 @@ import (
 	TQC "../../TQBase/constant"
 	"encoding/json"
 	"net/http"
+	tNet "../../TQBase/network"
 )
 
 func Index(w http.ResponseWriter, r *http.Request)  {
@@ -14,7 +15,20 @@ func Index(w http.ResponseWriter, r *http.Request)  {
 }
 
 func Login(w http.ResponseWriter, r *http.Request)  {
-	TQ.LogErr(json.NewEncoder(w).Encode(R.OK().OutLog()))
+	hc:=tNet.GetHttpClient(w,r)
+	params:=hc.GetParam()
+	logonVersion:=params.Get("lv")
+	clientVersion:=params.Get("cv")
+	//请求校验
+	if logonVersion=="" {
+		hc.ReturnMsg(R.ErrorMsg("请输入登录器版本号"))
+		return
+	}
+	if clientVersion=="" {
+		hc.ReturnMsg(R.ErrorMsg("请输入客户端版本号"))
+		return
+	}
+	hc.ReturnMsg(R.OK())
 }
 
 func Register(w http.ResponseWriter, r *http.Request)  {
