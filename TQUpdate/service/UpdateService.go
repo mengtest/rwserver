@@ -1,6 +1,7 @@
 package service
 
 import (
+	"../../TQBase/base"
 	"../../TQBase/db"
 	"database/sql"
 )
@@ -19,6 +20,8 @@ type Version struct {
 
 func CheckVersion() []Version {
 	version := []Version{}
-	db.DB.Select(&version,"SELECT * FROM tb_version GROUP BY nType ORDER BY dtCreateTime DESC")
+	sql:="SELECT * FROM tb_version WHERE nDelete=0 GROUP BY nType ORDER BY dtCreateTime DESC"
+	base.LogInfo("SQL:",sql)
+	db.DB.Select(&version,sql)
 	return version
 }
