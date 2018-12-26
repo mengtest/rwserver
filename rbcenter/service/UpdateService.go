@@ -7,20 +7,20 @@ import (
 )
 
 type Version struct {
-	LId int64 `db:"lId" json:"lId"`
-	StrName string `db:"strName" json:"strName"`
-	StrVersion  string `db:"strVersion" json:"strVersion"`
-	StrPath     string `db:"strPath" json:"strPath"`
-	StrMd5 string `db:"strMd5" json:"strMd5"`
-	NType  int `db:"nType" json:"nType"`
-	NDelete int `db:"nDelete" json:"-"`
-	DtUpdateTime sql.NullString `db:"dtUpdateTime" json:"-"`
-	DtCreateTime sql.NullString `db:"dtCreateTime" json:"-"`
+	Id int64 `db:"id" json:"id"`
+	PackageName string `db:"packageName" json:"packageName"`
+	Version  string `db:"version" json:"version"`
+	Path     string `db:"path" json:"path"`
+	Md5 string `db:"md5" json:"md5"`
+	AppType  int `db:"appType" json:"appType"`
+	UpdateTime sql.NullString `db:"updateTime" json:"-"`
+	CreateTime sql.NullString `db:"createTime" json:"-"`
+	Delete int `db:"delete" json:"-"`
 }
 
 func CheckVersion() []Version {
 	version := []Version{}
-	sql:="SELECT * FROM tb_version WHERE nDelete=0 GROUP BY nType ORDER BY dtCreateTime DESC"
+	sql:="SELECT * FROM tb_version WHERE delete=0 GROUP BY nType ORDER BY createTime DESC"
 	base.LogInfo("SQL:",sql)
 	db.DB.Select(&version,sql)
 	return version
