@@ -9,7 +9,7 @@ import (
 
 func main() {
 	//初始化日志输出
-	TQ.Init(TQ.GetCurrentDirectory(),"UpdateServer.log")
+	TQ.Init(TQ.GetCurrentDirectory(),"CenterServer.log")
 	//初始化路由
 	router := route.NewRouter()
 	//初始化DB

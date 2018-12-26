@@ -27,9 +27,10 @@ func NewRouter() *mux.Router {
 func logger(inner http.Handler, name string) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		start := time.Now()
-		inner.ServeHTTP(w, r)
 		r.ParseForm()
-		tb.LogInfo("interface:", r.RequestURI,"Time:",time.Since(start))
+		tb.LogInfo("request==>",r.RequestURI," params==>",r.Form)
+		inner.ServeHTTP(w, r)
+		tb.LogInfo("completed:"+name,"  time:",time.Since(start))
 	})
 }
 
