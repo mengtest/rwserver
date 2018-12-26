@@ -41,9 +41,11 @@ func LogStruct(prefix string,v interface{})  {
 }
 
 
-func CheckErr(err error) {
+func CheckErr(err error) bool{
 	if err != nil {
 		LogError(err)
+		return true
 	}
+	return false
 }
 

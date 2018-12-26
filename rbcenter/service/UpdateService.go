@@ -7,20 +7,20 @@ import (
 )
 
 type Version struct {
-	Id int64 `db:"id" json:"id"`
-	PackageName string `db:"packageName" json:"packageName"`
-	Version  string `db:"version" json:"version"`
-	Path     string `db:"path" json:"path"`
-	Md5 string `db:"md5" json:"md5"`
-	AppType  int `db:"appType" json:"appType"`
-	UpdateTime sql.NullString `db:"updateTime" json:"-"`
-	CreateTime sql.NullString `db:"createTime" json:"-"`
-	Deleted int `db:"deleted" json:"-"`
+	LId int64 `db:"lId" json:"lId"`
+	StrName string `db:"strName" json:"strName"`
+	StrVersion  string `db:"strVersion" json:"strVersion"`
+	StrPath     string `db:"strPath" json:"strPath"`
+	StrMd5 string `db:"strMd5" json:"strMd5"`
+	NAppType  int `db:"nAppType" json:"nAppType"`
+	DtUpdateTime sql.NullString `db:"dtUpdateTime" json:"-"`
+	DtCreateTime sql.NullString `db:"dtCreateTime" json:"-"`
+	NDeleted int `db:"nDeleted" json:"-"`
 }
 
 func CheckVersion() []Version {
 	version := []Version{}
-	sql:="SELECT * FROM tb_version WHERE deleted=0 GROUP BY appType ORDER BY createTime DESC"
+	sql:="SELECT * FROM tb_version WHERE nDeleted=0 GROUP BY nAppType ORDER BY dtCreateTime DESC"
 	base.LogInfo("SQL:",sql)
 	err:=db.DB.Select(&version,sql)
 	base.CheckErr(err)

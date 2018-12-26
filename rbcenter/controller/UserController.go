@@ -29,9 +29,9 @@ func Login(w http.ResponseWriter, r *http.Request)  {
 		return
 	}
 	//获取最新版本信息
-	user,ret,msg :=service.GetUser(mobile)
-	if ret<0 {
-		hc.ReturnMsg(R.ErrorMsg(msg))
+	user,err :=service.GetUserByMobile(mobile)
+	if err !=nil {
+		hc.ReturnMsg(R.ErrorMsg("用户不存在"))
 	}
 	hc.ReturnMsg(R.OK().SetData(user))
 }
@@ -41,17 +41,17 @@ func LoginPwd(w http.ResponseWriter, r *http.Request)  {
 	params:=hc.GetParam()
 
 	mobile:=params.Get("mobile")
-	password:=params.Get("password")
+	pwd:=params.Get("pwd")
 	if mobile=="" {
 		hc.ReturnMsg(R.ErrorMsg("请输入用户名"))
 		return
 	}
-	if password=="" {
+	if pwd=="" {
 		hc.ReturnMsg(R.ErrorMsg("请输入密码"))
 		return
 	}
 	//获取最新版本信息
-	user,ret,msg :=service.Login(mobile,password)
+	user,ret,msg :=service.Login(mobile,pwd)
 	if ret<0 {
 		hc.ReturnMsg(R.ErrorMsg(msg))
 	}
