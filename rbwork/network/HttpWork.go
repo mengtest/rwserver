@@ -2,8 +2,8 @@ package network
 
 import (
 	"net/http"
-    tsb "../../TQStruct/base"
-	tb "../../TQBase/base"
+    tsb "../../rbstruct/base"
+	tb "./../base"
 	"encoding/json"
 	"net/url"
 )

@@ -7,7 +7,7 @@ import (
 	"bytes"
 	"encoding/binary"
 	"strings"
-    TQUser "../../TQStruct/user"
+    TQUser "../../rbstruct/user"
 )
 
 type TcpClient struct {

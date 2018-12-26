@@ -1,8 +1,8 @@
 package service
 
 import (
-	"../../TQBase/base"
-	"../../TQBase/db"
+	"../../rbwork/base"
+	"../../rbwork/db"
 	"database/sql"
 )
 

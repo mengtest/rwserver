@@ -1,8 +1,8 @@
 package main
 
 import (
-	TQ "../../TQBase/base"
-	TQNet "../../TQBase/network"
+	TQ "../../rbwork/base"
+	TQNet "../../rbwork/network"
 	"net"
 	"os"
 )

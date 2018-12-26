@@ -3,8 +3,8 @@ package main
 import (
 	"net/http"
 	"../route"
-	TQ "../../TQBase/base"
-	"../../TQBase/db"
+	TQ "../../rbwork/base"
+	"../../rbwork/db"
 )
 
 func main() {

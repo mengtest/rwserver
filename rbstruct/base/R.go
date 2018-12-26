@@ -1,6 +1,6 @@
 package base
 
-import ( TQ "../../TQBase/base")
+import ( TQ "../../rbwork/base")
 
 //定义返回结构体  字段后面跟`json:"fieldName"` 可以设定显示别名  注意字段首字母必须大写，否则返回前端的时候不显示
 type R struct {

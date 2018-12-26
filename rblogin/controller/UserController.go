@@ -1,12 +1,12 @@
 package controller
 
 import (
-	R "../../TQStruct/base"
-	TQ "../../TQBase/base"
-	TQC "../../TQBase/constant"
+	R "../../rbstruct/base"
+	TQ "../../rbwork/base"
+	TQC "../../rbwork/constant"
 	"encoding/json"
 	"net/http"
-	tNet "../../TQBase/network"
+	tNet "../../rbwork/network"
 )
 
 func Index(w http.ResponseWriter, r *http.Request)  {

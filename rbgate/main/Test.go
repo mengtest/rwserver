@@ -4,7 +4,7 @@ import (
 	"bufio"
 	"fmt"
 	"strings"
-	RwUtil "../../TQBase/base"
+	RwUtil "../../rbwork/base"
 )
 
 func main()  {

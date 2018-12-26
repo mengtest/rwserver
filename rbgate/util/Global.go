@@ -2,7 +2,7 @@ package util
 
 import (
 	"net"
-	rwnet "../../TQBase/network"
+	rwnet "../../rbwork/network"
 )
 
 
