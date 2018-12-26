@@ -27,8 +27,9 @@ func NewRouter() *mux.Router {
 func logger(inner http.Handler, name string) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		start := time.Now()
+		r.ParseForm()
 		inner.ServeHTTP(w, r)
-		TQ.LogInfo("Request===>", r.Method, r.RequestURI, name, time.Since(start))
+		TQ.LogInfo("completed:"+r.RequestURI," time:", time.Since(start))
 	})
 }
 
@@ -44,8 +45,9 @@ type Routes []Route
 
 var routes = Routes{
 	Route{Name: "Index", Method: "GET", Pattern: "/", HandlerFunc: Ctrl.Index},
-	Route{Name: "Login", Method: "GET", Pattern: "/user/login", HandlerFunc: Ctrl.Login},
-	Route{Name: "Register", Method: "GET", Pattern: "/user/register", HandlerFunc: Ctrl.Register},
+	Route{Name: "Upload", Method: "GET", Pattern: "/upload", HandlerFunc: Ctrl.Upload},
+	Route{Name: "Download", Method: "GET", Pattern: "/download/{fileName}", HandlerFunc: Ctrl.Download},//下载指定文件
+
 }
 
 

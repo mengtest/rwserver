@@ -6,7 +6,7 @@ import ( TQ "../../rbwork/base")
 type R struct {
 	Code int   `json:"code"`
 	Msg string  `json:"msg"`
-	Data interface{} `json:"data"`
+	Data interface{} `json:"data,omitempty"`
 }
 
 func OK() R{

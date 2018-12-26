@@ -45,9 +45,11 @@ type Route struct {
 type Routes []Route
 
 var routes = Routes{
-	Route{Name: "Index", Method: "GET", Pattern: "/", HandlerFunc: Ctrl.Index},
-	Route{Name: "Update", Method: "GET", Pattern: "/update", HandlerFunc: Ctrl.CheckVersion},
-	Route{Name: "CheckMd5", Method: "GET", Pattern: "/update/checkMd5", HandlerFunc: Ctrl.FileMd5Check},
+	Route{Name: "Index", Method: "GET", Pattern: "/", HandlerFunc: Ctrl.Index},                //主页
+	Route{Name: "Download", Method: "GET", Pattern: "/download", HandlerFunc: Ctrl.Index},     //下载页
+	Route{Name: "Patch", Method: "GET", Pattern: "/patch", HandlerFunc: Ctrl.Index},           //补丁页
+	Route{Name: "CheckVersion", Method: "GET", Pattern: "/checkVersion", HandlerFunc: Ctrl.CheckVersion},   //检测更新接口
+	Route{Name: "Login", Method: "GET", Pattern: "/login", HandlerFunc: Ctrl.Login}, //登录
 }
 
 

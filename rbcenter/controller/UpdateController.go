@@ -9,8 +9,8 @@ import (
 )
 
 func Index(w http.ResponseWriter, r *http.Request)  {
-	//302重定向到更新页面
-	url := constant.UpdateHost + r.RequestURI
+	//302重定向到新页面
+	url := constant.MainHost + r.RequestURI
 	http.Redirect(w,r,url,http.StatusMovedPermanently)
 }
 
@@ -24,19 +24,3 @@ func CheckVersion(w http.ResponseWriter, r *http.Request)  {
 	hc.ReturnMsg(R.OK().SetData(versions))
 }
 
-func FileMd5Check(w http.ResponseWriter, r *http.Request)  {
-	hc:=network.GetHttpClient(w,r)
-	params:=hc.GetParam()
-	fileName:=params.Get("fileName")
-	md5:=params.Get("md5")
-	//请求校验
-	if fileName=="" {
-		hc.ReturnMsg(R.ErrorMsg("请输入文件名"))
-		return
-	}
-	if md5 == "" {
-		hc.ReturnMsg(R.ErrorMsg("请输入md5值"))
-		return
-	}
-	hc.ReturnMsg(R.OK())
-}
