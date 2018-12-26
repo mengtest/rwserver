@@ -15,13 +15,14 @@ type Version struct {
 	AppType  int `db:"appType" json:"appType"`
 	UpdateTime sql.NullString `db:"updateTime" json:"-"`
 	CreateTime sql.NullString `db:"createTime" json:"-"`
-	Delete int `db:"delete" json:"-"`
+	Deleted int `db:"deleted" json:"-"`
 }
 
 func CheckVersion() []Version {
 	version := []Version{}
-	sql:="SELECT * FROM tb_version WHERE delete=0 GROUP BY nType ORDER BY createTime DESC"
+	sql:="SELECT * FROM tb_version WHERE deleted=0 GROUP BY appType ORDER BY createTime DESC"
 	base.LogInfo("SQL:",sql)
-	db.DB.Select(&version,sql)
+	err:=db.DB.Select(&version,sql)
+	base.CheckErr(err)
 	return version
 }

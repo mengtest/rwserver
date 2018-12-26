@@ -2,22 +2,19 @@ package controller
 
 import (
 	R "../../rbstruct/base"
-	TQC "../../rbwork/constant"
-	"net/http"
+	"../../rbwork/constant"
 	"../../rbwork/network"
 	"../rbutil"
+	"../../rbwork/base"
+	"net/http"
 	"os"
 	"io"
 )
 
-func checkErr(err error) {
-	if err != nil {
-		err.Error()
-	}
-}
+
 
 func Index(w http.ResponseWriter, r *http.Request)  {
-	url :=  TQC.DownloadHost+ r.RequestURI
+	url :=  constant.DownloadHost+ r.RequestURI
 	http.Redirect(w,r,url,http.StatusMovedPermanently)
 }
 
@@ -25,7 +22,7 @@ func Upload(w http.ResponseWriter, r *http.Request)  {
 	hc:=network.GetHttpClient(w,r)
 	if r.Method == "POST" {
 		err := r.ParseMultipartForm(102400)
-		checkErr(err)
+		base.CheckErr(err)
 		m := r.MultipartForm
 		files := m.File["files"]
 		for i, _ := range files {
@@ -35,7 +32,7 @@ func Upload(w http.ResponseWriter, r *http.Request)  {
 				return
 			}
 			f, err := os.OpenFile(rbutil.FilePath+files[i].Filename, os.O_WRONLY|os.O_CREATE, 0666)
-			checkErr(err)
+			base.CheckErr(err)
 			io.Copy(f, file)
 			defer f.Close()
 			defer file.Close()
