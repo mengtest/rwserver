@@ -54,12 +54,12 @@ func Set(k, v string) {
 func GetStringValue(k string) string {
 	c := pool.Get()
 	defer c.Close()
-	username, err := redis.String(c.Do("GET", k))
+	value, err := redis.String(c.Do("GET", k))
 	if err != nil {
 		fmt.Println("Get Error: ", err.Error())
 		return ""
 	}
-	return username
+	return value
 }
 
 func SetKeyExpire(k string, ex int) {

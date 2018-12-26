@@ -5,6 +5,8 @@ import (
 	"../service"
 	"../../rbwork/network"
 	R "../../rbstruct/base"
+	"../../rbwork/redis"
+	"../../rbwork/constant"
 )
 
 func Login(w http.ResponseWriter, r *http.Request)  {
@@ -21,12 +23,17 @@ func Login(w http.ResponseWriter, r *http.Request)  {
 		hc.ReturnMsg(R.ErrorMsg("请输入短信验证码"))
 		return
 	}
-	//获取最新版本信息
-	versions :=service.CheckVersion()
-	if len(versions)<=0 {
-		hc.ReturnMsg(R.ErrorMsg("未查询到最新版本信息"))
+	rck := redis.GetStringValue(constant.SMS_MOBILE+mobile)
+	if  rck=="" || rck !=checkCode {
+		hc.ReturnMsg(R.ErrorMsg("验证码无效"))
+		return
 	}
-	hc.ReturnMsg(R.OK().SetData(versions))
+	//获取最新版本信息
+	user,ret,msg :=service.GetUser(mobile)
+	if ret<0 {
+		hc.ReturnMsg(R.ErrorMsg(msg))
+	}
+	hc.ReturnMsg(R.OK().SetData(user))
 }
 
 func LoginPwd(w http.ResponseWriter, r *http.Request)  {
@@ -44,10 +51,10 @@ func LoginPwd(w http.ResponseWriter, r *http.Request)  {
 		return
 	}
 	//获取最新版本信息
-	versions :=service.CheckVersion()
-	if len(versions)<=0 {
-		hc.ReturnMsg(R.ErrorMsg("未查询到最新版本信息"))
+	user,ret,msg :=service.Login(mobile,password)
+	if ret<0 {
+		hc.ReturnMsg(R.ErrorMsg(msg))
 	}
-	hc.ReturnMsg(R.OK().SetData(versions))
+	hc.ReturnMsg(R.OK().SetData(user))
 }
 
