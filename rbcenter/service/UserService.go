@@ -21,6 +21,11 @@ type User struct {
 	NDeleted int `db:"nDeleted" json:"-"`
 }
 
+type UserData struct {
+	Token string `json:"token"`
+	User User `json:"user"`
+}
+
 func GetUserByMobile(mobile string) (User,int) {
 	user:=User{}
 	sqlc:="SELECT * FROM tb_user WHERE nDeleted=0 AND strMobile=? ORDER BY dtCreateTime DESC"
@@ -58,10 +63,4 @@ func GetUserByName(name string) (User,int) {
 		return user,-1
 	}
 	return user,1
-}
-
-
-func Login(mobile string,pwd string) (User, int, string) {
-	user:=User{}
-	return user,0,""
 }

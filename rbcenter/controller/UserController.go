@@ -29,12 +29,14 @@ func Login(w http.ResponseWriter, r *http.Request)  {
 		hc.ReturnMsg(R.ErrorMsg("用户不存在"))
 		return
 	}
+	//校验密码
+
+	//生成token
 	token:=base.CreateToken(string(user.LId))
-	//获取最新版本信息
-	user,ret,msg :=service.Login(strName,strPwd)
-	if ret<0 {
-		hc.ReturnMsg(R.ErrorMsg(msg))
-	}
-	hc.ReturnMsg(R.OK().SetData(token))
+
+	userData:=service.UserData{}
+	userData.User=user
+	userData.Token=token
+	hc.ReturnMsg(R.OK().SetData(userData))
 }
 
