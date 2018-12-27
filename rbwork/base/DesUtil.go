@@ -36,8 +36,9 @@ func PKCSUnPadding(origData []byte)[]byte{
 	return origData[:length-unpadding]
 }
 //加密
-func DesEncode(origData []byte)string{
+func DesEncode(decMsg string)string{
 	key := []byte(DesKey)
+	origData:=[]byte(decMsg)
 	//获取block块
 	block,_ :=des.NewTripleDESCipher(key)
 	//补码

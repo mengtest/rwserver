@@ -4,6 +4,7 @@ import (
 	"../../rbwork/base"
 	"../../rbwork/db"
 	"database/sql"
+	"time"
 )
 
 //定义用户结构体
@@ -63,4 +64,14 @@ func GetUserByName(name string) (User,int) {
 		return user,-1
 	}
 	return user,1
+}
+
+func SaveUser(user User) int {
+	sqlc:="INSERT INTO tb_user (strName,strPwd,dtUpdateTime,dtCreateTime) VALUES (?,?,?,?)"
+	res,err:=db.DB.Exec(sqlc,user.StrName,user.StrPwd,time.Now(),time.Now())
+	if base.CheckErr(err) {
+		return -1
+	}
+	ret,_:=res.RowsAffected()
+	return int(ret)
 }
