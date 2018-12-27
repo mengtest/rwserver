@@ -6,6 +6,8 @@ import (
 	Ctrl "../controller"
 	"time"
 	tb "../../rbwork/base"
+	R "../../rbstruct/base"
+	"encoding/json"
 )
 
 func NewRouter() *mux.Router {
@@ -13,7 +15,7 @@ func NewRouter() *mux.Router {
 	for _, route := range routes {
 		var handler http.Handler
 		handler = route.HandlerFunc
-		handler = logger(handler, route.Name)
+		handler = logger(handler, route.Name,route.LoginValidate)
 
 		router.
 			Methods(route.Method).
@@ -23,11 +25,27 @@ func NewRouter() *mux.Router {
 	}
 	return router
 }
-//输出请求执行时间
-func logger(inner http.Handler, name string) http.Handler {
+//请求拦截器
+func logger(inner http.Handler, name string,loginValidate bool) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		start := time.Now()
 		r.ParseForm()
+		strToken:=r.Header.Get("token")
+		claims,err:=tb.DecodeToken(strToken)
+		if loginValidate == true {
+			if strToken =="" {
+				json.NewEncoder(w).Encode(R.ErrorMsg("未登录").OutLog())
+				return
+			}
+			if err != nil && claims["uid"] !=nil {
+				json.NewEncoder(w).Encode(R.ErrorMsg("请重新登录").OutLog())
+				return
+			}
+		}
+		if claims["uid"] != nil {
+			r.Form.Set("lLoginId",claims["uid"].(string)) //给每个请求设置登录人ID
+		}
+
 		tb.LogInfo("request==>",r.RequestURI," params==>",r.Form)
 		inner.ServeHTTP(w, r)
 		tb.LogInfo("completed:"+name,"  time:",time.Since(start))
@@ -36,18 +54,18 @@ func logger(inner http.Handler, name string) http.Handler {
 
 //定义路由
 type Route struct {
-	Name        string
-	Method      string
-	Pattern     string
-	HandlerFunc http.HandlerFunc
+	Name        string  //接口命名
+	LoginValidate bool  //接口是否需要验证登录
+	Method      string  //接口请求方式
+	Pattern     string  //接口请求URL
+	HandlerFunc http.HandlerFunc  //接口业务逻辑
 }
 
 type Routes []Route
 
 var routes = Routes{
-	Route{Name: "CheckVersion", Method: "GET", Pattern: "/checkVersion", HandlerFunc: Ctrl.CheckVersion},   //检测更新接口
-	Route{Name: "Login", Method: "GET", Pattern: "/login", HandlerFunc: Ctrl.Login}, //验证码登录
-	Route{Name: "Login", Method: "GET", Pattern: "/loginPwd", HandlerFunc: Ctrl.LoginPwd}, //密码登录
+	Route{Name: "CheckVersion", LoginValidate:false, Method: "GET", Pattern: "/checkVersion", HandlerFunc: Ctrl.CheckVersion},   //检测更新接口
+	Route{Name: "Login",LoginValidate:false, Method: "GET", Pattern: "/login", HandlerFunc: Ctrl.Login}, //登录
 }
 
 

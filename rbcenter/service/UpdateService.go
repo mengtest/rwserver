@@ -3,9 +3,8 @@ package service
 import (
 	"../../rbwork/base"
 	"../../rbwork/db"
-	"database/sql"
 )
-
+//定义版本结构体
 type Version struct {
 	LId int64 `db:"lId" json:"lId"`
 	StrName string `db:"strName" json:"strName"`
@@ -13,9 +12,14 @@ type Version struct {
 	StrPath     string `db:"strPath" json:"strPath"`
 	StrMd5 string `db:"strMd5" json:"strMd5"`
 	NAppType  int `db:"nAppType" json:"nAppType"`
-	DtUpdateTime sql.NullString `db:"dtUpdateTime" json:"-"`
-	DtCreateTime sql.NullString `db:"dtCreateTime" json:"-"`
+	DtUpdateTime string `db:"dtUpdateTime" json:"-"`
+	DtCreateTime string `db:"dtCreateTime" json:"-"`
 	NDeleted int `db:"nDeleted" json:"-"`
+}
+
+//对sql.NullString进行处理
+func GetNewVersion(v Version) Version {
+	return v
 }
 
 func CheckVersion() []Version {
