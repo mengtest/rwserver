@@ -49,3 +49,14 @@ func CheckErr(err error) bool{
 	return false
 }
 
+
+func Json2map(jsonstr string) (map[string]interface{},error){
+	m := make(map[string]interface{})
+	err := json.Unmarshal([]byte(jsonstr), &m)
+	return m,err
+}
+
+func Struct2Json(v interface{}) string {
+	b, _ := json.Marshal(v)
+	return string(b)
+}

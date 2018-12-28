@@ -14,7 +14,8 @@ type TcpClient struct {
 	ip  string            //客户端IP
 	conn net.Conn         //客户端连接
 	reader *bufio.Reader  //客户端输入读取缓冲区
-	user user.UserInfo  //用户
+	bIsLogin bool         //是否通过登录授权访问
+	user user.UserInfo    //用户
 }
 
 func NewTcpClient(conn net.Conn) *TcpClient {
