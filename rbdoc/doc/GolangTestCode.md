@@ -14,7 +14,7 @@
 
 
 ##Golang tcp 测试代码
-1.启动TQGate的GateServer  
+1.启动rbgate的GateServer  
 2.运行测试代码
 ```
 package main 

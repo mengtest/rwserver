@@ -2,7 +2,7 @@
 
 ####网络编程中,TCP/IP统一采用大端方式传送数据，所以大端方式也称之为网络字节序
 
-1.启动TQGate的GateServer  
+1.启动rbgate的GateServer  
 2.运行测试代码
 ```
 bool SendMsg(char* data)
