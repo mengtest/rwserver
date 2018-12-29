@@ -53,6 +53,7 @@ func login(tcpClient *network.TcpClient,umap map[string]interface{})  {
 		tcpClient.Write(base.Struct2Json(R.ErrorMsg("token无效,请先登录")))
 		return
 	}
+	tcpClient.SetIsLogin(true)
 	tcpClient.Write(base.Struct2Json(R.OK()))
 }
 

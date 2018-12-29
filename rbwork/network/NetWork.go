@@ -14,7 +14,7 @@ type TcpClient struct {
 	ip  string            //客户端IP
 	conn net.Conn         //客户端连接
 	reader *bufio.Reader  //客户端输入读取缓冲区
-	bIsLogin bool         //是否通过登录授权访问
+	isLogin bool         //是否通过登录授权访问
 	user user.UserInfo    //用户
 }
 
@@ -37,6 +37,10 @@ func (c *TcpClient) Close() error {
 
 func (c *TcpClient) GetIP() string  {
 	return c.ip
+}
+
+func (c *TcpClient) SetIsLogin(b bool) {
+	c.isLogin=b
 }
 
 //不懂这里字节的话，建议先看下字节原理
