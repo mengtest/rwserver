@@ -7,6 +7,7 @@ type R struct {
 	Code int   `json:"code"`
 	Msg string  `json:"msg"`
 	Data interface{} `json:"data,omitempty"`
+	RequestId string `json:"requestId,omitempty"`
 }
 
 func OK() R{
@@ -44,3 +45,18 @@ func (r R) OutLog() R{
 	return r
 }
 
+func TcpOK(requestId string) R{
+	return R{Code: 0, Msg: "处理成功",RequestId:requestId}
+}
+
+func TcpOkMsg(requestId ,message string) R{
+	return R{Code: 0, Msg: message,RequestId:requestId}
+}
+
+func TcpError(requestId string) R{
+	return R{Code: -1, Msg: "系统异常",RequestId:requestId}
+}
+
+func TcpErrorMsg(requestId ,message string) R{
+	return R{Code: -1, Msg: message ,RequestId:requestId}
+}

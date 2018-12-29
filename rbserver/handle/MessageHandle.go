@@ -1,10 +1,12 @@
 package handle
 
 import (
+	R "../../rbstruct/base"
 	"../../rbwork/base"
 	"../../rbwork/network"
-	R "../../rbstruct/base"
 	"github.com/goinggo/mapstructure"
+	"reflect"
+	"../util"
 )
 
 type LoginStruct struct {
@@ -19,9 +21,16 @@ func HandleMsg(tcpClient *network.TcpClient,msg string)  {
 		tcpClient.Write(base.Struct2Json(R.ErrorMsg("无效请求")))
 		return
 	}
-	cmd:=umap["cmd"].(string)
-	if cmd =="" {
-		tcpClient.Write(base.Struct2Json(R.ErrorMsg("无效请求")))
+	cmd:=umap["cmd"]
+	requestId:=umap["requestId"]
+	type1:=reflect.TypeOf(cmd).String()
+	if cmd ==nil || type1 !="string" {
+		tcpClient.Write(base.Struct2Json(R.ErrorMsg("无效CMD")))
+		return
+	}
+	type2:=reflect.TypeOf(requestId).String()
+	if requestId ==nil ||  type2 !="string"{
+		tcpClient.Write(base.Struct2Json(R.ErrorMsg("无效ID")))
 		return
 	}
 
@@ -36,7 +45,7 @@ func HandleMsg(tcpClient *network.TcpClient,msg string)  {
 		move(tcpClient,umap)
 		return
 	default:
-		tcpClient.Write(base.Struct2Json(R.ErrorMsg("无效请求")))
+		tcpClient.Write(base.Struct2Json(R.TcpErrorMsg(requestId.(string),"无效请求")))
 		return
 	}
 
@@ -44,23 +53,29 @@ func HandleMsg(tcpClient *network.TcpClient,msg string)  {
 
 func login(tcpClient *network.TcpClient,umap map[string]interface{})  {
 	strToken:=umap["token"].(string)
+	requestId:=umap["requestId"].(string)
 	claims,err :=base.DecodeToken(strToken)
 	if err != nil {
-		tcpClient.Write(base.Struct2Json(R.ErrorMsg("token无效")))
+		tcpClient.Write(base.Struct2Json(R.TcpErrorMsg(requestId,"token无效")))
 		return
 	}
 	if umap["mac"].(string) != claims["mac"].(string) {
-		tcpClient.Write(base.Struct2Json(R.ErrorMsg("token无效,请先登录")))
+		tcpClient.Write(base.Struct2Json(R.TcpErrorMsg(requestId,"token无效,请先登录")))
 		return
 	}
 	tcpClient.SetIsLogin(true)
-	tcpClient.Write(base.Struct2Json(R.OK()))
+
+	userId:=claims["uid"].(string)
+	util.Clients[userId]=tcpClient
+
+	tcpClient.Write(base.Struct2Json(R.TcpOK(requestId)))
 }
 
 func chat(tcpClient *network.TcpClient,umap map[string]interface{})  {
+	requestId:=umap["requestId"].(string)
 	loginStruct:=LoginStruct{}
 	if err := mapstructure.Decode(umap, &loginStruct); err != nil {
-		tcpClient.Write(base.Struct2Json(R.ErrorMsg("请求参数错误")))
+		tcpClient.Write(base.Struct2Json(R.TcpErrorMsg(requestId,"请求参数错误")))
 	}
 }
 
