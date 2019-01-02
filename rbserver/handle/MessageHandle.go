@@ -61,9 +61,9 @@ func login(tcpClient *network.TcpClient,umap map[string]interface{})  {
 		tcpClient.Write(base.Struct2Json(R.TcpErrorMsg("login",requestId,"token无效,请先登录")))
 		return
 	}
-	tcpClient.SetIsLogin(true)
-
 	userId:=claims["uid"].(string)
+	tcpClient.SetIsLogin(true)
+	tcpClient.SetUserId(userId)
 
 	util.Clients.Delete(tcpClient.GetIP()) //清除游客模式连接
 	util.Clients.Set(userId,tcpClient)     //设置用户ID为主键
@@ -101,22 +101,57 @@ func chat(tcpClient *network.TcpClient,umap map[string]interface{})  {
 	}
 }
 
+//获取角色列表
+func getRoles(tcpClient *network.TcpClient,umap map[string]interface{})  {
+
+}
+
+//选择角色进入
+func loginRole(tcpClient *network.TcpClient,umap map[string]interface{})  {
+
+}
+
 //移动
 func move(tcpClient *network.TcpClient,umap map[string]interface{})  {
 
 }
 
 //攻击敌人
+func attack(tcpClient *network.TcpClient,umap map[string]interface{})  {
+
+}
 
 //接任务
+func acceptTask(tcpClient *network.TcpClient,umap map[string]interface{})  {
+
+}
+
+//放弃任务
+func abandonTask(tcpClient *network.TcpClient,umap map[string]interface{})  {
+
+}
 
 //完成任务
+func finishTask(tcpClient *network.TcpClient,umap map[string]interface{})  {
+
+}
 
 //升级
+func upgrade(tcpClient *network.TcpClient,umap map[string]interface{})  {
+
+}
 
 //获取物品（装备、物品）
+func getGoods(tcpClient *network.TcpClient,umap map[string]interface{})  {
 
+}
 
+//丢弃物品
+func discardGoods(tcpClient *network.TcpClient,umap map[string]interface{})  {
+
+}
+
+//ping 心跳时间更新
 func ping(tcpClient *network.TcpClient)  {
 	tcpClient.SetTime(time.Now().Unix())
 }
