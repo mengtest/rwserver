@@ -9,12 +9,6 @@ import (
 	"time"
 )
 
-type LoginStruct struct {
-   Cmd string
-   Token string
-   Mac string
-}
-
 func HandleMsg(tcpClient *network.TcpClient,msg string)  {
 	umap,err:=base.Json2map(msg)
 	if err !=nil {
