@@ -73,13 +73,13 @@ func runHeartbeat() {
 		<-tick.C
 		base.LogInfo("开始发送心跳包")
 		for _,tcpClient:= range util.Clients.GetMap() {
-			timeb:=time.Now().Unix()-tcpClient.GetTime()
+			timeb:=time.Now().Unix()-tcpClient.GetTime() //计算秒
 			if timeb>40 {
 			    //40ms内未收到心跳返回,剔除用户
 				tcpClient.Close()
 				util.Clients.Delete(tcpClient.GetIP())
 				util.Clients.Delete(tcpClient.GetUserId())
-				base.LogInfo("IP:"+tcpClient.GetIP(),"userId"+tcpClient.GetUserId(),"超过40秒未收到心跳返回，已断开连接")
+				base.LogInfo("IP->"+tcpClient.GetIP(),"userId->"+tcpClient.GetUserId(),"超过40秒未收到心跳返回，已断开连接")
 			}
 			tcpClient.Write("{\"cmd\":\"ping\",\"requestId\":\"ping\"}")
 		}
