@@ -7,20 +7,21 @@ import (
 	"bytes"
 	"encoding/binary"
 	"strings"
-    "../../rbstruct/user"
+	"time"
 )
 
 type TcpClient struct {
 	ip  string            //客户端IP
 	conn net.Conn         //客户端连接
 	reader *bufio.Reader  //客户端输入读取缓冲区
-	isLogin bool         //是否通过登录授权访问
-	user user.UserInfo    //用户
+	isLogin bool          //是否通过登录授权访问
+	timestamp int64       //上次心跳检测收到返回的时间戳
+	userId string         //用户
 }
 
 func NewTcpClient(conn net.Conn) *TcpClient {
 	ip:=strings.Split(conn.RemoteAddr().String(),":")[0] //获取客户端IP
-	return &TcpClient{ip: ip, conn: conn, reader: bufio.NewReader(conn)}
+	return &TcpClient{ip: ip, conn: conn, reader: bufio.NewReader(conn),isLogin:false,timestamp:time.Now().Unix()}
 }
 
 func (c *TcpClient) LocalAddr() net.Addr {
@@ -42,6 +43,23 @@ func (c *TcpClient) GetIP() string  {
 func (c *TcpClient) SetIsLogin(b bool) {
 	c.isLogin=b
 }
+
+func (c *TcpClient) SetTime(t int64) {
+	c.timestamp=t
+}
+
+func (c *TcpClient) GetTime() int64{
+	return c.timestamp
+}
+
+func (c *TcpClient) SetUserId(userId string) {
+	c.userId=userId
+}
+
+func (c *TcpClient) GetUserId() string{
+	return c.userId
+}
+
 
 //不懂这里字节的话，建议先看下字节原理
 func (c *TcpClient) Write(message string) (int, error) {

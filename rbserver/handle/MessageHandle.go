@@ -7,6 +7,7 @@ import (
 	"github.com/goinggo/mapstructure"
 	"reflect"
 	"../util"
+	"time"
 )
 
 type LoginStruct struct {
@@ -44,8 +45,11 @@ func HandleMsg(tcpClient *network.TcpClient,msg string)  {
 	case Move:
 		move(tcpClient,umap)
 		return
+	case Ping:
+		ping(tcpClient)
+		return
 	default:
-		tcpClient.Write(base.Struct2Json(R.TcpErrorMsg(requestId.(string),"无效请求")))
+		tcpClient.Write(base.Struct2Json(R.TcpErrorMsg(cmd.(string),requestId.(string),"无效请求")))
 		return
 	}
 
@@ -56,29 +60,34 @@ func login(tcpClient *network.TcpClient,umap map[string]interface{})  {
 	requestId:=umap["requestId"].(string)
 	claims,err :=base.DecodeToken(strToken)
 	if err != nil {
-		tcpClient.Write(base.Struct2Json(R.TcpErrorMsg(requestId,"token无效")))
+		tcpClient.Write(base.Struct2Json(R.TcpErrorMsg("login",requestId,"token无效")))
 		return
 	}
 	if umap["mac"].(string) != claims["mac"].(string) {
-		tcpClient.Write(base.Struct2Json(R.TcpErrorMsg(requestId,"token无效,请先登录")))
+		tcpClient.Write(base.Struct2Json(R.TcpErrorMsg("login",requestId,"token无效,请先登录")))
 		return
 	}
 	tcpClient.SetIsLogin(true)
 
 	userId:=claims["uid"].(string)
-	util.Clients[userId]=tcpClient
 
-	tcpClient.Write(base.Struct2Json(R.TcpOK(requestId)))
+	util.Clients.Delete(tcpClient.GetIP()) //清除游客模式连接
+	util.Clients.Set(userId,tcpClient)     //设置用户ID为主键
+	tcpClient.Write(base.Struct2Json(R.TcpOK("login",requestId)))
 }
 
 func chat(tcpClient *network.TcpClient,umap map[string]interface{})  {
 	requestId:=umap["requestId"].(string)
 	loginStruct:=LoginStruct{}
 	if err := mapstructure.Decode(umap, &loginStruct); err != nil {
-		tcpClient.Write(base.Struct2Json(R.TcpErrorMsg(requestId,"请求参数错误")))
+		tcpClient.Write(base.Struct2Json(R.TcpErrorMsg("chat",requestId,"请求参数错误")))
 	}
 }
 
 func move(tcpClient *network.TcpClient,umap map[string]interface{})  {
 
+}
+
+func ping(tcpClient *network.TcpClient)  {
+	tcpClient.SetTime(time.Now().Unix())
 }

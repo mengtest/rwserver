@@ -6,6 +6,8 @@ import (
 	"../handle"
 	"net"
 	"os"
+	"time"
+	"../util"
 )
 
 func main() {
@@ -15,10 +17,12 @@ func main() {
 	CheckError(err)
 	//defer延迟关闭改资源，以免引起内存泄漏
 	defer netListen.Close()
-
 	base.LogInfo("gate sever start")
+
+	go runHeartbeat()
+
 	for {
-		conn, err := netListen.Accept()  //第二步:获取连接
+		conn, err := netListen.Accept()
 		if err != nil {
 			base.LogError(err)
 			continue  //出错退出当前循环
@@ -26,8 +30,9 @@ func main() {
 		//实例化TcpClient,方便进行统一管理
 		client := network.NewTcpClient(conn)
 		base.LogInfo(client.GetIP(), "===>tcp connect success")
-		//将连接加入全局map
-
+		//将连接加入全局map 此时该连接没有经过认证，待心跳检测超时无返回时则中断该连接，并从map清除
+		//登录认证的用户重新设置用户ID为主键
+		util.Clients.Set(client.GetIP(),client)
 		//使用协程处理并发请求
 		go handleConnection(client)
 
@@ -61,4 +66,24 @@ func CheckError(err error) {
 	}
 }
 
+func runHeartbeat() {
+	//每10秒执行一次检测
+	tick := time.NewTicker(time.Second*time.Duration(5))
+	for {
+		<-tick.C
+		base.LogInfo("开始发送心跳包")
+		for _,tcpClient:= range util.Clients.GetMap() {
+			timeb:=time.Now().Unix()-tcpClient.GetTime()
+			if timeb>40 {
+			    //40ms内未收到心跳返回,剔除用户
+				tcpClient.Close()
+				util.Clients.Delete(tcpClient.GetIP())
+				util.Clients.Delete(tcpClient.GetUserId())
+				base.LogInfo("IP:"+tcpClient.GetIP(),"userId"+tcpClient.GetUserId(),"超过40秒未收到心跳返回，已断开连接")
+			}
+			tcpClient.Write("{\"cmd\":\"ping\",\"requestId\":\"ping\"}")
+		}
+	}
+	defer tick.Stop()
+}
 
