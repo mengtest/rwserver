@@ -44,6 +44,10 @@ func (c *TcpClient) SetIsLogin(b bool) {
 	c.isLogin=b
 }
 
+func (c *TcpClient) GetIsLogin() bool {
+	return c.isLogin
+}
+
 func (c *TcpClient) SetTime(t int64) {
 	c.timestamp=t
 }

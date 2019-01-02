@@ -5,7 +5,7 @@ import (
 	"sync"
 )
 
-//定义全局存储在线用户，键值为IP+用户ID
+//定义全局存储在线用户，键值为IP或用户ID（建立连接时为IP,登录认证后为userId）
 var Clients = NewClientMap()
 
 
