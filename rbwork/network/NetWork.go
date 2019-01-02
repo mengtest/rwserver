@@ -15,7 +15,7 @@ type TcpClient struct {
 	conn net.Conn         //客户端连接
 	reader *bufio.Reader  //客户端输入读取缓冲区
 	isLogin bool          //是否通过登录授权访问
-	timestamp int64       //上次心跳检测收到返回的时间戳
+	timestamp int64       //上次心跳检测收到返回的时间戳（秒）
 	userId string         //用户
 }
 
