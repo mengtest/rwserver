@@ -54,6 +54,7 @@ func HandleMsg(tcpClient *network.TcpClient,msg string)  {
 
 }
 
+//登录授权校验
 func login(tcpClient *network.TcpClient,umap map[string]interface{})  {
 	strToken:=umap["token"].(string)
 	requestId:=umap["requestId"].(string)
@@ -72,9 +73,11 @@ func login(tcpClient *network.TcpClient,umap map[string]interface{})  {
 
 	util.Clients.Delete(tcpClient.GetIP()) //清除游客模式连接
 	util.Clients.Set(userId,tcpClient)     //设置用户ID为主键
+
 	tcpClient.Write(base.Struct2Json(R.TcpOK("login",requestId)))
 }
 
+//聊天消息
 func chat(tcpClient *network.TcpClient,umap map[string]interface{})  {
 	requestId:=umap["requestId"].(string)
 	if !tcpClient.GetIsLogin() {
@@ -104,9 +107,21 @@ func chat(tcpClient *network.TcpClient,umap map[string]interface{})  {
 	}
 }
 
+//移动
 func move(tcpClient *network.TcpClient,umap map[string]interface{})  {
 
 }
+
+//攻击敌人
+
+//接任务
+
+//完成任务
+
+//升级
+
+//获取物品（装备、物品）
+
 
 func ping(tcpClient *network.TcpClient)  {
 	tcpClient.SetTime(time.Now().Unix())
