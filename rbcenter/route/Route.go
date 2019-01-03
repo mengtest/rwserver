@@ -65,7 +65,7 @@ type Routes []Route
 
 var routes = Routes{
 	Route{Name: "CheckVersion", LoginValidate:false, Method: "GET", Pattern: "/checkVersion", HandlerFunc: Ctrl.CheckVersion},   //检测更新接口
-	Route{Name: "Login",LoginValidate:false, Method: "POST", Pattern: "/login", HandlerFunc: Ctrl.Login}, //登录
+	Route{Name: "Login",LoginValidate:false, Method: "GET", Pattern: "/login", HandlerFunc: Ctrl.Login}, //登录
 }
 
 

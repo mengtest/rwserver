@@ -6,6 +6,7 @@ import (
 	"../../rbwork/db"
 	"../../rbwork/network"
 	"../util"
+	"reflect"
 )
 
 //定义角色结构体
@@ -52,6 +53,11 @@ func (s *Service) Login(tcpClient *network.TcpClient,umap map[string]interface{}
 	claims,err :=base.DecodeToken(strToken)
 	if err != nil {
 		tcpClient.Write(base.Struct2Json(R.TcpErrorMsg("Login",requestId,"token无效")))
+		return
+	}
+	mac:=umap["mac"]
+	if  mac ==nil || reflect.TypeOf(mac).String() !="string"{
+		tcpClient.Write(base.Struct2Json(R.ErrorMsg("无效MAC")))
 		return
 	}
 	if umap["mac"].(string) != claims["mac"].(string) {

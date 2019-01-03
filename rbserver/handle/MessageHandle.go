@@ -16,13 +16,11 @@ func HandleMsg(tcpClient *network.TcpClient,msg string)  {
 	}
 	cmd:=umap["cmd"]
 	requestId:=umap["requestId"]
-	type1:=reflect.TypeOf(cmd).String()
-	if cmd ==nil || type1 !="string" {
+	if cmd ==nil || reflect.TypeOf(cmd).String() !="string" {
 		tcpClient.Write(base.Struct2Json(R.ErrorMsg("无效请求")))
 		return
 	}
-	type2:=reflect.TypeOf(requestId).String()
-	if requestId ==nil ||  type2 !="string"{
+	if requestId ==nil ||  reflect.TypeOf(requestId).String() !="string"{
 		tcpClient.Write(base.Struct2Json(R.ErrorMsg("无效ID")))
 		return
 	}
