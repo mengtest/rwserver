@@ -9,6 +9,7 @@ import (
 	"sync/atomic"
 	"math/rand"
 	"time"
+	"github.com/satori/go.uuid"
 )
 
 func substr(s string, pos, length int) string {
@@ -79,6 +80,10 @@ func GetIncreaseID(ID *uint64) uint64 {
 	return n
 }
 
-func GenId() int64{
-	return time.Now().UnixNano() / int64(time.Millisecond)
+func GenId() string{
+	u,err:=uuid.NewV4()
+	if err != nil {
+		return ""
+	}
+	return strings.Replace(u.String(),"-","",-1)
 }

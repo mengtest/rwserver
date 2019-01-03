@@ -3,6 +3,7 @@ package main
 import (
 	"../../rbwork/base"
 	"../../rbwork/network"
+	"../../rbwork/db"
 	"../handle"
 	"net"
 	"os"
@@ -10,8 +11,13 @@ import (
 	"../util"
 )
 
-func main() {
+func init()  {
 	base.Init(base.GetCurrentDirectory(),"GameServer.log")
+	db.Init("root:123456@tcp(127.0.0.1:3306)/tianqi?charset=utf8")
+}
+
+func main() {
+
 	//建立socket，监听端口  第一步:绑定端口
 	netListen, err := net.Listen("tcp", "localhost:9010")
 	CheckError(err)
@@ -41,8 +47,7 @@ func main() {
 }
 //处理连接
 func handleConnection(tcpClient *network.TcpClient) {
-	//这里服务端先不着急关闭连接，由系统心跳检测去统一管理
-	//defer tcpClient.Close()
+	//这里不主动关闭连接，由系统心跳检测去统一管理
 
 	for {
 		message, err := tcpClient.Read()
@@ -51,7 +56,7 @@ func handleConnection(tcpClient *network.TcpClient) {
 			//监听到客户端退出，关闭连接
 			tcpClient.Close()
 			util.Clients.Delete(tcpClient.GetIP()+tcpClient.GetSN())
-			util.Clients.Delete(tcpClient.GetUserId())
+			util.Clients.Delete(tcpClient.GetRoleId())
 			return
 		}
 		//输出收到的日志信息
@@ -83,7 +88,7 @@ func runHeartbeat() {
 			    //40s内未收到心跳返回,剔除用户
 				tcpClient.Close()
 				util.Clients.Delete(tcpClient.GetIP()+tcpClient.GetSN())
-				util.Clients.Delete(tcpClient.GetUserId())
+				util.Clients.Delete(tcpClient.GetRoleId())
 				base.LogInfo("IP->"+tcpClient.GetIP(),"userId->"+tcpClient.GetUserId(),"超过40秒未收到心跳返回，已断开连接")
 			}
 			tcpClient.Write("{\"cmd\":\"ping\",\"requestId\":\"ping\"}")

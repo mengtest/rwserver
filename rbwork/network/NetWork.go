@@ -9,12 +9,11 @@ import (
 	"strings"
 	"time"
 	"../base"
-	"strconv"
 )
 
 type TcpClient struct {
 	ip  string            //客户端IP
-	sn  int64             //相同IP客户端连接序列号
+	sn  string             //相同IP客户端连接序列号
 	mac  string           //客户端mac地址
 	conn net.Conn         //客户端连接
 	reader *bufio.Reader  //客户端输入读取缓冲区
@@ -46,7 +45,7 @@ func (c *TcpClient) GetIP() string  {
 }
 
 func (c *TcpClient) GetSN() string  {
-	return strconv.FormatInt(c.sn,10)
+	return c.sn
 }
 
 func (c *TcpClient) SetIsLogin(b bool) {
