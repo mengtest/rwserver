@@ -8,11 +8,13 @@ import (
 	"encoding/binary"
 	"strings"
 	"time"
+	"../base"
+	"strconv"
 )
 
 type TcpClient struct {
 	ip  string            //客户端IP
-	sn  int               //相同IP客户端连接序列号
+	sn  int64             //相同IP客户端连接序列号
 	mac  string           //客户端mac地址
 	conn net.Conn         //客户端连接
 	reader *bufio.Reader  //客户端输入读取缓冲区
@@ -24,7 +26,7 @@ type TcpClient struct {
 
 func NewTcpClient(conn net.Conn) *TcpClient {
 	ip:=strings.Split(conn.RemoteAddr().String(),":")[0] //获取客户端IP
-	return &TcpClient{ip: ip,sn:0, conn: conn, reader: bufio.NewReader(conn),isLogin:false,timestamp:time.Now().Unix()}
+	return &TcpClient{ip: ip,sn:base.GenId(), conn: conn, reader: bufio.NewReader(conn),isLogin:false,timestamp:time.Now().Unix()}
 }
 
 func (c *TcpClient) LocalAddr() net.Addr {
@@ -41,6 +43,10 @@ func (c *TcpClient) Close() error {
 
 func (c *TcpClient) GetIP() string  {
 	return c.ip
+}
+
+func (c *TcpClient) GetSN() string  {
+	return strconv.FormatInt(c.sn,10)
 }
 
 func (c *TcpClient) SetIsLogin(b bool) {
@@ -65,6 +71,22 @@ func (c *TcpClient) SetUserId(userId string) {
 
 func (c *TcpClient) GetUserId() string{
 	return c.userId
+}
+
+func (c *TcpClient) SetRoleId(roleId string) {
+	c.roleId=roleId
+}
+
+func (c *TcpClient) GetRoleId() string{
+	return c.roleId
+}
+
+func (c *TcpClient) SetMac(mac string) {
+	c.mac=mac
+}
+
+func (c *TcpClient) GetMac() string{
+	return c.mac
 }
 
 

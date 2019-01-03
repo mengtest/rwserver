@@ -14,21 +14,19 @@ func (s *Service) Login(tcpClient *network.TcpClient,umap map[string]interface{}
 	requestId:=umap["requestId"].(string)
 	claims,err :=base.DecodeToken(strToken)
 	if err != nil {
-		tcpClient.Write(base.Struct2Json(R.TcpErrorMsg("login",requestId,"token无效")))
+		tcpClient.Write(base.Struct2Json(R.TcpErrorMsg("Login",requestId,"token无效")))
 		return
 	}
 	if umap["mac"].(string) != claims["mac"].(string) {
-		tcpClient.Write(base.Struct2Json(R.TcpErrorMsg("login",requestId,"token无效,请先登录")))
+		tcpClient.Write(base.Struct2Json(R.TcpErrorMsg("Login",requestId,"token无效,请先登录")))
 		return
 	}
 	userId:=claims["uid"].(string)
 	tcpClient.SetIsLogin(true)
 	tcpClient.SetUserId(userId)
+	tcpClient.SetMac(umap["mac"].(string))
 
-	util.Clients.Delete(tcpClient.GetIP()) //清除游客模式连接
-	util.Clients.Set(userId,tcpClient)     //设置用户ID为主键
-
-	tcpClient.Write(base.Struct2Json(R.TcpOK("login",requestId)))
+	tcpClient.Write(base.Struct2Json(R.TcpOK("Login",requestId)))
 }
 
 
@@ -39,7 +37,15 @@ func (s *Service) GetRoles(tcpClient *network.TcpClient,umap map[string]interfac
 
 //选择角色进入
 func (s *Service) LoginRole(tcpClient *network.TcpClient,umap map[string]interface{})  {
+	requestId:=umap["requestId"].(string)
+	roleId:=umap["roleId"].(string)
+	//load role info
 
+	tcpClient.SetRoleId(roleId)
+
+	util.Clients.Delete(tcpClient.GetIP()) //清除游客模式连接
+	util.Clients.Set(tcpClient.GetUserId()+roleId,tcpClient)     //设置用户ID为主键
+	tcpClient.Write(base.Struct2Json(R.TcpOK("LoginRole",requestId)))
 }
 
 

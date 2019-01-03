@@ -6,6 +6,9 @@ import (
 	"path/filepath"
 	"strings"
 	"encoding/json"
+	"sync/atomic"
+	"math/rand"
+	"time"
 )
 
 func substr(s string, pos, length int) string {
@@ -59,4 +62,23 @@ func Json2map(jsonstr string) (map[string]interface{},error){
 func Struct2Json(v interface{}) string {
 	b, _ := json.Marshal(v)
 	return string(b)
+}
+
+
+//GetIncreaseID 并发环境下生成一个增长的id,按需设置局部变量或者全局变量
+func GetIncreaseID(ID *uint64) uint64 {
+	var n, v uint64
+	for {
+		v = atomic.LoadUint64(ID)
+		n = v + 1
+		if atomic.CompareAndSwapUint64(ID, v, n) {
+			break
+		}
+	}
+	rand.Seed(time.Now().UnixNano())
+	return n
+}
+
+func GenId() int64{
+	return time.Now().UnixNano() / int64(time.Millisecond)
 }

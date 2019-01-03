@@ -11,6 +11,9 @@ import (
 
 
 func main() {
+	for i:=0;i<50;i++ {
+		base.LogInfo(base.GenId())
+	}
 
 	var tcpAddr *net.TCPAddr
 	tcpAddr, _ = net.ResolveTCPAddr("tcp", "localhost:9010")

@@ -32,7 +32,8 @@ func main() {
 		base.LogInfo(client.GetIP(), "===>tcp connect success")
 		//将连接加入全局map 此时该连接没有经过认证，待心跳检测超时无返回时则中断该连接，并从map清除
 		//登录认证的用户重新设置用户ID为主键
-		util.Clients.Set(client.GetIP(),client)
+
+		util.Clients.Set(client.GetIP()+client.GetSN(),client)
 		//使用协程处理并发请求
 		go handleConnection(client)
 
@@ -49,7 +50,7 @@ func handleConnection(tcpClient *network.TcpClient) {
 			base.LogError(err)
 			//监听到客户端退出，关闭连接
 			tcpClient.Close()
-			util.Clients.Delete(tcpClient.GetIP())
+			util.Clients.Delete(tcpClient.GetIP()+tcpClient.GetSN())
 			util.Clients.Delete(tcpClient.GetUserId())
 			return
 		}
@@ -81,7 +82,7 @@ func runHeartbeat() {
 			if timeb>40 {
 			    //40s内未收到心跳返回,剔除用户
 				tcpClient.Close()
-				util.Clients.Delete(tcpClient.GetIP())
+				util.Clients.Delete(tcpClient.GetIP()+tcpClient.GetSN())
 				util.Clients.Delete(tcpClient.GetUserId())
 				base.LogInfo("IP->"+tcpClient.GetIP(),"userId->"+tcpClient.GetUserId(),"超过40秒未收到心跳返回，已断开连接")
 			}
