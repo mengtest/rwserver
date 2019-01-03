@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50723
 File Encoding         : 65001
 
-Date: 2018-12-28 13:40:29
+Date: 2019-01-03 21:03:59
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -63,7 +63,8 @@ CREATE TABLE `tb_npc` (
 -- ----------------------------
 DROP TABLE IF EXISTS `tb_role`;
 CREATE TABLE `tb_role` (
-  `lId` bigint(20) NOT NULL AUTO_INCREMENT,
+  `lId` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '角色ID',
+  `lUserId` bigint(20) DEFAULT NULL COMMENT '用户ID',
   `strName` varchar(255) DEFAULT '' COMMENT '角色名称',
   `strTitle` varchar(255) DEFAULT '' COMMENT '当前称号',
   `nSex` int(1) DEFAULT '0' COMMENT '0 男 1女',
@@ -77,12 +78,14 @@ CREATE TABLE `tb_role` (
   `nMaxAD` int(10) DEFAULT '0' COMMENT 'Attack Damage 物理伤害',
   `nPhyDef` int(10) DEFAULT '0' COMMENT '物防',
   `nMagDef` int(10) DEFAULT '0' COMMENT '法防',
+  `nDodge` int(10) DEFAULT NULL COMMENT '回避值',
   `nCrit` int(10) DEFAULT '0' COMMENT '会心',
-  `nCon` int(10) DEFAULT '0' COMMENT '体质 影响hp+=5*nt 影响物防nDefence+=3*nt',
-  `nDex` int(10) DEFAULT '0' COMMENT '敏捷 影响会心 和速度',
-  `nStr` int(10) DEFAULT '0' COMMENT '力量',
-  `nDod` int(10) DEFAULT '0' COMMENT '躲避',
-  `nSup` int(10) DEFAULT '0' COMMENT '法力',
+  `nHit` int(10) DEFAULT '0' COMMENT '命中',
+  `nCon` int(10) DEFAULT '0' COMMENT '体 影响nHP+=5*nCon 影响物防nPhyDef+=3*nCon',
+  `nDex` int(10) DEFAULT '0' COMMENT '敏 影响会心和施法速度',
+  `nStr` int(10) DEFAULT '0' COMMENT '力 影响物理伤害和命中 nMinAD+=2*nStr; nMaxAD=3*nStr  nHit+=1*nStr',
+  `nAvoid` int(10) DEFAULT '0' COMMENT '避',
+  `nSp` int(10) DEFAULT '0' COMMENT '法',
   `fPosX` double(10,2) DEFAULT NULL,
   `fPosY` double(10,2) DEFAULT NULL,
   `fPosZ` double(10,2) DEFAULT NULL,
@@ -90,8 +93,8 @@ CREATE TABLE `tb_role` (
   `fDirY` double(10,2) DEFAULT NULL,
   `fDirZ` double(10,2) DEFAULT NULL,
   `strMapName` varchar(30) DEFAULT '' COMMENT '角色所在地图名称',
-  `DeleteDate` datetime DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP COMMENT '角色删除时间',
   `nDeleted` tinyint(1) DEFAULT '0' COMMENT '是否删除',
+  `dtDeleteDate` datetime DEFAULT NULL COMMENT '角色删除时间',
   `dtUpdateTime` datetime DEFAULT NULL COMMENT '更新时间',
   `dtCreateTime` datetime DEFAULT NULL COMMENT '创建时间',
   PRIMARY KEY (`lId`)
