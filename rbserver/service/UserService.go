@@ -1,12 +1,11 @@
 package service
 
 import (
-	"../../rbwork/network"
-	"../../rbwork/db"
-	"../util"
-	"../../rbwork/base"
 	R "../../rbstruct/base"
-	"database/sql"
+	"../../rbwork/base"
+	"../../rbwork/db"
+	"../../rbwork/network"
+	"../util"
 )
 
 //定义角色结构体
@@ -70,16 +69,19 @@ func (s *Service) Login(tcpClient *network.TcpClient,umap map[string]interface{}
 
 //获取角色列表
 func (s *Service) GetRoles(tcpClient *network.TcpClient,umap map[string]interface{})  {
+	requestId:=umap["requestId"].(string)
+	if !tcpClient.GetIsLogin() {
+		tcpClient.Write(base.Struct2Json(R.TcpErrorMsg("Login",requestId,"未授权，请先登录")))
+		return
+	}
+
 	roles:=[]Role{}
 	sqlc:="SELECT * FROM tb_role WHERE nDeleted=0 AND lUserId=? ORDER BY dtCreateTime DESC"
 	base.LogInfo("SQL:",sqlc," Param:",tcpClient.GetUserId())
 	err:=db.DB.Select(&roles,sqlc,tcpClient.GetUserId())
-	if err==sql.ErrNoRows{
+	base.CheckErr(err)
 
-	}else if base.CheckErr(err) {
-
-	}
-
+	tcpClient.Write(base.Struct2Json(R.TcpOK("GetRoles",requestId).SetData(roles).OutLog()))
 }
 
 //选择角色进入
@@ -87,6 +89,10 @@ func (s *Service) LoginRole(tcpClient *network.TcpClient,umap map[string]interfa
 	requestId:=umap["requestId"].(string)
 	roleId:=umap["roleId"].(string)
 	//load role info
+	if !tcpClient.GetIsLogin() {
+		tcpClient.Write(base.Struct2Json(R.TcpErrorMsg("Login",requestId,"未授权，请先登录")))
+		return
+	}
 
 	tcpClient.SetRoleId(roleId)
 
