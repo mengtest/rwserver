@@ -71,7 +71,7 @@ func (s *Service) LoginRole(tcpClient *network.TcpClient,umap map[string]interfa
 
 	util.Clients.Delete(tcpClient.GetIP()) //清除游客模式连接
 	util.Clients.Set(roleId.(string),tcpClient)     //设置角色ID为主键
-	tcpClient.Write(base.Struct2Json(R.TcpOK("LoginRole",requestId)))
+	tcpClient.Write(base.Struct2Json(R.TcpOK("LoginRole",requestId).SetData(role).OutLog()))
 }
 
 

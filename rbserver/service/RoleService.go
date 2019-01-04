@@ -41,3 +41,8 @@ func (s *Service) GetGoods(tcpClient *network.TcpClient,umap map[string]interfac
 func (s *Service) DiscardGoods(tcpClient *network.TcpClient,umap map[string]interface{})  {
 
 }
+
+//获取周围玩家列表
+func (s *Service) GetAroundPlayers(tcpClient *network.TcpClient,umap map[string]interface{})  {
+
+}
