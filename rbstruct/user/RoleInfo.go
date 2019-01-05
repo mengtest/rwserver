@@ -33,7 +33,9 @@ type RoleInfo struct {
 	FDirX        float32        `db:"fDirX" json:"fDirX"`
 	FDirY        float32        `db:"fDirY" json:"fDirY"`
 	FDirZ        float32        `db:"fDirZ" json:"fDirZ"`
-	StrMapChunk  string         `db:"strMapChunk" json:"strMapChunk"`
+	StrMapName   string         `db:"strMapName" json:"strMapName"`
+	NChunkX      int            `db:"nChunkX" json:"nChunkX"`
+	NChunkY      int            `db:"nChunkY" json:"nChunkY"`
 	NDeleted     int            `db:"nDeleted" json:"-"`
 	DtDeleteDate sql.NullString `db:"dtDeleteDate" json:"-"`
 	DtUpdateTime sql.NullString `db:"dtUpdateTime" json:"-"`

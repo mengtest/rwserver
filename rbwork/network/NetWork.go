@@ -1,6 +1,7 @@
 package network
 
 import (
+	"../../rbstruct/user"
 	"bufio"
 	"bytes"
 	"encoding/binary"
@@ -11,19 +12,20 @@ import (
 )
 
 type TcpClient struct {
-	ip        string        //客户端IP
-	mac       string        //客户端mac地址
-	conn      net.Conn      //客户端连接
-	reader    *bufio.Reader //客户端输入读取缓冲区
-	isLogin   bool          //是否通过登录授权访问
-	timestamp int64         //上次心跳检测收到返回的时间戳（秒）
-	userId    string        //用户ID
-	roleId    string        //角色ID
+	ip        string         //客户端IP
+	mac       string         //客户端mac地址
+	conn      net.Conn       //客户端连接
+	reader    *bufio.Reader  //客户端输入读取缓冲区
+	isLogin   bool           //是否通过登录授权访问
+	timestamp int64          //上次心跳检测收到返回的时间戳（秒）
+	userId    string         //用户ID
+	roleId    string         //角色ID
+	role      *user.RoleInfo //当前登陆角色
 }
 
 func NewTcpClient(conn net.Conn) *TcpClient {
 	ip := strings.Split(conn.RemoteAddr().String(), ":")[0] //获取客户端IP
-	return &TcpClient{ip: ip, conn: conn, reader: bufio.NewReader(conn), isLogin: false, timestamp: time.Now().Unix()}
+	return &TcpClient{ip: ip, conn: conn, reader: bufio.NewReader(conn), isLogin: false, timestamp: time.Now().Unix(), role: &user.RoleInfo{}}
 }
 
 func (c *TcpClient) LocalAddr() string {
@@ -80,6 +82,14 @@ func (c *TcpClient) SetMac(mac string) {
 
 func (c *TcpClient) GetMac() string {
 	return c.mac
+}
+
+func (c *TcpClient) SetRole(role user.RoleInfo) {
+	c.role = &role
+}
+
+func (c *TcpClient) GetRole() *user.RoleInfo {
+	return c.role
 }
 
 //不懂这里字节的话，建议先看下字节原理

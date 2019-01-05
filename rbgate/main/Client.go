@@ -27,14 +27,18 @@ func sendMessage(conn *net.TCPConn) {
 
 	//time.Sleep(1 * time.Microsecond)
 	//content:="{\"code\":\"asdjkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkweqweopqweqopopopopopopopopopopopopopopopopopopopopopopopopopopopopopopopopopopopopopopopopopopopopopop\",\"msg\":\"weweeweeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee\"}"
-	content := "{\"cmd\":\"Login\",\"token\":\"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE1NDY2Njc4OTAsImlhdCI6MTU0NjY2NDI5MywiaXNzIjoidHEuaXVvb24uY29tIiwibWFjIjoiIiwidWlkIjoiMSJ9.nEios8Sq4wSJh0tWcEwrfFp0BRvpAz9cPvqqWyN7AYU\",\"requestId\":\"1\",\"mac\":\"\"}"
+	content := "{\"cmd\":\"Login\",\"token\":\"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE1NDY2NzE2NzgsImlhdCI6MTU0NjY2ODA3OCwiaXNzIjoidHEuaXVvb24uY29tIiwibWFjIjoiIiwidWlkIjoiXHUwMDAxIn0.aSyv1mWdGmemShweOat6gfqjkTMNf9RbA-RBtqy5yFs\",\"requestId\":\"1\",\"mac\":\"\"}"
 	b, _ := base.EncodeHead2Byte(string(content))
 	conn.Write(b)
 	Recv(conn)
 	content = "{\"cmd\":\"LoginRole\",\"roleId\":\"1\",\"requestId\":\"1\",\"mac\":\"\"}"
 	b, _ = base.EncodeHead2Byte(string(content))
 	conn.Write(b)
-
+	Recv(conn)
+	time.Sleep(1 * time.Second)
+	content = "{\"cmd\":\"GetAroundPlayers\",\"roleId\":\"1\",\"requestId\":\"1\",\"mac\":\"\"}"
+	b, _ = base.EncodeHead2Byte(string(content))
+	conn.Write(b)
 	Recv(conn)
 
 }
