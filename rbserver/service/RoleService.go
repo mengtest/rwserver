@@ -19,6 +19,7 @@ func (s *Service) Upgrade(tcpClient *network.TcpClient, umap map[string]interfac
 
 //角色移动
 func (s *Service) Move(tcpClient *network.TcpClient, umap map[string]interface{}) {
+	requestId := umap["requestId"].(string)
 	mapName := umap["mapName"]
 	chunkX := umap["chunkX"]
 	chunkY := umap["chunkY"]
@@ -29,43 +30,43 @@ func (s *Service) Move(tcpClient *network.TcpClient, umap map[string]interface{}
 	dy := umap["dy"]
 	dz := umap["dz"]
 	if mapName == nil || reflect.TypeOf(mapName).String() != "string" {
-		tcpClient.Write(base.Struct2Json(R.ErrorMsg("参数错误")))
+		tcpClient.Write(base.Struct2Json(R.TcpErrorMsg("Move",requestId,"参数错误")))
 		return
 	}
 	if chunkX == nil || reflect.TypeOf(chunkX).String() != "string" {
-		tcpClient.Write(base.Struct2Json(R.ErrorMsg("参数错误")))
+		tcpClient.Write(base.Struct2Json(R.TcpErrorMsg("Move",requestId,"参数错误")))
 		return
 	}
 	if chunkX == nil || reflect.TypeOf(chunkX).String() != "string" {
-		tcpClient.Write(base.Struct2Json(R.ErrorMsg("参数错误")))
+		tcpClient.Write(base.Struct2Json(R.TcpErrorMsg("Move",requestId,"参数错误")))
 		return
 	}
 	if chunkY == nil || reflect.TypeOf(chunkY).String() != "string" {
-		tcpClient.Write(base.Struct2Json(R.ErrorMsg("参数错误")))
+		tcpClient.Write(base.Struct2Json(R.TcpErrorMsg("Move",requestId,"参数错误")))
 		return
 	}
 	if px == nil || reflect.TypeOf(px).String() != "string" {
-		tcpClient.Write(base.Struct2Json(R.ErrorMsg("参数错误")))
+		tcpClient.Write(base.Struct2Json(R.TcpErrorMsg("Move",requestId,"参数错误")))
 		return
 	}
 	if py == nil || reflect.TypeOf(py).String() != "string" {
-		tcpClient.Write(base.Struct2Json(R.ErrorMsg("参数错误")))
+		tcpClient.Write(base.Struct2Json(R.TcpErrorMsg("Move",requestId,"参数错误")))
 		return
 	}
 	if pz == nil || reflect.TypeOf(pz).String() != "string" {
-		tcpClient.Write(base.Struct2Json(R.ErrorMsg("参数错误")))
+		tcpClient.Write(base.Struct2Json(R.TcpErrorMsg("Move",requestId,"参数错误")))
 		return
 	}
 	if dx == nil || reflect.TypeOf(dx).String() != "string" {
-		tcpClient.Write(base.Struct2Json(R.ErrorMsg("参数错误")))
+		tcpClient.Write(base.Struct2Json(R.TcpErrorMsg("Move",requestId,"参数错误")))
 		return
 	}
 	if dy == nil || reflect.TypeOf(dy).String() != "string" {
-		tcpClient.Write(base.Struct2Json(R.ErrorMsg("参数错误")))
+		tcpClient.Write(base.Struct2Json(R.TcpErrorMsg("Move",requestId,"参数错误")))
 		return
 	}
 	if dz == nil || reflect.TypeOf(dz).String() != "string" {
-		tcpClient.Write(base.Struct2Json(R.ErrorMsg("参数错误")))
+		tcpClient.Write(base.Struct2Json(R.TcpErrorMsg("Move",requestId,"参数错误")))
 		return
 	}
 	nChunkX,_:=strconv.Atoi(chunkX.(string))
@@ -84,6 +85,22 @@ func (s *Service) Move(tcpClient *network.TcpClient, umap map[string]interface{}
 
 //角色攻击敌人
 func (s *Service) Attack(tcpClient *network.TcpClient, umap map[string]interface{}) {
+	requestId := umap["requestId"].(string)
+	tRoleId := umap["tRoleId"]
+	skillId := umap["skillId"]
+	if tRoleId == nil || reflect.TypeOf(tRoleId).String() != "string" {
+		tcpClient.Write(base.Struct2Json(R.TcpErrorMsg("Move",requestId,"参数错误")))
+		return
+	}
+	if skillId == nil || reflect.TypeOf(skillId).String() != "string" {
+		tcpClient.Write(base.Struct2Json(R.TcpErrorMsg("Move",requestId,"参数错误")))
+		return
+	}
+	//计算伤害
+	//向攻击发起者推送伤害
+	tcpClient.Write(base.Struct2Json(R.TcpOK("Attack",requestId).SetData(nil)))
+	//攻击者，受伤计算，向被攻击者推送伤害
+	util.Clients.Get(tRoleId.(string)).Write(base.Struct2Json(R.TcpOK("Move",requestId).SetData(nil)))
 
 }
 
