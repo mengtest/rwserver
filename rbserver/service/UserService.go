@@ -14,8 +14,10 @@ import (
 
 //登录授权校验
 func (s *Service) Login(tcpClient *network.TcpClient, umap map[string]interface{}) {
+
 	strToken := umap["token"].(string)
 	requestId := umap["requestId"].(string)
+
 	claims, err := base.DecodeToken(strToken)
 	if err != nil {
 		tcpClient.Write(base.Struct2Json(R.TcpErrorMsg("Login", requestId, "token无效")))

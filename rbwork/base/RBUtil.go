@@ -1,15 +1,16 @@
 package base
 
 import (
+	"encoding/json"
+	"github.com/goinggo/mapstructure"
+	"github.com/satori/go.uuid"
 	"log"
+	"math/rand"
 	"os"
 	"path/filepath"
 	"strings"
-	"encoding/json"
 	"sync/atomic"
-	"math/rand"
 	"time"
-	"github.com/satori/go.uuid"
 )
 
 func substr(s string, pos, length int) string {
@@ -34,18 +35,17 @@ func GetCurrentDirectory() string {
 }
 
 //打印结构体
-func LogStruct(prefix string,v interface{})  {
-	if v==nil {
-       return
+func LogStruct(prefix string, v interface{}) {
+	if v == nil {
+		return
 	}
 	b, err := json.Marshal(v)
 	if err == nil {
-       LogInfo(prefix,string(b))
+		LogInfo(prefix, string(b))
 	}
 }
 
-
-func CheckErr(err error) bool{
+func CheckErr(err error) bool {
 	if err != nil {
 		LogError(err)
 		return true
@@ -53,11 +53,10 @@ func CheckErr(err error) bool{
 	return false
 }
 
-
-func Json2map(jsonstr string) (map[string]interface{},error){
+func Json2map(jsonstr string) (map[string]interface{}, error) {
 	m := make(map[string]interface{})
 	err := json.Unmarshal([]byte(jsonstr), &m)
-	return m,err
+	return m, err
 }
 
 func Struct2Json(v interface{}) string {
@@ -65,6 +64,15 @@ func Struct2Json(v interface{}) string {
 	return string(b)
 }
 
+func Json2Struct(jsonstr string, s *interface{}) error {
+	err := json.Unmarshal([]byte(jsonstr), s)
+	return err
+}
+
+func MapToStruct(m map[string]interface{}, s *interface{}) error {
+	err := mapstructure.Decode(m, s)
+	return err
+}
 
 //GetIncreaseID 并发环境下生成一个增长的id,按需设置局部变量或者全局变量
 func GetIncreaseID(ID *uint64) uint64 {
@@ -80,10 +88,10 @@ func GetIncreaseID(ID *uint64) uint64 {
 	return n
 }
 
-func GenId() string{
-	u,err:=uuid.NewV4()
+func GenId() string {
+	u, err := uuid.NewV4()
 	if err != nil {
 		return ""
 	}
-	return strings.Replace(u.String(),"-","",-1)
+	return strings.Replace(u.String(), "-", "", -1)
 }
