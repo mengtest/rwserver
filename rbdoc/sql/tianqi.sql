@@ -1,22 +1,24 @@
 /*
-Navicat MySQL Data Transfer
+ Navicat Premium Data Transfer
 
-Source Server         : localhost
-Source Server Version : 50723
-Source Host           : localhost:3306
-Source Database       : tianqi
+ Source Server         : localhost
+ Source Server Type    : MySQL
+ Source Server Version : 50717
+ Source Host           : localhost
+ Source Database       : tianqi
 
-Target Server Type    : MYSQL
-Target Server Version : 50723
-File Encoding         : 65001
+ Target Server Type    : MySQL
+ Target Server Version : 50717
+ File Encoding         : utf-8
 
-Date: 2019-01-03 21:03:59
+ Date: 01/05/2019 14:55:59 PM
 */
 
-SET FOREIGN_KEY_CHECKS=0;
+SET NAMES utf8;
+SET FOREIGN_KEY_CHECKS = 0;
 
 -- ----------------------------
--- Table structure for tb_npc
+--  Table structure for `tb_npc`
 -- ----------------------------
 DROP TABLE IF EXISTS `tb_npc`;
 CREATE TABLE `tb_npc` (
@@ -55,11 +57,7 @@ CREATE TABLE `tb_npc` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='npc列表';
 
 -- ----------------------------
--- Records of tb_npc
--- ----------------------------
-
--- ----------------------------
--- Table structure for tb_role
+--  Table structure for `tb_role`
 -- ----------------------------
 DROP TABLE IF EXISTS `tb_role`;
 CREATE TABLE `tb_role` (
@@ -93,19 +91,24 @@ CREATE TABLE `tb_role` (
   `fDirY` double(10,2) DEFAULT NULL,
   `fDirZ` double(10,2) DEFAULT NULL,
   `strMapName` varchar(30) DEFAULT '' COMMENT '角色所在地图名称',
+  `nChunkX` int(10) DEFAULT '0',
+  `nChunkY` int(10) DEFAULT '0',
   `nDeleted` tinyint(1) DEFAULT '0' COMMENT '是否删除',
   `dtDeleteDate` datetime DEFAULT NULL COMMENT '角色删除时间',
   `dtUpdateTime` datetime DEFAULT NULL COMMENT '更新时间',
   `dtCreateTime` datetime DEFAULT NULL COMMENT '创建时间',
   PRIMARY KEY (`lId`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='角色表';
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COMMENT='角色表';
 
 -- ----------------------------
--- Records of tb_role
+--  Records of `tb_role`
 -- ----------------------------
+BEGIN;
+INSERT INTO `tb_role` VALUES ('1', '1', '慕临风', '一剑霜寒十四州', '0', '50', '45897228', '5849', '1209', '100', '257', '324', '547', '588', '432', '878', '112', '210', '100', '60', '200', '70', '30', '100.00', '100.00', '100.00', '0.00', '0.00', '0.00', 'tzy', '11', '12', '0', null, null, '2019-01-05 12:16:58');
+COMMIT;
 
 -- ----------------------------
--- Table structure for tb_user
+--  Table structure for `tb_user`
 -- ----------------------------
 DROP TABLE IF EXISTS `tb_user`;
 CREATE TABLE `tb_user` (
@@ -124,12 +127,14 @@ CREATE TABLE `tb_user` (
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4;
 
 -- ----------------------------
--- Records of tb_user
+--  Records of `tb_user`
 -- ----------------------------
-INSERT INTO `tb_user` VALUES ('1', 'wuyz', '1', 'wka1', '1111', '0', '', '', '2018-12-27 17:31:17', '2018-12-27 17:31:17', '0');
+BEGIN;
+INSERT INTO `tb_user` VALUES ('1', 'wuyz', 'e19f69ca630aef5591f2107b56228dfc', 'wka1', '1111', '0', '', '', '2019-01-05 11:42:50', '2019-01-05 11:42:50', '0');
+COMMIT;
 
 -- ----------------------------
--- Table structure for tb_version
+--  Table structure for `tb_version`
 -- ----------------------------
 DROP TABLE IF EXISTS `tb_version`;
 CREATE TABLE `tb_version` (
@@ -146,8 +151,10 @@ CREATE TABLE `tb_version` (
 ) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4;
 
 -- ----------------------------
--- Records of tb_version
+--  Records of `tb_version`
 -- ----------------------------
-INSERT INTO `tb_version` VALUES ('1', 'weq', '1.0.1', '/weqwe', '3434234234523', '1', '2018-12-20 10:51:47', '2018-12-20 10:51:47', '0');
-INSERT INTO `tb_version` VALUES ('2', 'fgh', '1.0.2', '/rtert', '6456576575', '2', '2018-12-25 10:51:52', '2018-12-25 10:51:52', '0');
-INSERT INTO `tb_version` VALUES ('3', 'weq', '1.0.1', '/weqwe', '3434234234523', '1', '2018-12-27 10:51:56', '2018-12-27 10:51:56', '0');
+BEGIN;
+INSERT INTO `tb_version` VALUES ('1', 'weq', '1.0.1', '/weqwe', '3434234234523', '1', '2018-12-20 10:51:47', '2018-12-20 10:51:47', '0'), ('2', 'fgh', '1.0.2', '/rtert', '6456576575', '2', '2018-12-25 10:51:52', '2018-12-25 10:51:52', '0'), ('3', 'weq', '1.0.1', '/weqwe', '3434234234523', '1', '2018-12-27 10:51:56', '2018-12-27 10:51:56', '0');
+COMMIT;
+
+SET FOREIGN_KEY_CHECKS = 1;
