@@ -1,7 +1,7 @@
 package redis
 
 import (
-	"gopkg.in/redis.v6"
+	"gopkg.in/redis.v4"
 )
 
 
