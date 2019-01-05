@@ -8,6 +8,7 @@ import (
 	"../../rbwork/network"
 	"../../rbwork/redis"
 	"../util"
+	"reflect"
 	"strconv"
 )
 
@@ -18,7 +19,67 @@ func (s *Service) Upgrade(tcpClient *network.TcpClient, umap map[string]interfac
 
 //角色移动
 func (s *Service) Move(tcpClient *network.TcpClient, umap map[string]interface{}) {
+	mapName := umap["mapName"]
+	chunkX := umap["chunkX"]
+	chunkY := umap["chunkY"]
+	px := umap["px"]
+	py := umap["py"]
+	pz := umap["pz"]
+	dx := umap["dx"]
+	dy := umap["dy"]
+	dz := umap["dz"]
+	if mapName == nil || reflect.TypeOf(mapName).String() != "string" {
+		tcpClient.Write(base.Struct2Json(R.ErrorMsg("参数错误")))
+		return
+	}
+	if chunkX == nil || reflect.TypeOf(chunkX).String() != "string" {
+		tcpClient.Write(base.Struct2Json(R.ErrorMsg("参数错误")))
+		return
+	}
+	if chunkX == nil || reflect.TypeOf(chunkX).String() != "string" {
+		tcpClient.Write(base.Struct2Json(R.ErrorMsg("参数错误")))
+		return
+	}
+	if chunkY == nil || reflect.TypeOf(chunkY).String() != "string" {
+		tcpClient.Write(base.Struct2Json(R.ErrorMsg("参数错误")))
+		return
+	}
+	if px == nil || reflect.TypeOf(px).String() != "string" {
+		tcpClient.Write(base.Struct2Json(R.ErrorMsg("参数错误")))
+		return
+	}
+	if py == nil || reflect.TypeOf(py).String() != "string" {
+		tcpClient.Write(base.Struct2Json(R.ErrorMsg("参数错误")))
+		return
+	}
+	if pz == nil || reflect.TypeOf(pz).String() != "string" {
+		tcpClient.Write(base.Struct2Json(R.ErrorMsg("参数错误")))
+		return
+	}
+	if dx == nil || reflect.TypeOf(dx).String() != "string" {
+		tcpClient.Write(base.Struct2Json(R.ErrorMsg("参数错误")))
+		return
+	}
+	if dy == nil || reflect.TypeOf(dy).String() != "string" {
+		tcpClient.Write(base.Struct2Json(R.ErrorMsg("参数错误")))
+		return
+	}
+	if dz == nil || reflect.TypeOf(dz).String() != "string" {
+		tcpClient.Write(base.Struct2Json(R.ErrorMsg("参数错误")))
+		return
+	}
+	nChunkX,_:=strconv.Atoi(chunkX.(string))
+	nChunkY,_:=strconv.Atoi(chunkY.(string))
 
+	role := tcpClient.GetRole()
+    //如果所处地图和地块发生变化,角色属性变化
+	if  mapName != role.StrMapName || nChunkX != role.NChunkX || nChunkY != role.NChunkY{
+		redis.Client.SRem(constant.MapChunk +role.StrMapName+":"+ strconv.Itoa(role.NChunkX) + "#" + strconv.Itoa(role.NChunkY),tcpClient.GetRoleId())
+		role.NChunkX=nChunkX
+		role.NChunkY=nChunkY
+		role.StrMapName=mapName.(string)
+		redis.Client.SAdd(constant.MapChunk+role.StrMapName+":"+strconv.Itoa(role.NChunkX)+"#"+strconv.Itoa(role.NChunkY),tcpClient.GetRoleId())
+	}
 }
 
 //角色攻击敌人

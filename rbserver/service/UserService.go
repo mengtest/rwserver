@@ -72,6 +72,7 @@ func (s *Service) LoginRole(tcpClient *network.TcpClient, umap map[string]interf
 	tcpClient.SetRoleId(roleId.(string))
 	tcpClient.SetRole(role)
 	redis.Client.SAdd(constant.MapChunk+role.StrMapName+":"+strconv.Itoa(role.NChunkX)+"#"+strconv.Itoa(role.NChunkY), roleId.(string))
+
 	util.Clients.Delete(tcpClient.RemoteAddr())  //清除游客模式连接
 	util.Clients.Set(roleId.(string), tcpClient) //设置角色ID为主键
 	tcpClient.Write(base.Struct2Json(R.TcpOK("LoginRole", requestId).SetData(role).OutLog()))
