@@ -15,7 +15,7 @@ import (
 func init() {
 	base.Init(base.GetCurrentDirectory(), "GameServer.log")
 	db.Init("root:123456@tcp(127.0.0.1:3306)/tianqi?charset=utf8")
-	redis.InitRedisPool("redis://127.0.0.1:6379", "Wyz123!@#")
+	redis.InitRedis("127.0.0.1:6379", "Wyz123!@#")
 }
 
 func main() {

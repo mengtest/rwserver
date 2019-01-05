@@ -8,4 +8,5 @@ const DownloadHost = "http://tq.iuoon.com/download"
 
 // redis key
 const SMS_MOBILE = "sms:mobile:" //手机短信验证码
-const MAP_CHUNK = "mapchunk:"
+const MapChunk = "map:chunk:"
+const RoleIds = "roleIds:"

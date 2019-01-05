@@ -68,16 +68,16 @@ func (s *Service) GetAroundPlayers(tcpClient *network.TcpClient, umap map[string
 	var roleIds []string
 	for i := role.NChunkX - 1; i <= role.NChunkX+1; i++ {
 		for j := role.NChunkY - 1; j <= role.NChunkY+1; j++ {
-			rIds, _ := redis.Smembers(constant.MAP_CHUNK + role.StrMapName + ":" + strconv.Itoa(i) + ":" + strconv.Itoa(j))
-			roleIds = append(roleIds, rIds...)
+			rIds:= redis.Client.SMembers(constant.MapChunk +role.StrMapName+":"+ strconv.Itoa(i) + "#" + strconv.Itoa(j))
+			roleIds = append(roleIds, rIds.Val() ...)
 		}
 	}
 	//---- 获取这些角色信息
 	var players []user.RoleInfo
 	for _, roleId := range roleIds {
 		if roleId != "" {
-			base.LogInfo("roleId==" + roleId)
-			players = append(players, *util.Clients.Get(roleId).GetRole())
+			client:=util.Clients.Get(roleId)
+			players = append(players, *client.GetRole())
 		}
 	}
 	tcpClient.Write(base.Struct2Json(R.TcpOK("GetAroundPlayers", requestId).SetData(players).OutLog()))
