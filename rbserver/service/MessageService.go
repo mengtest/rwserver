@@ -6,7 +6,10 @@ import (
 	"../util"
 	"../../rbwork/base"
 	R "../../rbstruct/base"
-	)
+	"strconv"
+	"../../rbwork/constant"
+	"../../rbwork/redis"
+)
 
 //聊天消息
 func (s *Service) Chat(tcpClient *network.TcpClient,umap map[string]interface{})  {
@@ -30,10 +33,33 @@ func (s *Service) Chat(tcpClient *network.TcpClient,umap map[string]interface{})
 			t.Write(base.Struct2Json(R.TcpOkMsg("chat",requestId,umap["msg"].(string))))
 		}
 		return
-	case "1": //指定用户说话
+	case "1":
+		//当前频道向附近玩家发送消息
+		go ChatToAroundPlayers(tcpClient,requestId,umap["msg"].(string))
+		return
+	case "10": //指定用户说话
 		util.Clients.Get(umap["toUserId"].(string)).Write(base.Struct2Json(R.TcpOkMsg("chat",requestId,umap["msg"].(string))))
 		return
 	default:
 		return
 	}
+}
+
+func ChatToAroundPlayers(tcpClient *network.TcpClient,requestId string,msg string){
+	role := tcpClient.GetRole()
+	var roleIds []string
+	for i := role.NChunkX - 1; i <= role.NChunkX+1; i++ {
+		for j := role.NChunkY - 1; j <= role.NChunkY+1; j++ {
+			rIds:= redis.Client.SMembers(constant.MapChunk +role.StrMapName+":"+ strconv.Itoa(i) + "#" + strconv.Itoa(j))
+			roleIds = append(roleIds, rIds.Val() ...)
+		}
+	}
+	//---- 获取这些角色信息
+	for _, roleId := range roleIds {
+		if roleId != "" {
+			client:=util.Clients.Get(roleId)
+			client.Write(base.Struct2Json(R.TcpOkMsg("chat",requestId,msg)))
+		}
+	}
+
 }
