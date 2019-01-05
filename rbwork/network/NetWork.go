@@ -1,55 +1,49 @@
 package network
 
 import (
-	"github.com/pkg/errors"
-	"net"
 	"bufio"
 	"bytes"
 	"encoding/binary"
+	"github.com/pkg/errors"
+	"net"
 	"strings"
 	"time"
-	"../base"
 )
 
 type TcpClient struct {
-	ip  string            //客户端IP
-	sn  string             //相同IP客户端连接序列号
-	mac  string           //客户端mac地址
-	conn net.Conn         //客户端连接
-	reader *bufio.Reader  //客户端输入读取缓冲区
-	isLogin bool          //是否通过登录授权访问
-	timestamp int64       //上次心跳检测收到返回的时间戳（秒）
-	userId string         //用户ID
-	roleId string         //角色ID
+	ip        string        //客户端IP
+	mac       string        //客户端mac地址
+	conn      net.Conn      //客户端连接
+	reader    *bufio.Reader //客户端输入读取缓冲区
+	isLogin   bool          //是否通过登录授权访问
+	timestamp int64         //上次心跳检测收到返回的时间戳（秒）
+	userId    string        //用户ID
+	roleId    string        //角色ID
 }
 
 func NewTcpClient(conn net.Conn) *TcpClient {
-	ip:=strings.Split(conn.RemoteAddr().String(),":")[0] //获取客户端IP
-	return &TcpClient{ip: ip,sn:base.GenId(), conn: conn, reader: bufio.NewReader(conn),isLogin:false,timestamp:time.Now().Unix()}
+	ip := strings.Split(conn.RemoteAddr().String(), ":")[0] //获取客户端IP
+	return &TcpClient{ip: ip, conn: conn, reader: bufio.NewReader(conn), isLogin: false, timestamp: time.Now().Unix()}
 }
 
-func (c *TcpClient) LocalAddr() net.Addr {
-	return c.conn.LocalAddr()
+func (c *TcpClient) LocalAddr() string {
+	return c.conn.LocalAddr().String()
 }
 
-func (c *TcpClient) RemoteAddr() net.Addr {
-	return c.conn.RemoteAddr()
+func (c *TcpClient) RemoteAddr() string {
+	return c.conn.RemoteAddr().String()
 }
 
 func (c *TcpClient) Close() error {
 	return c.conn.Close()
 }
 
-func (c *TcpClient) GetIP() string  {
+func (c *TcpClient) GetIP() string {
 	return c.ip
 }
 
-func (c *TcpClient) GetSN() string  {
-	return c.sn
-}
-
 func (c *TcpClient) SetIsLogin(b bool) {
-	c.isLogin=b
+	c.isLogin = b
 }
 
 func (c *TcpClient) GetIsLogin() bool {
@@ -57,46 +51,45 @@ func (c *TcpClient) GetIsLogin() bool {
 }
 
 func (c *TcpClient) SetTime(t int64) {
-	c.timestamp=t
+	c.timestamp = t
 }
 
-func (c *TcpClient) GetTime() int64{
+func (c *TcpClient) GetTime() int64 {
 	return c.timestamp
 }
 
 func (c *TcpClient) SetUserId(userId string) {
-	c.userId=userId
+	c.userId = userId
 }
 
-func (c *TcpClient) GetUserId() string{
+func (c *TcpClient) GetUserId() string {
 	return c.userId
 }
 
 func (c *TcpClient) SetRoleId(roleId string) {
-	c.roleId=roleId
+	c.roleId = roleId
 }
 
-func (c *TcpClient) GetRoleId() string{
+func (c *TcpClient) GetRoleId() string {
 	return c.roleId
 }
 
 func (c *TcpClient) SetMac(mac string) {
-	c.mac=mac
+	c.mac = mac
 }
 
-func (c *TcpClient) GetMac() string{
+func (c *TcpClient) GetMac() string {
 	return c.mac
 }
-
 
 //不懂这里字节的话，建议先看下字节原理
 func (c *TcpClient) Write(message string) (int, error) {
 	// 读取消息的长度
 	//tcp一次传输一般2个字节长度足够，所以这里用int16，如果不够可采用4字节的int32或者更高
 	//根据debug显示int16下分配了两位uint8字节，最大可达255*256+255=65535，所以应付绝大多数场景是足够的
-	var length  = int16(len(message))
+	var length = int16(len(message))
 	if uint16(length) > 65535 {
-       return 0,errors.New("byte length exceeded the maximum limit of 65535")
+		return 0, errors.New("byte length exceeded the maximum limit of 65535")
 	}
 	var pkg = new(bytes.Buffer)
 
@@ -141,11 +134,11 @@ func (c *TcpClient) Read() (string, error) {
 	}
 	// 字节超过了最大传输限制，返回错误
 	if uint16(length) > 65535 {
-		return "",errors.New("byte length exceeded the maximum limit of 65535")
+		return "", errors.New("byte length exceeded the maximum limit of 65535")
 	}
 
 	//2字节长度处理逻辑
-	ln:=int16(c.reader.Buffered())
+	ln := int16(c.reader.Buffered())
 	if ln < length+2 {
 		//这里有个问题，如果客户端只输入了报文长度，没有输入报文，则会出现这种请求
 		return "", errors.New("could not read body info,please check client request")
@@ -158,4 +151,3 @@ func (c *TcpClient) Read() (string, error) {
 	return string(pack[2:]), nil
 
 }
-

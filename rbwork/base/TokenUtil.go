@@ -1,12 +1,12 @@
 package base
 
 import (
-	"time"
-	"github.com/dgrijalva/jwt-go"
 	"fmt"
+	"github.com/dgrijalva/jwt-go"
+	"time"
 )
 
-const SecretKey  = "tianqi2018xbc"
+const SecretKey = "tianqi2018xbc"
 
 type CustClaims struct {
 	Audience  string `json:"aud,omitempty"`
@@ -19,27 +19,28 @@ type CustClaims struct {
 	UserId    int64  `json:"uid,omitempty"`
 }
 
-func CreateToken(userId string) string {
+func CreateToken(userId string, mac string) string {
 	claims := make(jwt.MapClaims)
 	claims["exp"] = time.Now().Add(time.Hour * time.Duration(1)).Unix()
 	claims["iat"] = time.Now().Unix()
 	claims["iss"] = "tq.iuoon.com"
 	claims["uid"] = userId
-	fmt.Println("duration==",time.Duration(1))
-	fmt.Println("nowtime==",time.Now().Unix())
+	claims["mac"] = mac
+	fmt.Println("duration==", time.Duration(1))
+	fmt.Println("nowtime==", time.Now().Unix())
 
-	token := jwt.NewWithClaims(jwt.SigningMethodHS256,claims)
+	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
 	tokenString, _ := token.SignedString([]byte(SecretKey))
 	return tokenString
 }
 
-func DecodeToken(tokenString string) (jwt.MapClaims,error) {
+func DecodeToken(tokenString string) (jwt.MapClaims, error) {
 	claims := jwt.MapClaims{}
-	_, err := jwt.ParseWithClaims(tokenString, claims,func(token *jwt.Token) (interface{}, error) {
+	_, err := jwt.ParseWithClaims(tokenString, claims, func(token *jwt.Token) (interface{}, error) {
 		return []byte(SecretKey), nil
 	})
 	if err != nil {
-		return nil,err
+		return nil, err
 	}
-	return claims,nil
+	return claims, nil
 }

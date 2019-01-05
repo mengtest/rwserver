@@ -2,18 +2,20 @@ package main
 
 import (
 	"../../rbwork/base"
-	"../../rbwork/network"
 	"../../rbwork/db"
+	"../../rbwork/network"
+	"../../rbwork/redis"
 	"../handle"
+	"../util"
 	"net"
 	"os"
 	"time"
-	"../util"
 )
 
-func init()  {
-	base.Init(base.GetCurrentDirectory(),"GameServer.log")
+func init() {
+	base.Init(base.GetCurrentDirectory(), "GameServer.log")
 	db.Init("root:123456@tcp(127.0.0.1:3306)/tianqi?charset=utf8")
+	redis.InitRedisPool("redis://127.0.0.1:6379", "Wyz123!@#")
 }
 
 func main() {
@@ -23,7 +25,7 @@ func main() {
 	CheckError(err)
 	//defer延迟关闭改资源，以免引起内存泄漏
 	defer netListen.Close()
-	base.LogInfo("gate sever start")
+	base.LogInfo("game sever start")
 
 	go runHeartbeat()
 
@@ -31,20 +33,21 @@ func main() {
 		conn, err := netListen.Accept()
 		if err != nil {
 			base.LogError(err)
-			continue  //出错退出当前循环
+			continue //出错退出当前循环
 		}
 		//实例化TcpClient,方便进行统一管理
 		client := network.NewTcpClient(conn)
-		base.LogInfo(client.GetIP(), "===>tcp connect success")
+		base.LogInfo(client.RemoteAddr(), "===>tcp connect success")
 		//将连接加入全局map 此时该连接没有经过认证，待心跳检测超时无返回时则中断该连接，并从map清除
 		//登录认证的用户重新设置用户ID为主键
 
-		util.Clients.Set(client.GetIP()+client.GetSN(),client)
+		util.Clients.Set(client.RemoteAddr(), client)
 		//使用协程处理并发请求
 		go handleConnection(client)
 
 	}
 }
+
 //处理连接
 func handleConnection(tcpClient *network.TcpClient) {
 	//这里不主动关闭连接，由系统心跳检测去统一管理
@@ -55,18 +58,16 @@ func handleConnection(tcpClient *network.TcpClient) {
 			base.LogError(err)
 			//监听到客户端退出，关闭连接
 			tcpClient.Close()
-			util.Clients.Delete(tcpClient.GetIP()+tcpClient.GetSN())
+			util.Clients.Delete(tcpClient.RemoteAddr())
 			util.Clients.Delete(tcpClient.GetRoleId())
 			return
 		}
 		//输出收到的日志信息
 		base.LogInfo("accept:", message)
-		go handle.HandleMsg(tcpClient,message)
+		go handle.HandleMsg(tcpClient, message)
 	}
 
 }
-
-
 
 //处理error
 func CheckError(err error) {
@@ -78,22 +79,21 @@ func CheckError(err error) {
 
 func runHeartbeat() {
 	//每10秒执行一次检测
-	tick := time.NewTicker(time.Second*time.Duration(5))
+	tick := time.NewTicker(time.Second * time.Duration(5))
 	for {
 		<-tick.C
 		base.LogInfo("开始发送心跳包")
-		for _,tcpClient:= range util.Clients.GetMap() {
-			timeb:=time.Now().Unix()-tcpClient.GetTime() //计算秒
-			if timeb>40 {
-			    //40s内未收到心跳返回,剔除用户
+		for _, tcpClient := range util.Clients.GetMap() {
+			timeb := time.Now().Unix() - tcpClient.GetTime() //计算秒
+			if timeb > 40 {
+				//40s内未收到心跳返回,剔除用户
 				tcpClient.Close()
-				util.Clients.Delete(tcpClient.GetIP()+tcpClient.GetSN())
+				util.Clients.Delete(tcpClient.RemoteAddr())
 				util.Clients.Delete(tcpClient.GetRoleId())
-				base.LogInfo("IP->"+tcpClient.GetIP(),"userId->"+tcpClient.GetUserId(),"超过40秒未收到心跳返回，已断开连接")
+				base.LogInfo("IP->"+tcpClient.RemoteAddr(), "roleId->"+tcpClient.GetRoleId(), "超过40秒未收到心跳返回，已断开连接")
 			}
 			tcpClient.Write("{\"cmd\":\"ping\",\"requestId\":\"ping\"}")
 		}
 	}
 	defer tick.Stop()
 }
-

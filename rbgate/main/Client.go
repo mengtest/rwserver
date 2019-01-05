@@ -1,14 +1,12 @@
 package main
 
 import (
-	"fmt"
-	"net"
 	"../../rbwork/base"
 	"../../rbwork/network"
-	"strconv"
+	"fmt"
+	"net"
 	"time"
 )
-
 
 func main() {
 	var tcpAddr *net.TCPAddr
@@ -20,36 +18,36 @@ func main() {
 	time.Sleep(1 * time.Microsecond)
 	go sendMessage(conn)
 
-
-
 	var msg string
 	fmt.Scanln(&msg)
 
 }
 
-
 func sendMessage(conn *net.TCPConn) {
-	for i:=0;i<10 ;i++ {
-		//time.Sleep(1 * time.Microsecond)
-		//content:="{\"code\":\"asdjkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkweqweopqweqopopopopopopopopopopopopopopopopopopopopopopopopopopopopopopopopopopopopopopopopopopopopopop\",\"msg\":\"weweeweeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee\"}"
-		content:="{\"cmd\":\"Login\",\"token\":\"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE1NDY1MzEzMzMsImlhdCI6MTU0NjUyNzczMywiaXNzIjoidHEuaXVvb24uY29tIiwidWlkIjoiXHUwMDAxIn0.oTlHBy2-tlpqMZe5O5MY2zbmywwOk76Mm4DIFnzycZ4\",\"requestId\":\""+strconv.Itoa(i)+"\",\"mac\":\"112\"}"
-		b, _ := base.EncodeHead2Byte(string(content))
-		conn.Write(b)
 
-        Recv(conn)
-	}
+	//time.Sleep(1 * time.Microsecond)
+	//content:="{\"code\":\"asdjkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkweqweopqweqopopopopopopopopopopopopopopopopopopopopopopopopopopopopopopopopopopopopopopopopopopopopopop\",\"msg\":\"weweeweeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee\"}"
+	content := "{\"cmd\":\"Login\",\"token\":\"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE1NDY2NjQ4NDAsImlhdCI6MTU0NjY2MTI0MCwiaXNzIjoidHEuaXVvb24uY29tIiwibWFjIjoiIiwidWlkIjoiXHUwMDAxIn0.ayJLoLVsxt6jaZSJGZPu6HYqz-fqiyRInE21g4XFXGs\",\"requestId\":\"1\",\"mac\":\"\"}"
+	b, _ := base.EncodeHead2Byte(string(content))
+	conn.Write(b)
+	Recv(conn)
+	content = "{\"cmd\":\"LoginRole\",\"roleId\":\"1\",\"requestId\":\"1\",\"mac\":\"\"}"
+	b, _ = base.EncodeHead2Byte(string(content))
+	conn.Write(b)
+
+	Recv(conn)
+
 }
 
-func Recv(conn *net.TCPConn)  {
+func Recv(conn *net.TCPConn) {
 	tcpClient := network.NewTcpClient(conn)
 
-		message, err := tcpClient.Read()
-		if err != nil {
-			base.LogError(err)
-			return
-		}
-		//输出收到的日志信息
-		base.LogInfo("收到返回:", message)
+	message, err := tcpClient.Read()
+	if err != nil {
+		base.LogError(err)
+		return
+	}
+	//输出收到的日志信息
+	base.LogInfo("收到返回:", message)
 
 }
-
