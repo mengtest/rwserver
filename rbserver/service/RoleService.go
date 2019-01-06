@@ -19,44 +19,44 @@ func (s *Service) Upgrade(tcpClient *network.TcpClient, msg string) {
 
 //角色移动
 func (s *Service) Move(tcpClient *network.TcpClient, msg string) {
-	req:=&net.MoveReq{}
-	base.Json2Struct(msg,req)
+	req := &net.MoveReq{}
+	base.Json2Struct(msg, req)
 
 	role := tcpClient.GetRole()
-    //如果所处地图和地块发生变化,角色属性变化
-	if  req.MapName != role.StrMapName || req.ChunkX != role.NChunkX || req.ChunkY != role.NChunkY{
-		redis.Client.SRem(constant.MapChunk +role.StrMapName+":"+ strconv.Itoa(role.NChunkX) + "#" + strconv.Itoa(role.NChunkY),tcpClient.GetRoleId())
-		role.NChunkX=req.ChunkX
-		role.NChunkY=req.ChunkY
-		role.StrMapName=req.MapName
-		role.FDirX=req.Dx
-		role.FDirY=req.Dy
-		role.FDirZ=req.Dz
-		role.FPosX=req.Px
-		role.FPosY=req.Py
-		role.FPosZ=req.Pz
-		redis.Client.SAdd(constant.MapChunk+role.StrMapName+":"+strconv.Itoa(role.NChunkX)+"#"+strconv.Itoa(role.NChunkY),tcpClient.GetRoleId())
+	//如果所处地图和地块发生变化,角色属性变化
+	if req.MapName != role.StrMapName || req.ChunkX != role.NChunkX || req.ChunkY != role.NChunkY {
+		redis.Client.SRem(constant.MapChunk+role.StrMapName+":"+strconv.Itoa(role.NChunkX)+"#"+strconv.Itoa(role.NChunkY), tcpClient.GetRoleId())
+		role.NChunkX = req.ChunkX
+		role.NChunkY = req.ChunkY
+		role.StrMapName = req.MapName
+		role.FDirX = req.Dx
+		role.FDirY = req.Dy
+		role.FDirZ = req.Dz
+		role.FPosX = req.Px
+		role.FPosY = req.Py
+		role.FPosZ = req.Pz
+		redis.Client.SAdd(constant.MapChunk+role.StrMapName+":"+strconv.Itoa(role.NChunkX)+"#"+strconv.Itoa(role.NChunkY), tcpClient.GetRoleId())
 	}
 }
 
 //角色攻击敌人
-func (s *Service) Attack(tcpClient *network.TcpClient,msg string) {
-	req:=&net.AttackReq{}
-	base.Json2Struct(msg,req)
-	if req.TargetId <=0 {
-		tcpClient.Write(base.Struct2Json(R.TcpErrorMsg(req.Cmd,req.RequestId,"请选择目标")))
+func (s *Service) Attack(tcpClient *network.TcpClient, msg string) {
+	req := &net.AttackReq{}
+	base.Json2Struct(msg, req)
+	if req.TargetId <= 0 {
+		tcpClient.Write(base.Struct2Json(R.TcpErrorMsg(req.Cmd, req.RequestId, "请选择目标")))
 		return
 	}
 	//计算伤害
-	if req.SkillCode ==""{
+	if req.SkillCode == "" {
 		//计算普攻伤害
-	}else{
+	} else {
 
 	}
 	//向攻击发起者推送伤害
-	tcpClient.Write(base.Struct2Json(R.TcpOK(req.Cmd,req.RequestId).SetData(nil)))
+	tcpClient.Write(base.Struct2Json(R.TcpOK(req.Cmd, req.RequestId).SetData(nil)))
 	//向被攻击者推送伤害
-	util.Clients.Get(strconv.FormatInt(req.TargetId,10)).Write(base.Struct2Json(R.TcpOK(req.Cmd,req.RequestId).SetData(nil)))
+	util.Clients.Get(strconv.FormatInt(req.TargetId, 10)).Write(base.Struct2Json(R.TcpOK(req.Cmd, req.RequestId).SetData(nil)))
 
 }
 
@@ -87,8 +87,8 @@ func (s *Service) DiscardGoods(tcpClient *network.TcpClient, msg string) {
 
 //获取周围玩家列表
 func (s *Service) GetAroundPlayers(tcpClient *network.TcpClient, msg string) {
-	req:=&net.Req{}
-	base.Json2Struct(msg,req)
+	req := &net.Req{}
+	base.Json2Struct(msg, req)
 	if !tcpClient.GetIsLogin() {
 		tcpClient.Write(base.Struct2Json(R.TcpErrorMsg(req.Cmd, req.RequestId, "未授权，请先登录")))
 		return
@@ -103,16 +103,30 @@ func (s *Service) GetAroundPlayers(tcpClient *network.TcpClient, msg string) {
 	var roleIds []string
 	for i := role.NChunkX - 1; i <= role.NChunkX+1; i++ {
 		for j := role.NChunkY - 1; j <= role.NChunkY+1; j++ {
-			rIds:= redis.Client.SMembers(constant.MapChunk +role.StrMapName+":"+ strconv.Itoa(i) + "#" + strconv.Itoa(j))
-			roleIds = append(roleIds, rIds.Val() ...)
+			rIds := redis.Client.SMembers(constant.MapChunk + role.StrMapName + ":" + strconv.Itoa(i) + "#" + strconv.Itoa(j))
+			roleIds = append(roleIds, rIds.Val()...)
 		}
 	}
 	//---- 获取这些角色信息
-	var players []user.RoleInfo
+	var players []user.AroundRole
 	for _, roleId := range roleIds {
 		if roleId != "" {
-			client:=util.Clients.Get(roleId)
-			players = append(players, *client.GetRole())
+			client := util.Clients.Get(roleId)
+
+			player := user.AroundRole{}
+			player.LId = client.GetRole().LId
+			player.StrName = client.GetRole().StrName
+			player.StrTitle = client.GetRole().StrTitle
+			player.NSex = client.GetRole().NSex
+			player.NLevel = client.GetRole().NLevel
+			player.NHP = client.GetRole().NHP
+			player.NMP = client.GetRole().NMP
+			player.NMaxHP = client.GetRole().NMaxHP + client.GetRole().NTempHP
+			player.NMaxMP = client.GetRole().NMaxMP + client.GetRole().NTempMP
+			player.NOccId = client.GetRole().NOccId
+			player.StrOccName = client.GetRole().StrOccName
+
+			players = append(players, player)
 		}
 	}
 	tcpClient.Write(base.Struct2Json(R.TcpOK(req.Cmd, req.RequestId).SetData(players).OutLog()))

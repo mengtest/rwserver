@@ -4,15 +4,20 @@ import "database/sql"
 
 //定义角色结构体
 type RoleInfo struct {
-	LId          int64          `db:"lId" json:"lId"`
-	LUserId      int64          `db:"lUserId" json:"lUserId"`
-	StrName      string         `db:"strName" json:"strName"`
-	StrTitle     string         `db:"strTitle" json:"strTitle"`
-	NSex         int            `db:"nSex" json:"nSex"`
-	NLevel       int            `db:"nLevel" json:"nLevel"`
-	NExp         int            `db:"nExp" json:"nExp"`
-	NHP          int            `db:"nHP" json:"nHP"`
-	NMP          int            `db:"nMP" json:"nMP"`
+	LId      int64  `db:"lId" json:"lId"`
+	LUserId  int64  `db:"lUserId" json:"lUserId"`
+	StrName  string `db:"strName" json:"strName"`
+	StrTitle string `db:"strTitle" json:"strTitle"`
+	NSex     int    `db:"nSex" json:"nSex"`
+	NLevel   int    `db:"nLevel" json:"nLevel"`
+	NExp     int    `db:"nExp" json:"nExp"`
+	NHP      int    `db:"nHP" json:"nHP"` //当前血气值
+	NMP      int    `db:"nMP" json:"nMP"`
+	NMaxHP   int    `db:"nMaxHP" json:"nMaxHP"` //最大血气值
+	NMaxMP   int    `db:"nMaxMP" json:"nMaxMP"`
+	NTempHP  int    `json:"nTempHP"` //临时增加气血上限，计算时加在最大HP上
+	NTempMP  int    `json:"nTempMP"`
+
 	NMinAP       int            `db:"nMinAP" json:"nMinAP"`
 	NMinAD       int            `db:"nMinAD" json:"nMinAD"`
 	NMaxAP       int            `db:"nMaxAP" json:"nMaxAP"`
@@ -42,16 +47,37 @@ type RoleInfo struct {
 	DtDeleteDate sql.NullString `db:"dtDeleteDate" json:"-"`
 	DtUpdateTime sql.NullString `db:"dtUpdateTime" json:"-"`
 	DtCreateTime string         `db:"dtCreateTime" json:"-"`
-	Skills       []RoleSkill    `json:"skills"`
+	Skills       []RoleSkill    `json:"skills"` //角色技能
+	Status       []RoleStatus   `json:"status"`
 }
 
 type RoleSkill struct {
-	LId          int64          `db:"lId" json:"lId"`
-	LRoleId      int64          `db:"lRoleId" json:"lRoleId"`
-	LSkillId     int64          `db:"lSkillId" json:"lSkillId"`
-	StrSkillName string         `db:"strSkillName" json:"strSkillName"`
-	NLevel       int            `db:"nLevel" json:"nLevel"`
-	NSkillValue  int            `db:"nSkillValue" json:"nSkillValue"`
-	NSkillType   int            `db:"nSkillType" json:"nSkillType"`
-	StrDesc      string         `db:"strDesc" json:"strDesc"`
+	LId          int64  `db:"lId" json:"lId"`
+	LRoleId      int64  `db:"lRoleId" json:"lRoleId"`
+	LSkillId     int64  `db:"lSkillId" json:"lSkillId"`
+	StrSkillName string `db:"strSkillName" json:"strSkillName"`
+	NLevel       int    `db:"nLevel" json:"nLevel"`
+	NSkillValue  int    `db:"nSkillValue" json:"nSkillValue"`
+	NSkillType   int    `db:"nSkillType" json:"nSkillType"`
+	StrDesc      string `db:"strDesc" json:"strDesc"`
+}
+
+type RoleStatus struct {
+	LId      int64  `json:"lId"`      //状态ID
+	StrDesc  string `json:"strDesc"`  //状态描述
+	NSeconds int    `json:"nSeconds"` //持续时间（秒）
+}
+
+type AroundRole struct {
+	LId        int64  `db:"lId" json:"lId"`
+	StrName    string `db:"strName" json:"strName"`
+	StrTitle   string `db:"strTitle" json:"strTitle"`
+	NSex       int    `db:"nSex" json:"nSex"`
+	NLevel     int    `db:"nLevel" json:"nLevel"`
+	NHP        int    `db:"nHP" json:"nHP"`
+	NMP        int    `db:"nMP" json:"nMP"`
+	NMaxHP     int    `db:"nMaxHP" json:"nMaxHP"`
+	NMaxMP     int    `db:"nMaxMP" json:"nMaxMP"`
+	NOccId     int    `db:"nOccId" json:"nOccId"`
+	StrOccName string `db:"strOccName" json:"strOccName"`
 }
