@@ -10,6 +10,6 @@ type Service struct {
 }
 
 //ping 心跳时间更新
-func (s *Service) Ping(tcpClient *network.TcpClient,umap map[string]interface{})  {
+func (s *Service) Ping(tcpClient *network.TcpClient,msg string)  {
 	tcpClient.SetTime(time.Now().Unix())
 }

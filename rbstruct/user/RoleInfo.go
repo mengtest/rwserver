@@ -27,12 +27,12 @@ type RoleInfo struct {
 	NStr         int            `db:"nStr" json:"nStr"`
 	NAvoid       int            `db:"nAvoid" json:"nAvoid"`
 	NSp          int            `db:"nSp" json:"nSp"`
-	FPosX        float32        `db:"fPosX" json:"fPosX"`
-	FPosY        float32        `db:"fPosY" json:"fPosY"`
-	FPosZ        float32        `db:"fPosZ" json:"fPosZ"`
-	FDirX        float32        `db:"fDirX" json:"fDirX"`
-	FDirY        float32        `db:"fDirY" json:"fDirY"`
-	FDirZ        float32        `db:"fDirZ" json:"fDirZ"`
+	FPosX        float64        `db:"fPosX" json:"fPosX"`
+	FPosY        float64        `db:"fPosY" json:"fPosY"`
+	FPosZ        float64        `db:"fPosZ" json:"fPosZ"`
+	FDirX        float64        `db:"fDirX" json:"fDirX"`
+	FDirY        float64        `db:"fDirY" json:"fDirY"`
+	FDirZ        float64        `db:"fDirZ" json:"fDirZ"`
 	StrMapName   string         `db:"strMapName" json:"strMapName"`
 	NChunkX      int            `db:"nChunkX" json:"nChunkX"`
 	NChunkY      int            `db:"nChunkY" json:"nChunkY"`

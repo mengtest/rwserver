@@ -1,51 +1,45 @@
 package service
 
 import (
-	"reflect"
-	"../../rbwork/network"
-	"../util"
-	"../../rbwork/base"
 	R "../../rbstruct/base"
-	"strconv"
+	"../../rbstruct/net"
+	"../../rbwork/base"
 	"../../rbwork/constant"
+	"../../rbwork/network"
 	"../../rbwork/redis"
+	"../util"
+	"strconv"
 )
 
 //聊天消息
-func (s *Service) Chat(tcpClient *network.TcpClient,umap map[string]interface{})  {
-	requestId:=umap["requestId"].(string)
+func (s *Service) Chat(tcpClient *network.TcpClient,msg string)  {
+	req:=&net.ChatReq{}
+	base.Json2Struct(msg,req)
 	if !tcpClient.GetIsLogin() {
-		tcpClient.Write(base.Struct2Json(R.TcpErrorMsg("chat",requestId,"未授权")))
-		return
-	}
-	ty0:=reflect.TypeOf(umap["chatType"]).String()
-	ty1:=reflect.TypeOf(umap["toUserId"]).String()
-	ty2:=reflect.TypeOf(umap["msg"]).String()
-	if ty0!="string" || ty1 !="string" || ty2 !="string"{
-		tcpClient.Write(base.Struct2Json(R.TcpErrorMsg("chat",requestId,"请求参数错误")))
+		tcpClient.Write(base.Struct2Json(R.TcpErrorMsg(req.Cmd,req.RequestId,"未授权")))
 		return
 	}
 
-	switch umap["chatType"].(string) {
-	case "0":
+	switch req.ChatType {
+	case 0:
 		//世界发送消息
 		for _,t:= range util.Clients.GetMap() {
-			t.Write(base.Struct2Json(R.TcpOkMsg("chat",requestId,umap["msg"].(string))))
+			t.Write(base.Struct2Json(R.TcpOkMsg(req.Cmd,req.RequestId,req.Msg)))
 		}
 		return
-	case "1":
+	case 1:
 		//当前频道向附近玩家发送消息
-		go ChatToAroundPlayers(tcpClient,requestId,umap["msg"].(string))
+		go ChatToAroundPlayers(tcpClient,req.Cmd,req.RequestId,req.Msg)
 		return
-	case "10": //指定用户说话
-		util.Clients.Get(umap["toUserId"].(string)).Write(base.Struct2Json(R.TcpOkMsg("chat",requestId,umap["msg"].(string))))
+	case 10: //指定用户说话
+		util.Clients.Get(strconv.FormatInt(req.ToRoleId,10)).Write(base.Struct2Json(R.TcpOkMsg(req.Cmd,req.RequestId,req.Msg)))
 		return
 	default:
 		return
 	}
 }
 
-func ChatToAroundPlayers(tcpClient *network.TcpClient,requestId string,msg string){
+func ChatToAroundPlayers(tcpClient *network.TcpClient,cmd string,requestId string,msg string){
 	role := tcpClient.GetRole()
 	var roleIds []string
 	for i := role.NChunkX - 1; i <= role.NChunkX+1; i++ {
@@ -58,7 +52,7 @@ func ChatToAroundPlayers(tcpClient *network.TcpClient,requestId string,msg strin
 	for _, roleId := range roleIds {
 		if roleId != "" {
 			client:=util.Clients.Get(roleId)
-			client.Write(base.Struct2Json(R.TcpOkMsg("chat",requestId,msg)))
+			client.Write(base.Struct2Json(R.TcpOkMsg(cmd,requestId,msg)))
 		}
 	}
 

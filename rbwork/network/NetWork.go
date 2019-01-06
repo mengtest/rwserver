@@ -7,6 +7,7 @@ import (
 	"encoding/binary"
 	"github.com/pkg/errors"
 	"net"
+	"strconv"
 	"strings"
 	"time"
 )
@@ -18,8 +19,8 @@ type TcpClient struct {
 	reader    *bufio.Reader  //客户端输入读取缓冲区
 	isLogin   bool           //是否通过登录授权访问
 	timestamp int64          //上次心跳检测收到返回的时间戳（秒）
-	userId    string         //用户ID
-	roleId    string         //角色ID
+	userId    int64         //用户ID
+	roleId    int64         //角色ID
 	role      *user.RoleInfo //当前登陆角色
 }
 
@@ -60,20 +61,24 @@ func (c *TcpClient) GetTime() int64 {
 	return c.timestamp
 }
 
-func (c *TcpClient) SetUserId(userId string) {
+func (c *TcpClient) SetUserId(userId int64) {
 	c.userId = userId
 }
 
-func (c *TcpClient) GetUserId() string {
+func (c *TcpClient) GetUserId() int64 {
 	return c.userId
 }
 
-func (c *TcpClient) SetRoleId(roleId string) {
+func (c *TcpClient) SetRoleId(roleId int64) {
 	c.roleId = roleId
 }
 
-func (c *TcpClient) GetRoleId() string {
+func (c *TcpClient) GetRoleId() int64 {
 	return c.roleId
+}
+//int64转string使用strconv.FormatInt(int64,10)
+func (c *TcpClient) GetStrRoleId() string {
+	return strconv.FormatInt(c.roleId,10)
 }
 
 func (c *TcpClient) SetMac(mac string) {

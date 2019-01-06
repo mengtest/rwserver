@@ -64,7 +64,7 @@ func Struct2Json(v interface{}) string {
 	return string(b)
 }
 
-func Json2Struct(jsonstr string, s *interface{}) error {
+func Json2Struct(jsonstr string, s interface{}) error {
 	err := json.Unmarshal([]byte(jsonstr), s)
 	return err
 }

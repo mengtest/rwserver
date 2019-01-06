@@ -59,7 +59,7 @@ func handleConnection(tcpClient *network.TcpClient) {
 			//监听到客户端退出，关闭连接
 			tcpClient.Close()
 			util.Clients.Delete(tcpClient.RemoteAddr())
-			util.Clients.Delete(tcpClient.GetRoleId())
+			util.Clients.Delete(tcpClient.GetStrRoleId())
 			return
 		}
 		//输出收到的日志信息
@@ -89,8 +89,8 @@ func runHeartbeat() {
 				//40s内未收到心跳返回,剔除用户
 				tcpClient.Close()
 				util.Clients.Delete(tcpClient.RemoteAddr())
-				util.Clients.Delete(tcpClient.GetRoleId())
-				base.LogInfo("IP->"+tcpClient.RemoteAddr(), "roleId->"+tcpClient.GetRoleId(), "超过40秒未收到心跳返回，已断开连接")
+				util.Clients.Delete(tcpClient.GetStrRoleId())
+				base.LogInfo("IP->"+tcpClient.RemoteAddr(), "roleId->"+tcpClient.GetStrRoleId(), "超过40秒未收到心跳返回，已断开连接")
 			}
 			tcpClient.Write("{\"cmd\":\"ping\",\"requestId\":\"ping\"}")
 		}
