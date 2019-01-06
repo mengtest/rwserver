@@ -59,12 +59,15 @@ func (s *Service) LoginRole(tcpClient *network.TcpClient, msg string) {
 		tcpClient.Write(base.Struct2Json(R.ErrorMsg("roleId参数无效")))
 		return
 	}
-	//load role info
+	//加载角色信息
 	role := dao.GetRoleByRoleId(req.RoleId)
 	if role.LId <= 0 {
 		tcpClient.Write(base.Struct2Json(R.ErrorMsg("角色不存在")))
 		return
 	}
+	//加载角色技能
+	skills := dao.GetRoleSkillByRoleId(req.RoleId)
+	role.Skills=skills
 
 	tcpClient.SetRoleId(req.RoleId)
 	tcpClient.SetRole(role)

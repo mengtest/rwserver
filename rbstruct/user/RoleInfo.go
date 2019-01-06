@@ -36,8 +36,22 @@ type RoleInfo struct {
 	StrMapName   string         `db:"strMapName" json:"strMapName"`
 	NChunkX      int            `db:"nChunkX" json:"nChunkX"`
 	NChunkY      int            `db:"nChunkY" json:"nChunkY"`
+	NOccId       int            `db:"nOccId" json:"nOccId"`
+	StrOccName   string         `db:"strOccName" json:"strOccName"`
 	NDeleted     int            `db:"nDeleted" json:"-"`
 	DtDeleteDate sql.NullString `db:"dtDeleteDate" json:"-"`
 	DtUpdateTime sql.NullString `db:"dtUpdateTime" json:"-"`
 	DtCreateTime string         `db:"dtCreateTime" json:"-"`
+	Skills       []RoleSkill    `json:"skills"`
+}
+
+type RoleSkill struct {
+	LId          int64          `db:"lId" json:"lId"`
+	LRoleId      int64          `db:"lRoleId" json:"lRoleId"`
+	LSkillId     int64          `db:"lSkillId" json:"lSkillId"`
+	StrSkillName string         `db:"strSkillName" json:"strSkillName"`
+	NLevel       int            `db:"nLevel" json:"nLevel"`
+	NSkillValue  int            `db:"nSkillValue" json:"nSkillValue"`
+	NSkillType   int            `db:"nSkillType" json:"nSkillType"`
+	StrDesc      string         `db:"strDesc" json:"strDesc"`
 }

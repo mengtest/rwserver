@@ -23,3 +23,12 @@ func GetRoleByRoleId(roleId int64) user.RoleInfo {
 	base.CheckErr(err)
 	return role
 }
+
+func GetRoleSkillByRoleId(roleId int64) []user.RoleSkill {
+	roleSkill:=[]user.RoleSkill{}
+	sqlc:="SELECT * FROM tb_role_skill WHERE lRoleId=? "
+	base.LogInfo("SQL:",sqlc," Param:",roleId)
+	err:=db.DB.Select(&roleSkill,sqlc,roleId)
+	base.CheckErr(err)
+	return roleSkill
+}
