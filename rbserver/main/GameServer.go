@@ -78,7 +78,7 @@ func CheckError(err error) {
 }
 
 func runHeartbeat() {
-	//每10秒执行一次检测
+	//每5秒执行一次检测
 	tick := time.NewTicker(time.Second * time.Duration(5))
 	for {
 		<-tick.C

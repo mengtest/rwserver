@@ -121,8 +121,8 @@ func (s *Service) GetAroundPlayers(tcpClient *network.TcpClient, msg string) {
 			player.NLevel = client.GetRole().NLevel
 			player.NHP = client.GetRole().NHP
 			player.NMP = client.GetRole().NMP
-			player.NMaxHP = client.GetRole().NMaxHP + client.GetRole().NTempHP
-			player.NMaxMP = client.GetRole().NMaxMP + client.GetRole().NTempMP
+			player.NMaxHP = client.GetRole().NMaxHP
+			player.NMaxMP = client.GetRole().NMaxMP
 			player.NOccId = client.GetRole().NOccId
 			player.StrOccName = client.GetRole().StrOccName
 
