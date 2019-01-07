@@ -4,19 +4,19 @@ import "database/sql"
 
 //定义角色结构体
 type RoleInfo struct {
-	LId      int64  `db:"lId" json:"lId"`
-	LUserId  int64  `db:"lUserId" json:"lUserId"`
-	StrName  string `db:"strName" json:"strName"`
-	StrTitle string `db:"strTitle" json:"strTitle"`
-	NSex     int    `db:"nSex" json:"nSex"`
-	NLevel   int    `db:"nLevel" json:"nLevel"`
-	NExp     int    `db:"nExp" json:"nExp"`
-	NHP      int    `db:"nHP" json:"nHP"` //当前血气值
-	NMP      int    `db:"nMP" json:"nMP"`
-	NMaxHP   int    `db:"nMaxHP" json:"nMaxHP"` //最大血气值
-	NMaxMP   int    `db:"nMaxMP" json:"nMaxMP"`
-	NTempHP  int    `json:"nTempHP"` //临时增加气血上限，计算时加在最大HP上
-	NTempMP  int    `json:"nTempMP"`
+	LId          int64          `db:"lId" json:"lId"`
+	LUserId      int64          `db:"lUserId" json:"lUserId"`
+	StrName      string         `db:"strName" json:"strName"`
+	StrTitle     string         `db:"strTitle" json:"strTitle"`
+	NSex         int            `db:"nSex" json:"nSex"`
+	NLevel       int            `db:"nLevel" json:"nLevel"`
+	NExp         int            `db:"nExp" json:"nExp"`
+	NHP          int            `db:"nHP" json:"nHP"` //当前血气值
+	NMP          int            `db:"nMP" json:"nMP"`
+	NMaxHP       int            `db:"nMaxHP" json:"nMaxHP"` //最大血气值
+	NMaxMP       int            `db:"nMaxMP" json:"nMaxMP"`
+	NTempHP      int            `json:"nTempHP"` //临时增加气血上限，计算时加在最大HP上
+	NTempMP      int            `json:"nTempMP"`
 
 	NMinAP       int            `db:"nMinAP" json:"nMinAP"`
 	NMinAD       int            `db:"nMinAD" json:"nMinAD"`
