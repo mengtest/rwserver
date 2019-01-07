@@ -74,9 +74,13 @@ func (s *Service) LoginRole(tcpClient *network.TcpClient, msg string) {
 	//设置角色所在地图块
 	redis.Client.SAdd(constant.MapChunk+role.StrMapName+":"+strconv.Itoa(role.NChunkX)+"#"+strconv.Itoa(role.NChunkY), req.RoleId)
     //全局存储client
+    strRoleId:=strconv.FormatInt(req.RoleId,10)
 	util.Clients.Delete(tcpClient.RemoteAddr())  //清除游客模式连接
-	util.Clients.Set(strconv.FormatInt(req.RoleId,10), tcpClient) //设置角色ID为主键
-    //
-    //
+	util.Clients.Set(strRoleId, tcpClient) //设置角色ID为主键
+    //返回自己的角色信息
 	tcpClient.Write(base.Struct2Json(R.TcpOK(req.Cmd, req.RequestId).SetData(role).OutLog()))
+    //向周围玩家同步下发自己的信息
+	SyncPlayerToAroundPlayers(strRoleId,role,nil)
+    //告知好友上线了
+
 }
