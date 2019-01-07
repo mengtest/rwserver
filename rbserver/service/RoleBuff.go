@@ -80,7 +80,7 @@ func BuffCalculation(roleId string,second int,buff user.RoleBuff)  {
 			//清除对应时间管理器
 			delete(BuffTimerManager,roleId+buff.StrProp)
 			//改变后的状态同步给周围玩家
-			SyncPlayerToAroundPlayers(roleId,*util.Clients.Get(roleId).GetRole())
+			SyncPlayerToAroundPlayers(roleId,*util.Clients.Get(roleId).GetRole(),nil)
 	}
 	defer t.Stop()
 }
