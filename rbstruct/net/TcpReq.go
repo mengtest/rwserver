@@ -43,3 +43,8 @@ type ChatReq struct {
 	ToRoleId int64    `json:"toRoleId"`
 	Msg string        `json:"msg"`
 }
+
+type RealeaseSkill struct {
+	Req
+	LSkillId int64 `json:"lSkillId"`
+}

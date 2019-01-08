@@ -47,6 +47,7 @@ type RoleInfo struct {
 	DtCreateTime string         `db:"dtCreateTime" json:"-"`
 	Skills       []RoleSkill    `json:"skills"`                //角色技能
 	Buffs        []RoleBuff     `json:"buffs"`                //角色状态
+	Action       string         `json:"action"`
 }
 
 //角色技能
@@ -54,26 +55,29 @@ type RoleSkill struct {
 	LId          int64          `db:"lId" json:"lId"`
 	LRoleId      int64          `db:"lRoleId" json:"lRoleId"`
 	LSkillId     int64          `db:"lSkillId" json:"lSkillId"`
+	StrSkillCode string         `db:"strSkillCode" json:"strSkillCode"`
 	StrSkillName string         `db:"strSkillName" json:"strSkillName"`
 	NLevel       int            `db:"nLevel" json:"nLevel"`
 	NSkillValue  int            `db:"nSkillValue" json:"nSkillValue"`
-	NSkillType   int            `db:"nSkillType" json:"nSkillType"`
+	NSkillType   int            `db:"nSkillType" json:"nSkillType"`   //1攻击型 2防御型
+	NAttackType  int            `db:"nAttackType" json:"nAttackType"` //1物理攻击 2法术攻击
 	StrDesc      string         `db:"strDesc" json:"strDesc"`
 }
 
 //角色buff
 type RoleBuff struct {
 	LSkillId     int64          `json:"lSkillId"` //技能ID，由什么技能触发的BUF
+	StrSkillCode string         `json:"strSkillCode"`
 	NLevel       int64          `json:"nLevel"`   //技能等级
 	StrProp      string         `json:"strProp"`  //影响角色的哪项属性
 	StrDesc      string         `json:"strDesc"`  //状态描述
 	NSeconds     int            `json:"nSeconds"` //剩余持续时间（秒）
 	NType        int            `json:"nType"`    //1增益型buf -1减益型buf
-	NValue       int            `json:"nType、"`  //增益值或减益值
+	NValue       int            `json:"nValue、"`  //增益值或减益值
 }
 
-//周围角色
-type AroundRole struct {
+
+type RespRole struct {
 	LId          int64          `db:"lId" json:"lId"`
 	StrName      string         `db:"strName" json:"strName"`
 	StrTitle     string         `db:"strTitle" json:"strTitle"`
@@ -92,4 +96,5 @@ type AroundRole struct {
 	FDirY        float64        `db:"fDirY" json:"fDirY"`
 	FDirZ        float64        `db:"fDirZ" json:"fDirZ"`
 	Buffs        []RoleBuff     `json:"buffs"`                //角色状态
+	Action       string         `json:"action"`               //角色动作 idle(idle0 idle1 idle2)、walk、run、dying(死亡中，执行死亡动作)、die(倒地)、releaseSkill(技能释放)、hurt（执行受伤动作）
 }

@@ -32,7 +32,7 @@ func SyncPlayerToAroundPlayers(currRoleId string,role user.RoleInfo,buff *user.R
 		}
 	}
 
-	player := user.AroundRole{}
+	player := user.RespRole{}
 	player.LId = role.LId
 	player.StrName = role.StrName
 	player.StrTitle = role.StrTitle
@@ -48,6 +48,7 @@ func SyncPlayerToAroundPlayers(currRoleId string,role user.RoleInfo,buff *user.R
 	player.FDirX = role.FDirX
 	player.FDirY = role.FDirY
 	player.FDirZ = role.FDirZ
+	player.Action= role.Action
 	//产生新的buff时才向附近玩家推送新buff
 	if buff != nil {
 		player.Buffs=append(player.Buffs,*buff)
