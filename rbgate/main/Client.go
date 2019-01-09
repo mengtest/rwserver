@@ -30,7 +30,7 @@ func sendMessage(conn *net.TCPConn) {
 	content := "{\"cmd\":\"Login\",\"token\":\"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE1NDgwNDcyODcsImlhdCI6MTU0Njc1MTI4NywiaXNzIjoidHEuaXVvb24uY29tIiwibWFjIjoiIiwidWlkIjoiXHUwMDAxIn0.MKFz6VTLbQmyXMtcoO1SQ2e092yys5tSJtqO2abBe0I\",\"requestId\":\"1\",\"mac\":\"\"}"
 	b, _ := base.EncodeHead2Byte(string(content))
 	conn.Write(b)
-
+    time.Sleep(time.Second*time.Duration(1))
 	content = "{\"cmd\":\"LoginRole\",\"roleId\":1,\"requestId\":\"1\",\"mac\":\"\"}"
 	b, _ = base.EncodeHead2Byte(string(content))
 	conn.Write(b)

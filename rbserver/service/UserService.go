@@ -7,6 +7,7 @@ import (
 	"../../rbwork/constant"
 	"../../rbwork/network"
 	"../../rbwork/redis"
+	"../../rbstruct/user"
 	"../dao"
 	"../util"
 	"strconv"
@@ -68,6 +69,8 @@ func (s *Service) LoginRole(tcpClient *network.TcpClient, msg string) {
 	//加载角色技能
 	skills := dao.GetRoleSkillByRoleId(req.RoleId)
 	role.Skills=skills
+	role.Buffs=[]user.RoleBuff{}
+	role.Action="idle0"
     //设置client角色信息
 	tcpClient.SetRoleId(req.RoleId)
 	tcpClient.SetRole(role)
