@@ -62,19 +62,23 @@ type RoleSkill struct {
 	NSkillValue  int            `db:"nSkillValue" json:"nSkillValue"`
 	NSkillType   int            `db:"nSkillType" json:"nSkillType"`   //1攻击 2状态Buff
 	NAttackType  int            `db:"nAttackType" json:"nAttackType"` //1物理加成 2法术加成
-	StrDesc      string         `db:"strDesc" json:"strDesc"`
+	StrDesc      string         `db:"strDesc" json:"strDesc"`         //技能介绍
+	StrEffectDesc string        `db:"strEffectDesc" json:"strEffectDesc"`  //效果描述
+	NCastTime    int            `db:"nCastTime" json:"nCastTime"`     //施法时间
+	NDuration    int            `db:"nDuration" json:"nDuration"`     //持续时间
 }
 
 //角色buff
 type RoleBuff struct {
-	LSkillId     int64          `json:"lSkillId"` //技能ID，由什么技能触发的BUF
-	StrSkillName      string    `json:"strSkillName"`  //strName
-	NLevel       int64          `json:"nLevel"`   //技能等级
-	StrProp      string         `json:"strProp"`  //影响角色的哪项属性
-	StrDesc      string         `json:"strDesc"`  //状态描述
-	NSeconds     int            `json:"nSeconds"` //剩余持续时间（秒）
-	NType        int            `json:"nType"`    //1增益型buf -1减益型buf
-	NValue       int            `json:"nValue"`   //增益值或减益值
+	LSkillId     int64          `json:"lSkillId"`       //技能ID，由什么技能触发的BUF
+	StrSkillName      string    `json:"strSkillName"`   //strName
+	NLevel       int64          `json:"nLevel"`         //技能等级
+	StrProp      string         `json:"strProp"`        //影响角色的哪项属性
+	StrEffectDesc      string   `json:"strEffectDesc"`  //状态描述
+	NSeconds     int            `json:"nSeconds"`       //剩余持续时间（秒）
+	NType        int            `json:"nType"`          //1增益型buf -1减益型buf
+	NValue       int            `json:"nValue"`         //增益值或减益值
+	NDuration    int            `db:"nDuration" json:"nDuration"`     //持续时间
 }
 
 

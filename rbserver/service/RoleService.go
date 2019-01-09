@@ -65,7 +65,9 @@ func (s *Service) Attack(tcpClient *network.TcpClient, msg string) {
 			buff:=user.RoleBuff{}
 			buff.LSkillId=skill.LSkillId
 			buff.StrSkillName=skill.StrSkillName
-			SyncPlayerToAroundPlayers(tcpClient.GetStrRoleId(),*tcpClient.GetRole(),nil)
+			buff.StrEffectDesc=skill.StrEffectDesc
+			buff.NDuration=skill.NDuration-1 //因为通信时间差，服务器预先减一秒
+			SyncPlayerToAroundPlayers(tcpClient.GetStrRoleId(),*tcpClient.GetRole(),&buff)
 		}
 		return
 	}
