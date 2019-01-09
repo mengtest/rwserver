@@ -2,15 +2,15 @@
 Navicat MySQL Data Transfer
 
 Source Server         : localhost
-Source Server Version : 50715
+Source Server Version : 50723
 Source Host           : localhost:3306
 Source Database       : tianqi
 
 Target Server Type    : MYSQL
-Target Server Version : 50715
+Target Server Version : 50723
 File Encoding         : 65001
 
-Date: 2019-01-07 20:37:36
+Date: 2019-01-09 15:13:16
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -133,10 +133,12 @@ CREATE TABLE `tb_role_skill` (
   `lId` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '主键ID',
   `lRoleId` bigint(20) DEFAULT NULL COMMENT '角色ID',
   `lSkillId` bigint(20) DEFAULT NULL COMMENT '技能ID',
+  `strSkillCode` varchar(50) DEFAULT '' COMMENT '技能编码',
   `strSkillName` varchar(50) DEFAULT NULL COMMENT '技能名称',
-  `nLevel` int(10) DEFAULT '1' COMMENT '技能等级',
+  `nSkillLevel` int(10) DEFAULT '1' COMMENT '技能等级',
   `nSkillValue` int(10) DEFAULT '0' COMMENT '技能值 根据等级*初始值',
-  `nSkillType` tinyint(2) DEFAULT '1' COMMENT '技能类型 1攻击型技能 2防御型技能',
+  `nSkillType` tinyint(2) DEFAULT '1' COMMENT '技能类型 1攻击 2状态BUff',
+  `nAttackType` tinyint(2) DEFAULT '0' COMMENT '类型  1物理 2法术',
   `strDesc` varchar(300) DEFAULT '' COMMENT '技能描述',
   PRIMARY KEY (`lId`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4;
@@ -144,7 +146,7 @@ CREATE TABLE `tb_role_skill` (
 -- ----------------------------
 -- Records of tb_role_skill
 -- ----------------------------
-INSERT INTO `tb_role_skill` VALUES ('1', '1', '1', '霜寒', '1', '100', '1', '11');
+INSERT INTO `tb_role_skill` VALUES ('1', '1', '1', null, '霜寒', '1', '100', '1', '0', '11');
 
 -- ----------------------------
 -- Table structure for tb_skill
@@ -152,10 +154,11 @@ INSERT INTO `tb_role_skill` VALUES ('1', '1', '1', '霜寒', '1', '100', '1', '1
 DROP TABLE IF EXISTS `tb_skill`;
 CREATE TABLE `tb_skill` (
   `lId` bigint(20) NOT NULL AUTO_INCREMENT,
+  `strCode` varchar(50) DEFAULT '' COMMENT '技能编码',
   `strName` varchar(50) DEFAULT '' COMMENT '技能名称',
   `strDesc` varchar(300) DEFAULT '' COMMENT '技能描述',
   `nValue` int(10) DEFAULT '0' COMMENT '技能初始值',
-  `nType` tinyint(2) DEFAULT '1' COMMENT '类型 1攻击 2状态防御',
+  `nType` tinyint(2) DEFAULT '1' COMMENT '类型 1攻击 2状态',
   `nOccupation` int(10) DEFAULT '0' COMMENT '技能所属职业 0所有职业 其他对应职业表',
   PRIMARY KEY (`lId`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COMMENT='技能配置表';
@@ -163,7 +166,7 @@ CREATE TABLE `tb_skill` (
 -- ----------------------------
 -- Records of tb_skill
 -- ----------------------------
-INSERT INTO `tb_skill` VALUES ('1', '霜寒', '', '100', '1', '0');
+INSERT INTO `tb_skill` VALUES ('1', '', '霜寒', '', '100', '1', '0');
 
 -- ----------------------------
 -- Table structure for tb_user
@@ -212,3 +215,19 @@ CREATE TABLE `tb_version` (
 INSERT INTO `tb_version` VALUES ('1', 'weq', '1.0.1', '/weqwe', '3434234234523', '1', '2018-12-20 10:51:47', '2018-12-20 10:51:47', '0');
 INSERT INTO `tb_version` VALUES ('2', 'fgh', '1.0.2', '/rtert', '6456576575', '2', '2018-12-25 10:51:52', '2018-12-25 10:51:52', '0');
 INSERT INTO `tb_version` VALUES ('3', 'weq', '1.0.1', '/weqwe', '3434234234523', '1', '2018-12-27 10:51:56', '2018-12-27 10:51:56', '0');
+
+-- ----------------------------
+-- Table structure for t_notice
+-- ----------------------------
+DROP TABLE IF EXISTS `t_notice`;
+CREATE TABLE `t_notice` (
+  `lId` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '主键',
+  `strTitle` varchar(50) DEFAULT '',
+  `strDesc` text,
+  `dtCreateTime` datetime DEFAULT NULL,
+  PRIMARY KEY (`lId`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='公告表';
+
+-- ----------------------------
+-- Records of t_notice
+-- ----------------------------
