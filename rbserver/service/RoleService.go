@@ -53,14 +53,26 @@ func (s *Service) Attack(tcpClient *network.TcpClient, msg string) {
 	targetClient:=util.Clients.Get(strconv.FormatInt(req.TargetId,10))
 	skill:=user.RoleSkill{}
 	for _,sk:= range role.Skills  {
-		if sk.LSkillId == req.LSkillId {
+		if sk.LSkillId == req.SkillId {
 			skill=sk
 			break
 		}
 	}
-	//计算伤害
+	if req.TargetId == role.LId {
+		//目标为自己
+		role.Action="attack_"+skill.StrSkillCode
+		if skill.NSkillType==2{
+			buff:=user.RoleBuff{}
+			buff.LSkillId=skill.LSkillId
+			buff.StrSkillName=skill.StrSkillName
+			SyncPlayerToAroundPlayers(tcpClient.GetStrRoleId(),*tcpClient.GetRole(),nil)
+		}
+		return
+	}
+	//-----------------------计算伤害start----------------------------
 	v:=0
-	if req.LSkillId == 0 {
+	attackType:=1
+	if req.SkillId == 0 {
 		//计算普攻伤害
 		v=base.RandInt(role.NMinAD,role.NMaxAD)*5/4-targetClient.GetRole().NPhyDef*2/3
 		if targetClient.GetRole().NHP <= v {
@@ -68,34 +80,42 @@ func (s *Service) Attack(tcpClient *network.TcpClient, msg string) {
 			targetClient.GetRole().Action="die"
 		}else{
 			targetClient.GetRole().NHP-=v
+			targetClient.GetRole().Action="hurt"
 		}
+		attackType=1
 	} else {
-		if skill.NAttackType==1{
+
+		//使用法术技能
+		if skill.NAttackType==1 && skill.NSkillType==1 {
+			//物理加成
 			v=base.RandInt(role.NMinAD,role.NMaxAD)*5/4+skill.NSkillValue-targetClient.GetRole().NPhyDef*2/3
-		}else if skill.NAttackType==2{
+		}else if skill.NAttackType==2 && skill.NSkillType==1{
+			//法术加成
 			v=base.RandInt(role.NMinAP,role.NMaxAP)*5/4+skill.NSkillValue-targetClient.GetRole().NMagDef*2/3
+		}else if skill.NSkillType==2{
+			//buff
 		}
 		if targetClient.GetRole().NHP <= v {
 			targetClient.GetRole().NHP=0
 			targetClient.GetRole().Action="die"
 		}else{
 			targetClient.GetRole().NHP-=v
+			targetClient.GetRole().Action="hurt"
 		}
+		attackType=2
 	}
+	//-----------------------计算伤害end----------------------------
 	role.Action="attack_"+skill.StrSkillCode
+
+	h:=net.NewHurt(v,attackType,1,skill.StrSkillName)
 	//向被攻击者推送伤害
-	targetClient.Write(base.Struct2Json(R.TcpOK(R.Hurt_Own,"0").SetData(nil)))
+	targetClient.Write(base.Struct2Json(R.TcpOK(R.Hurt_Own,"0").SetData(h)))
 	//向攻击发起者推送伤害
-	tcpClient.Write(base.Struct2Json(R.TcpOK(R.Hurt_Target, "0").SetData(nil)))
+	tcpClient.Write(base.Struct2Json(R.TcpOK(R.Hurt_Target, "0").SetData(h)))
     //同步被攻击者信息给附近玩家
 	SyncPlayerToAroundPlayers(targetClient.GetStrRoleId(),*targetClient.GetRole(),nil)
 	//同步攻击者信息给附近玩家
 	SyncPlayerToAroundPlayers(tcpClient.GetStrRoleId(),*tcpClient.GetRole(),nil)
-}
-
-//释放技能
-func (s *Service) ReleaseSkill(tcpClient *network.TcpClient, msg string) {
-
 }
 
 //角色接任务

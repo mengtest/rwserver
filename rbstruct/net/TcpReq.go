@@ -34,17 +34,17 @@ type AttackReq struct {
 	Req
 	TargetId int64    `json:"targetId"`       //目标ID （角色ID，怪物ID）
 	TargetType int    `json:"targetType"`     //目标类型0-角色 1-怪物
-	LSkillId int64    `json:"lSkillId"`       //技能ID
+	SkillId int64     `json:"skillId"`       //技能ID
 }
 
 type ChatReq struct {
 	Req
-	ChatType int      `json:"chatType"`
-	ToRoleId int64    `json:"toRoleId"`
-	Msg string        `json:"msg"`
+	ChatType   int      `json:"chatType"`
+	ToRoleId   int64    `json:"toRoleId"`
+	Msg        string        `json:"msg"`
 }
 
 type RealeaseSkill struct {
 	Req
-	LSkillId int64 `json:"lSkillId"`
+	SkillId    int64    `json:"skillId"`
 }
