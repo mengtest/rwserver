@@ -109,16 +109,6 @@ func runSyncRoleInfoToDB(){
 	for {
 		<-tick.C
 		base.LogInfo("开始同步角色到数据库")
-		roleInfoSql:=""
-		for _, client := range util.Clients.GetMap() {
-			if client.GetRole().BChange {
-				//拼接SQL
-				roleInfoSql+=dao.GetRoleSQL(*client.GetRole())+";"
-			}
-		}
-		if roleInfoSql != "" {
-
-		}
-
+		dao.SyncRoleToDB()
 	}
 }
