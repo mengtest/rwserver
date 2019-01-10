@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50723
 File Encoding         : 65001
 
-Date: 2019-01-09 15:13:16
+Date: 2019-01-10 09:38:19
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -139,14 +139,17 @@ CREATE TABLE `tb_role_skill` (
   `nSkillValue` int(10) DEFAULT '0' COMMENT '技能值 根据等级*初始值',
   `nSkillType` tinyint(2) DEFAULT '1' COMMENT '技能类型 1攻击 2状态BUff',
   `nAttackType` tinyint(2) DEFAULT '0' COMMENT '类型  1物理 2法术',
-  `strDesc` varchar(300) DEFAULT '' COMMENT '技能描述',
+  `strDesc` varchar(500) DEFAULT '' COMMENT '技能描述',
+  `nCastTime` int(10) DEFAULT '0' COMMENT '施法时间 秒',
+  `nDuration` int(10) DEFAULT '0' COMMENT '持续时间 秒',
+  `strEffectDesc` varchar(255) DEFAULT '' COMMENT '技能效果描述',
   PRIMARY KEY (`lId`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4;
 
 -- ----------------------------
 -- Records of tb_role_skill
 -- ----------------------------
-INSERT INTO `tb_role_skill` VALUES ('1', '1', '1', null, '霜寒', '1', '100', '1', '0', '11');
+INSERT INTO `tb_role_skill` VALUES ('1', '1', '1', '1', '霜寒', '1', '100', '1', '0', '11', '0', '0', '');
 
 -- ----------------------------
 -- Table structure for tb_skill
@@ -156,17 +159,20 @@ CREATE TABLE `tb_skill` (
   `lId` bigint(20) NOT NULL AUTO_INCREMENT,
   `strCode` varchar(50) DEFAULT '' COMMENT '技能编码',
   `strName` varchar(50) DEFAULT '' COMMENT '技能名称',
-  `strDesc` varchar(300) DEFAULT '' COMMENT '技能描述',
+  `strDesc` varchar(500) DEFAULT '' COMMENT '技能描述',
+  `strEffectDesc` varchar(255) DEFAULT '' COMMENT '效果描述',
+  `nOccupation` int(10) DEFAULT '0' COMMENT '技能所属职业 0所有职业 其他对应职业表',
   `nValue` int(10) DEFAULT '0' COMMENT '技能初始值',
   `nType` tinyint(2) DEFAULT '1' COMMENT '类型 1攻击 2状态',
-  `nOccupation` int(10) DEFAULT '0' COMMENT '技能所属职业 0所有职业 其他对应职业表',
+  `nCastTime` int(10) DEFAULT '0' COMMENT '施法时间 秒',
+  `nDuration` int(10) DEFAULT '0' COMMENT '持续时间 秒',
   PRIMARY KEY (`lId`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COMMENT='技能配置表';
 
 -- ----------------------------
 -- Records of tb_skill
 -- ----------------------------
-INSERT INTO `tb_skill` VALUES ('1', '', '霜寒', '', '100', '1', '0');
+INSERT INTO `tb_skill` VALUES ('1', '', '霜寒', '', null, '0', '100', '1', '0', '0');
 
 -- ----------------------------
 -- Table structure for tb_user
