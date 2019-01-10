@@ -32,6 +32,8 @@ func main() {
 
 	go runHeartbeat()
 
+	go runSyncRoleInfoToDB()
+
 	for {
 		conn, err := netListen.Accept()
 		if err != nil {
@@ -105,7 +107,7 @@ func runHeartbeat() {
 //同步角色信息到DB
 func runSyncRoleInfoToDB(){
 	//每10秒执行一次
-	tick := time.NewTicker(time.Second * time.Duration(5))
+	tick := time.NewTicker(time.Second * time.Duration(10))
 	for {
 		<-tick.C
 		base.LogInfo("开始同步角色到数据库")
