@@ -39,9 +39,10 @@ type AttackReq struct {
 
 type ChatReq struct {
 	Req
-	ChatType   int      `json:"chatType"`
-	ToRoleId   int64    `json:"toRoleId"`
-	Msg        string        `json:"msg"`
+	NChannel       int       `json:"nChannel"`
+	LFromRoleId    int64     `json:"lFromRoleId"`
+	LToRoleId      int64     `json:"lToRoleId"`
+	StrMsg         string    `json:"strMsg"`
 }
 
 type RealeaseSkill struct {

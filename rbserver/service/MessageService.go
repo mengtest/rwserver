@@ -20,27 +20,52 @@ func (s *Service) Chat(tcpClient *network.TcpClient,msg string)  {
 		return
 	}
 
-	switch req.ChatType {
+	switch req.NChannel {
 	case 0:
-		//世界发送消息
+		//世界
+		c:=net.NewChat(tcpClient.GetRoleId(),tcpClient.GetRole().StrName,0,"",req.StrMsg,req.NChannel)
 		for _,t:= range util.Clients.GetMap() {
-			t.Write(base.Struct2Json(R.TcpOkMsg(req.Cmd,req.RequestId,req.Msg)))
+			t.Write(base.Struct2Json(R.TcpOK(req.Cmd,req.RequestId).SetData(c)))
 		}
 		return
 	case 1:
-		//当前频道向附近玩家发送消息
-		go ChatToAroundPlayers(tcpClient,req.Cmd,req.RequestId,req.Msg)
+		//当前
+		go ChatToAroundPlayers(tcpClient,req.Cmd,req.RequestId,req.StrMsg,req.NChannel)
 		return
-	case 10: //指定用户说话
-		util.Clients.Get(strconv.FormatInt(req.ToRoleId,10)).Write(base.Struct2Json(R.TcpOkMsg(req.Cmd,req.RequestId,req.Msg)))
+	case 2:
+		//地区
+		return
+	case 3:
+		//组织
+		return
+	case 4:
+		//队伍
+		return
+	case 5:
+		//团队
+		return
+	case 6:
+		//系统通知
+		c:=net.NewChat(tcpClient.GetRoleId(),tcpClient.GetRole().StrName,0,"",req.StrMsg,req.NChannel)
+		for _,t:= range util.Clients.GetMap() {
+			t.Write(base.Struct2Json(R.TcpOK(req.Cmd,req.RequestId).SetData(c)))
+		}
+		return
+	case 10:
+		//私聊
+	    toRoleId:=strconv.FormatInt(req.LToRoleId,10)
+		client:=util.Clients.Get(toRoleId)
+		c:=net.NewChat(tcpClient.GetRole().LId,tcpClient.GetRole().StrName,client.GetRole().LId,client.GetRole().StrName,msg,req.NChannel)
+		client.Write(base.Struct2Json(R.TcpOK(req.Cmd,req.RequestId).SetData(c)))
 		return
 	default:
 		return
 	}
 }
 
-func ChatToAroundPlayers(tcpClient *network.TcpClient,cmd string,requestId string,msg string){
+func ChatToAroundPlayers(tcpClient *network.TcpClient,cmd string,requestId string,msg string,channel int){
 	role := tcpClient.GetRole()
+	//---- 获取附近角色ID
 	var roleIds []string
 	for i := role.NChunkX - 1; i <= role.NChunkX+1; i++ {
 		for j := role.NChunkY - 1; j <= role.NChunkY+1; j++ {
@@ -48,11 +73,12 @@ func ChatToAroundPlayers(tcpClient *network.TcpClient,cmd string,requestId strin
 			roleIds = append(roleIds, rIds.Val() ...)
 		}
 	}
-	//---- 获取这些角色信息
+	//---- 发送信息
 	for _, roleId := range roleIds {
 		if roleId != "" {
 			client:=util.Clients.Get(roleId)
-			client.Write(base.Struct2Json(R.TcpOkMsg(cmd,requestId,msg)))
+			c:=net.NewChat(role.LId,role.StrName,client.GetRole().LId,client.GetRole().StrName,msg,channel)
+			client.Write(base.Struct2Json(R.TcpOK(cmd,requestId).SetData(c)))
 		}
 	}
 

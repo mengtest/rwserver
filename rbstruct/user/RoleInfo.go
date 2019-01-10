@@ -75,10 +75,9 @@ type RoleBuff struct {
 	NLevel       int64          `json:"nLevel"`         //技能等级
 	StrProp      string         `json:"strProp"`        //影响角色的哪项属性
 	StrEffectDesc      string   `json:"strEffectDesc"`  //状态描述
-	NSeconds     int            `json:"nSeconds"`       //剩余持续时间（秒）
 	NType        int            `json:"nType"`          //1增益型buf -1减益型buf
 	NValue       int            `json:"nValue"`         //增益值或减益值
-	NDuration    int            `db:"nDuration" json:"nDuration"`     //持续时间
+	NDuration    int            `json:"nDuration"`     //持续时间
 }
 
 
