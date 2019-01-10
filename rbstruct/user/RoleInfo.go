@@ -12,25 +12,61 @@ type RoleInfo struct {
 	NLevel       int            `db:"nLevel" json:"nLevel"`
 	NCurtExp     int64          `db:"nCurtExp" json:"nCurtExp"`
 	NExp         int64          `db:"nExp" json:"nExp"`
+
 	NHP          int            `db:"nHP" json:"nHP"`                //当前血气值
+	NTempHP      int
+
 	NMP          int            `db:"nMP" json:"nMP"`
+	NTempMP      int
+
 	NMaxHP       int            `db:"nMaxHP" json:"nMaxHP"`          //最大血气值
+	NTempMaxHP   int
+
 	NMaxMP       int            `db:"nMaxMP" json:"nMaxMP"`
+	NTempMaxMP   int
 
 	NMinAP       int            `db:"nMinAP" json:"nMinAP"`
+	NTempMinAP   int
+
 	NMinAD       int            `db:"nMinAD" json:"nMinAD"`
+	NTempMinAD   int
+
 	NMaxAP       int            `db:"nMaxAP" json:"nMaxAP"`
+	NTempMaxAP   int
+
 	NMaxAD       int            `db:"nMaxAD" json:"nMaxAD"`
+	NTempMaxAD   int
+
 	NPhyDef      int            `db:"nPhyDef" json:"nPhyDef"`
+	NTempPhyDef  int
+
 	NMagDef      int            `db:"nMagDef" json:"nMagDef"`
+	NTempMagDef  int
+
 	NDodge       int            `db:"nDodge" json:"nDodge"`
+	NTempDodge   int
+
 	NCrit        int            `db:"nCrit" json:"nCrit"`
+	NTempCrit    int
+
 	NHit         int            `db:"nHit" json:"nHit"`
+	NTempHit     int
+
 	NCon         int            `db:"nCon" json:"nCon"`
+	NTempCon     int
+
 	NDex         int            `db:"nDex" json:"nDex"`
+	NTempDex     int
+
 	NStr         int            `db:"nStr" json:"nStr"`
+	NTempStr     int
+
 	NAvoid       int            `db:"nAvoid" json:"nAvoid"`
+	NTempAvoid   int
+
 	NSp          int            `db:"nSp" json:"nSp"`
+	NTempSp      int
+
 	FPosX        float64        `db:"fPosX" json:"fPosX"`
 	FPosY        float64        `db:"fPosY" json:"fPosY"`
 	FPosZ        float64        `db:"fPosZ" json:"fPosZ"`
@@ -70,6 +106,7 @@ type RoleSkill struct {
 	NCastTime    int            `db:"nCastTime" json:"nCastTime"`     //施法时间
 	NDuration    int            `db:"nDuration" json:"nDuration"`     //持续时间
 	BChange      bool            //本条技能是否产生变化
+	ChangeType   int             //更新类型：1新增 2更新
 }
 
 //角色buff
