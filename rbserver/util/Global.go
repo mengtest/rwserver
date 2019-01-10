@@ -2,10 +2,12 @@ package util
 
 import (
 	"../../rbwork/network"
+	"../../rbstruct/config"
 	"sync"
 )
 
-//定义全局存储在线用户，键值为（IP+SN）或用户ID（建立连接时为IP,登录认证后为userId）
+//---------------------------------------TcpClient----------------------------------------------
+//定义全局存储在线用户，键值为（IP:客户端端口）或角色ID（建立连接时为IP,登录选择角色进入游戏后为角色ID）
 var Clients = NewClientMap()
 
 //map 并发存取
@@ -65,3 +67,7 @@ func (m *ClientMap) Delete(k string) {
 	defer m.lock.Unlock()
 	delete(m.bm, k)
 }
+
+//---------------------------------------普通map----------------------------------------------
+var LevelMap = make(map[int]*config.LevelConfig)
+

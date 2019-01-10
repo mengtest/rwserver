@@ -10,10 +10,41 @@ Target Server Type    : MYSQL
 Target Server Version : 50723
 File Encoding         : 65001
 
-Date: 2019-01-10 09:38:19
+Date: 2019-01-10 14:57:04
 */
 
 SET FOREIGN_KEY_CHECKS=0;
+
+-- ----------------------------
+-- Table structure for tb_level_config
+-- ----------------------------
+DROP TABLE IF EXISTS `tb_level_config`;
+CREATE TABLE `tb_level_config` (
+  `lId` bigint(20) NOT NULL AUTO_INCREMENT,
+  `nLevel` int(10) DEFAULT '0',
+  `nExp` bigint(20) DEFAULT '0',
+  PRIMARY KEY (`lId`)
+) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=utf8mb4;
+
+-- ----------------------------
+-- Records of tb_level_config
+-- ----------------------------
+INSERT INTO `tb_level_config` VALUES ('1', '1', '500');
+INSERT INTO `tb_level_config` VALUES ('2', '2', '1000');
+INSERT INTO `tb_level_config` VALUES ('3', '3', '1800');
+INSERT INTO `tb_level_config` VALUES ('4', '4', '2600');
+INSERT INTO `tb_level_config` VALUES ('5', '5', '3600');
+INSERT INTO `tb_level_config` VALUES ('6', '6', '4600');
+INSERT INTO `tb_level_config` VALUES ('7', '7', '5800');
+INSERT INTO `tb_level_config` VALUES ('8', '8', '7000');
+INSERT INTO `tb_level_config` VALUES ('9', '9', '8400');
+INSERT INTO `tb_level_config` VALUES ('10', '10', '9800');
+INSERT INTO `tb_level_config` VALUES ('11', '11', '11400');
+INSERT INTO `tb_level_config` VALUES ('12', '12', '13000');
+INSERT INTO `tb_level_config` VALUES ('13', '13', '14800');
+INSERT INTO `tb_level_config` VALUES ('14', '14', '16600');
+INSERT INTO `tb_level_config` VALUES ('15', '15', '18400');
+INSERT INTO `tb_level_config` VALUES ('16', '16', '20000');
 
 -- ----------------------------
 -- Table structure for tb_npc

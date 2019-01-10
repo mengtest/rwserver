@@ -45,7 +45,6 @@ type ChatReq struct {
 	StrMsg         string    `json:"strMsg"`
 }
 
-type RealeaseSkill struct {
+type UpgradeReq struct {
 	Req
-	SkillId    int64    `json:"skillId"`
 }

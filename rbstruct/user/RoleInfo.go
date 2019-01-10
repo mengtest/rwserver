@@ -10,7 +10,8 @@ type RoleInfo struct {
 	StrTitle     string         `db:"strTitle" json:"strTitle"`
 	NSex         int            `db:"nSex" json:"nSex"`
 	NLevel       int            `db:"nLevel" json:"nLevel"`
-	NExp         int            `db:"nExp" json:"nExp"`
+	NCurtExp     int64          `db:"nCurtExp" json:"nCurtExp"`
+	NExp         int64          `db:"nExp" json:"nExp"`
 	NHP          int            `db:"nHP" json:"nHP"`                //当前血气值
 	NMP          int            `db:"nMP" json:"nMP"`
 	NMaxHP       int            `db:"nMaxHP" json:"nMaxHP"`          //最大血气值

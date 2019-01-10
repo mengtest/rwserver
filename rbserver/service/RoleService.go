@@ -14,7 +14,19 @@ import (
 
 //角色升级
 func (s *Service) Upgrade(tcpClient *network.TcpClient, msg string) {
+	req := &net.UpgradeReq{}
+	base.Json2Struct(msg, req)
+	role := tcpClient.GetRole()
+	newLevel:=role.NLevel+1
+	levelC:=util.LevelMap[newLevel]
 
+	if newLevel<=60 && levelC !=nil && role.NCurtExp>=levelC.NExp {
+		role.NLevel=newLevel
+		role.NCurtExp=role.NCurtExp-levelC.NExp
+		tcpClient.Write(base.Struct2Json(R.TcpOK(req.Cmd, req.RequestId)))
+	}else{
+		tcpClient.Write(base.Struct2Json(R.TcpError(req.Cmd, req.RequestId)))
+	}
 }
 
 //角色移动

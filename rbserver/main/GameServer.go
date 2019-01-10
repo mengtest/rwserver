@@ -7,6 +7,7 @@ import (
 	"../../rbwork/redis"
 	"../handle"
 	"../util"
+	"../service"
 	"net"
 	"os"
 	"time"
@@ -16,6 +17,7 @@ func init() {
 	base.Init(base.GetCurrentDirectory(), "GameServer.log")
 	db.Init("root:123456@tcp(127.0.0.1:3306)/tianqi?charset=utf8")
 	redis.InitRedis("127.0.0.1:6379", "Wyz123!@#")
+	service.InitLevel()
 }
 
 func main() {
