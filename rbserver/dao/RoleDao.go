@@ -4,6 +4,7 @@ import (
 	"../../rbstruct/user"
 	"../../rbwork/base"
 	"../../rbwork/db"
+	"strconv"
 )
 
 func GetRolesByUserId(userId int64) []user.RoleInfo {
@@ -31,4 +32,18 @@ func GetRoleSkillByRoleId(roleId int64) []user.RoleSkill {
 	err:=db.DB.Select(&roleSkill,sqlc,roleId)
 	base.CheckErr(err)
 	return roleSkill
+}
+
+func GetRoleSQL(role user.RoleInfo) string {
+	sql:="UPDATE tb_role SET "
+	sql+="strName='"+role.StrName+"',"
+	sql+="strTitle='"+role.StrTitle+"',"
+	sql+="WHERE lId="+strconv.FormatInt(role.LId,10)
+	return sql
+}
+
+func ExecSQL(sql string)  {
+	db.DB.MustBegin()
+	db.DB.MustExec(sql)
+
 }

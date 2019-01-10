@@ -5,6 +5,7 @@ import (
 	"../../rbwork/db"
 	"../../rbwork/network"
 	"../../rbwork/redis"
+	"../dao"
 	"../handle"
 	"../util"
 	"../service"
@@ -79,6 +80,7 @@ func CheckError(err error) {
 	}
 }
 
+//心跳检测
 func runHeartbeat() {
 	//每5秒执行一次检测
 	tick := time.NewTicker(time.Second * time.Duration(5))
@@ -98,4 +100,25 @@ func runHeartbeat() {
 		}
 	}
 	defer tick.Stop()
+}
+
+//同步角色信息到DB
+func runSyncRoleInfoToDB(){
+	//每10秒执行一次
+	tick := time.NewTicker(time.Second * time.Duration(5))
+	for {
+		<-tick.C
+		base.LogInfo("开始同步角色到数据库")
+		roleInfoSql:=""
+		for _, client := range util.Clients.GetMap() {
+			if client.GetRole().BChange {
+				//拼接SQL
+				roleInfoSql+=dao.GetRoleSQL(*client.GetRole())+";"
+			}
+		}
+		if roleInfoSql != "" {
+
+		}
+
+	}
 }

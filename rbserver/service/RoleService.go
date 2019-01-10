@@ -49,6 +49,7 @@ func (s *Service) Move(tcpClient *network.TcpClient, msg string) {
 	role.FPosX = req.Px
 	role.FPosY = req.Py
 	role.FPosZ = req.Pz
+	role.BChange=true
 	//同步消息
 	SyncPlayerToAroundPlayers(tcpClient.GetStrRoleId(),*tcpClient.GetRole(),nil)
 }
@@ -112,9 +113,11 @@ func (s *Service) Attack(tcpClient *network.TcpClient, msg string) {
 		if targetClient.GetRole().NHP <= v {
 			targetClient.GetRole().NHP=0
 			targetClient.GetRole().Action="die"
+			targetClient.GetRole().BChange=true
 		}else{
 			targetClient.GetRole().NHP-=v
 			targetClient.GetRole().Action="hurt"
+			targetClient.GetRole().BChange=true
 		}
 		attackType=2
 	}

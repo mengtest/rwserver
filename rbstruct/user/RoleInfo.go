@@ -49,6 +49,8 @@ type RoleInfo struct {
 	Skills       []RoleSkill    `json:"skills"`                //角色技能
 	Buffs        []RoleBuff     `json:"buffs"`                //角色状态
 	Action       string         `json:"action"`
+	BChange      bool            //角色信息是否产生变化
+	BChangeSkill bool            //角色技能列表是否产生变化
 }
 
 //所有技能都是法术，未使用技能为普通物理攻击
@@ -67,6 +69,7 @@ type RoleSkill struct {
 	StrEffectDesc string        `db:"strEffectDesc" json:"strEffectDesc"`  //效果描述
 	NCastTime    int            `db:"nCastTime" json:"nCastTime"`     //施法时间
 	NDuration    int            `db:"nDuration" json:"nDuration"`     //持续时间
+	BChange      bool            //本条技能是否产生变化
 }
 
 //角色buff
