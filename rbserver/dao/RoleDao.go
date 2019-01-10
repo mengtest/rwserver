@@ -74,8 +74,8 @@ func SyncRoleToDB()  {
 			sql+="nChunkY=?,"
 			sql+="dtUpdateTime=NOW()"
 			sql+="WHERE lId=?"
-			tx.MustExec(sql,r.StrName,r.StrTitle,r.NLevel,r.NCurtExp,r.NExp,r.NHP-r.NTempHP,r.NMP-r.NTempMP,r.NMinAP-r.NTempMinAP,r.NMinAD,r.NMaxAP,r.NMaxAD,
-				r.NPhyDef,r.NMagDef,r.NDodge,r.NCrit,r.NHit,r.NCon,r.NDex,r.NStr,r.NAvoid,r.NSp,r.FPosX,r.FPosY,r.FPosZ,r.FDirX,r.FDirY,r.FDirZ,r.StrMapName,r.NChunkX,r.NChunkY,r.LId)
+			tx.MustExec(sql,r.StrName,r.StrTitle,r.NLevel,r.NCurtExp,r.NExp,r.NHP-r.NTempHP,r.NMP-r.NTempMP,r.NMinAP-r.NTempMinAP,r.NMinAD-r.NTempMinAD,r.NMaxAP-r.NTempMaxAP,r.NMaxAD-r.NTempMaxAD,
+				r.NPhyDef-r.NTempPhyDef,r.NMagDef-r.NTempMagDef,r.NDodge-r.NTempDodge,r.NCrit-r.NTempCrit,r.NHit-r.NTempHit,r.NCon-r.NTempCon,r.NDex-r.NTempCon,r.NStr-r.NTempStr,r.NAvoid-r.NTempAvoid,r.NSp-r.NTempSp,r.FPosX,r.FPosY,r.FPosZ,r.FDirX,r.FDirY,r.FDirZ,r.StrMapName,r.NChunkX,r.NChunkY,r.LId)
 		}
 		//同步角色技能到数据库
 		if client.GetRole().BChangeSkill {
