@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50723
 File Encoding         : 65001
 
-Date: 2019-01-10 14:57:04
+Date: 2019-01-10 15:36:51
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -116,7 +116,8 @@ CREATE TABLE `tb_role` (
   `strTitle` varchar(255) DEFAULT '' COMMENT '当前称号',
   `nSex` int(1) DEFAULT '0' COMMENT '0 男 1女',
   `nLevel` int(10) unsigned DEFAULT '1' COMMENT '等级 根据阅历提升等级',
-  `nExp` bigint(20) DEFAULT '0' COMMENT '阅历',
+  `nCurtExp` bigint(20) DEFAULT '0' COMMENT '当前阅历',
+  `nExp` bigint(20) DEFAULT '0' COMMENT '总阅历',
   `nHP` int(10) DEFAULT '0' COMMENT '体力气血值',
   `nMP` int(10) DEFAULT '0' COMMENT '法力值',
   `nMinAP` int(10) DEFAULT '0' COMMENT 'Attack Power 法术伤害',
@@ -154,7 +155,7 @@ CREATE TABLE `tb_role` (
 -- ----------------------------
 -- Records of tb_role
 -- ----------------------------
-INSERT INTO `tb_role` VALUES ('1', '1', '慕临风', '一剑霜寒十四州', '0', '50', '45897228', '5849', '1209', '100', '257', '324', '547', '588', '432', '878', '112', '210', '100', '60', '200', '70', '30', '100.00', '100.00', '100.00', '0.00', '0.00', '0.00', 'tzy', '11', '12', '1', '问剑阁', '0', null, null, '2019-01-05 12:16:58');
+INSERT INTO `tb_role` VALUES ('1', '1', '慕临风', '一剑霜寒十四州', '0', '50', null, '45897228', '5849', '1209', '100', '257', '324', '547', '588', '432', '878', '112', '210', '100', '60', '200', '70', '30', '100.00', '100.00', '100.00', '0.00', '0.00', '0.00', 'tzy', '11', '12', '1', '问剑阁', '0', null, null, '2019-01-05 12:16:58');
 
 -- ----------------------------
 -- Table structure for tb_role_skill
