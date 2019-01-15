@@ -48,3 +48,9 @@ type ChatReq struct {
 type UpgradeReq struct {
 	Req
 }
+
+//-- 增加阅历
+type IncreaseExpReq struct {
+	Req
+	NExp           int64       `json:"nExp"`
+}

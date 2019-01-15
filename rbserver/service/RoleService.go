@@ -160,50 +160,29 @@ func (s *Service) DiscardGoods(tcpClient *network.TcpClient, msg string) {
 
 }
 
-//获取周围玩家列表
-func (s *Service) GetAroundPlayers(tcpClient *network.TcpClient, msg string) {
-	req := &net.Req{}
+//增加经验
+func (s *Service) IncreaseExp(tcpClient *network.TcpClient, msg string) {
+	req := &net.IncreaseExpReq{}
 	base.Json2Struct(msg, req)
-	if !tcpClient.GetIsLogin() {
-		tcpClient.Write(base.Struct2Json(R.TcpErrorMsg(req.Cmd, req.RequestId, "未授权，请先登录")))
-		return
+	role:=tcpClient.GetRole()
+	role.NExp=role.NExp+req.NExp
+	tExp:=role.NCurtExp+req.NExp
+	if role.NLevel <= 10 && util.LevelMap[role.NLevel].NExp < tExp {
+		role.NCurtExp=tExp-util.LevelMap[role.NLevel].NExp
+		//10以下自动升级
+		role.NLevel=role.NLevel+1
+		//各属性自动加1
+		role.NSp=role.NSp+1
+		role.NStr=role.NStr+1
+		role.NDex=role.NDex+1
+		role.NAvoid=role.NAvoid+1
+		role.NCon=role.NCon+1
+		//计算防御、攻击等值
+		role.NHP=role.NHP+5
+		role.NPhyDef=role.NPhyDef+3
+	}else{
+		role.NExp=role.NExp+req.NExp
+		role.NCurtExp=role.NCurtExp+req.NExp
 	}
-	if tcpClient.GetRoleId() <= 0 {
-		tcpClient.Write(base.Struct2Json(R.TcpErrorMsg(req.Cmd, req.RequestId, "未选择角色")))
-		return
-	}
-
-	role := tcpClient.GetRole()
-	//---- 获取周围角色ID
-	var roleIds []string
-	for i := role.NChunkX - 1; i <= role.NChunkX+1; i++ {
-		for j := role.NChunkY - 1; j <= role.NChunkY+1; j++ {
-			rIds := redis.Client.SMembers(constant.MapChunk + role.StrMapName + ":" + strconv.Itoa(i) + "#" + strconv.Itoa(j))
-			roleIds = append(roleIds, rIds.Val()...)
-		}
-	}
-	//---- 获取这些角色信息
-	var players []user.RespRole
-	for _, roleId := range roleIds {
-		if roleId != "" {
-			client := util.Clients.Get(roleId)
-
-			player := user.RespRole{}
-			player.LId = client.GetRole().LId
-			player.StrName = client.GetRole().StrName
-			player.StrTitle = client.GetRole().StrTitle
-			player.NSex = client.GetRole().NSex
-			player.NLevel = client.GetRole().NLevel
-			player.NHP = client.GetRole().NHP
-			player.NMP = client.GetRole().NMP
-			player.NMaxHP = client.GetRole().NMaxHP
-			player.NMaxMP = client.GetRole().NMaxMP
-			player.NOccId = client.GetRole().NOccId
-			player.StrOccName = client.GetRole().StrOccName
-
-			players = append(players, player)
-		}
-	}
-	tcpClient.Write(base.Struct2Json(R.TcpOK(req.Cmd, req.RequestId).SetData(players).OutLog()))
 
 }
