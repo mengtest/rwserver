@@ -64,6 +64,10 @@ func BuffCalculation(roleId string, second int, buff user.RoleBuff) {
 			role.NTempDodge -= v
 			role.NDodge -= v
 			break
+		case "nCastValue":
+			role.NTempCastValue -= v
+			role.NCastValue -= v
+			break
 		case "nCrit":
 			role.NTempCrit -= v
 			role.NCrit -= v

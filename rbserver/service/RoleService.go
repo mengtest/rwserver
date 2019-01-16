@@ -71,16 +71,30 @@ func (s *Service) Attack(tcpClient *network.TcpClient, msg string) {
 			break
 		}
 	}
-	if req.TargetId == role.LId {
-		//目标为自己
+	//如果是释放buff技能
+	if skill.NSkillType==2{
+
+		buff:=user.RoleBuff{}
+		buff.LSkillId=skill.LSkillId
+		buff.StrSkillName=skill.StrSkillName
+		buff.StrEffectDesc=skill.StrEffectDesc
+		buff.NDuration=skill.NDuration-1 //因为通信时间差，服务器预先减一秒
+		buff.StrProp=skill.StrProp
 		role.Action="attack_"+skill.StrSkillCode
-		if skill.NSkillType==2{
-			buff:=user.RoleBuff{}
-			buff.LSkillId=skill.LSkillId
-			buff.StrSkillName=skill.StrSkillName
-			buff.StrEffectDesc=skill.StrEffectDesc
-			buff.NDuration=skill.NDuration-1 //因为通信时间差，服务器预先减一秒
+		buff.NValue=skill.NSkillValue
+
+		if req.TargetId == role.LId {
+			//目标为自己
+			buff.NType=1 //增益型
 			SyncPlayerToAroundPlayers(tcpClient.GetStrRoleId(),*tcpClient.GetRole(),&buff)
+			//buff持续时间计算，结束后进行结算
+			go BuffCalculation(tcpClient.GetStrRoleId(),skill.NDuration,buff)
+		}else{
+			//目标为敌人
+			buff.NType=-1 //减益型
+			SyncPlayerToAroundPlayers(targetClient.GetStrRoleId(),*tcpClient.GetRole(),&buff)
+			//buff持续时间计算，结束后进行结算
+			go BuffCalculation(targetClient.GetStrRoleId(),skill.NDuration,buff)
 		}
 		return
 	}
@@ -178,7 +192,7 @@ func (s *Service) IncreaseExp(tcpClient *network.TcpClient, msg string) {
 		role.NAvoid=role.NAvoid+1
 		role.NCon=role.NCon+1
 		//计算防御、攻击等值
-		role.NHP=role.NHP+5
+		role.NHP=role.NHP+10
 		role.NPhyDef=role.NPhyDef+3
 	}else{
 		role.NExp=role.NExp+req.NExp

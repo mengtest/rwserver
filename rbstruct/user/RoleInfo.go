@@ -46,6 +46,9 @@ type RoleInfo struct {
 	NDodge       int            `db:"nDodge" json:"nDodge"`
 	NTempDodge   int
 
+	NCastValue   int            `db:"nCastValue" json:"nCastValue"`
+	NTempCastValue int
+
 	NCrit        int            `db:"nCrit" json:"nCrit"`
 	NTempCrit    int
 
@@ -105,6 +108,7 @@ type RoleSkill struct {
 	StrEffectDesc string        `db:"strEffectDesc" json:"strEffectDesc"`  //效果描述
 	NCastTime    int            `db:"nCastTime" json:"nCastTime"`     //施法时间
 	NDuration    int            `db:"nDuration" json:"nDuration"`     //持续时间
+	StrProp     string          `db:"strProp" json:"strProp"`        //影响角色的哪项属性
 	BChange      bool            //本条技能是否产生变化
 	ChangeType   int             //更新类型：1新增 2更新
 }

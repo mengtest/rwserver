@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50723
 File Encoding         : 65001
 
-Date: 2019-01-10 15:36:51
+Date: 2019-01-16 14:18:09
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -127,9 +127,10 @@ CREATE TABLE `tb_role` (
   `nPhyDef` int(10) DEFAULT '0' COMMENT '物防',
   `nMagDef` int(10) DEFAULT '0' COMMENT '法防',
   `nDodge` int(10) DEFAULT NULL COMMENT '回避值',
+  `nCastValue` int(10) DEFAULT '0' COMMENT '吟唱力，影响技能施法速度加成',
   `nCrit` int(10) DEFAULT '0' COMMENT '会心',
   `nHit` int(10) DEFAULT '0' COMMENT '命中',
-  `nCon` int(10) DEFAULT '0' COMMENT '体 影响nHP+=5*nCon 影响物防nPhyDef+=3*nCon',
+  `nCon` int(10) DEFAULT '0' COMMENT '体 影响nHP+=10*nCon 影响物防nPhyDef+=3*nCon',
   `nDex` int(10) DEFAULT '0' COMMENT '敏 影响会心和施法速度',
   `nStr` int(10) DEFAULT '0' COMMENT '力 影响物理伤害和命中 nMinAD+=2*nStr; nMaxAD=3*nStr  nHit+=1*nStr',
   `nAvoid` int(10) DEFAULT '0' COMMENT '避',
@@ -155,7 +156,7 @@ CREATE TABLE `tb_role` (
 -- ----------------------------
 -- Records of tb_role
 -- ----------------------------
-INSERT INTO `tb_role` VALUES ('1', '1', '慕临风', '一剑霜寒十四州', '0', '50', null, '45897228', '5849', '1209', '100', '257', '324', '547', '588', '432', '878', '112', '210', '100', '60', '200', '70', '30', '100.00', '100.00', '100.00', '0.00', '0.00', '0.00', 'tzy', '11', '12', '1', '问剑阁', '0', null, null, '2019-01-05 12:16:58');
+INSERT INTO `tb_role` VALUES ('1', '1', '慕临风', '一剑霜寒十四州', '0', '50', null, '45897228', '5849', '1209', '100', '257', '324', '547', '588', '432', '878', '0', '112', '210', '100', '60', '200', '70', '30', '100.00', '100.00', '100.00', '0.00', '0.00', '0.00', 'tzy', '11', '12', '1', '问剑阁', '0', null, null, '2019-01-05 12:16:58');
 
 -- ----------------------------
 -- Table structure for tb_role_skill
@@ -175,13 +176,14 @@ CREATE TABLE `tb_role_skill` (
   `nCastTime` int(10) DEFAULT '0' COMMENT '施法时间 秒',
   `nDuration` int(10) DEFAULT '0' COMMENT '持续时间 秒',
   `strEffectDesc` varchar(255) DEFAULT '' COMMENT '技能效果描述',
+  `strProp` varchar(30) DEFAULT '' COMMENT '影响什么属性 （技能为buff时）',
   PRIMARY KEY (`lId`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4;
 
 -- ----------------------------
 -- Records of tb_role_skill
 -- ----------------------------
-INSERT INTO `tb_role_skill` VALUES ('1', '1', '1', '1', '霜寒', '1', '100', '1', '0', '11', '0', '0', '');
+INSERT INTO `tb_role_skill` VALUES ('1', '1', '1', '1', '霜寒', '1', '100', '1', '0', '11', '0', '0', '', '');
 
 -- ----------------------------
 -- Table structure for tb_skill
