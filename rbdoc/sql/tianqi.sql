@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50723
 File Encoding         : 65001
 
-Date: 2019-01-16 14:18:09
+Date: 2019-01-16 15:46:34
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -45,6 +45,22 @@ INSERT INTO `tb_level_config` VALUES ('13', '13', '14800');
 INSERT INTO `tb_level_config` VALUES ('14', '14', '16600');
 INSERT INTO `tb_level_config` VALUES ('15', '15', '18400');
 INSERT INTO `tb_level_config` VALUES ('16', '16', '20000');
+
+-- ----------------------------
+-- Table structure for tb_notice
+-- ----------------------------
+DROP TABLE IF EXISTS `tb_notice`;
+CREATE TABLE `tb_notice` (
+  `lId` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '主键',
+  `strTitle` varchar(50) DEFAULT '',
+  `strDesc` text,
+  `dtCreateTime` datetime DEFAULT NULL,
+  PRIMARY KEY (`lId`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='公告表';
+
+-- ----------------------------
+-- Records of tb_notice
+-- ----------------------------
 
 -- ----------------------------
 -- Table structure for tb_npc
@@ -159,6 +175,26 @@ CREATE TABLE `tb_role` (
 INSERT INTO `tb_role` VALUES ('1', '1', '慕临风', '一剑霜寒十四州', '0', '50', null, '45897228', '5849', '1209', '100', '257', '324', '547', '588', '432', '878', '0', '112', '210', '100', '60', '200', '70', '30', '100.00', '100.00', '100.00', '0.00', '0.00', '0.00', 'tzy', '11', '12', '1', '问剑阁', '0', null, null, '2019-01-05 12:16:58');
 
 -- ----------------------------
+-- Table structure for tb_role_equip
+-- ----------------------------
+DROP TABLE IF EXISTS `tb_role_equip`;
+CREATE TABLE `tb_role_equip` (
+  `lId` bigint(20) NOT NULL AUTO_INCREMENT,
+  `lRoleId` bigint(20) DEFAULT NULL COMMENT '角色ID',
+  `lEquipId` bigint(20) DEFAULT NULL COMMENT '装备ID',
+  `strEquipName` varchar(50) DEFAULT '' COMMENT '装备名称',
+  `nEquipType` tinyint(2) DEFAULT '0' COMMENT '装备类型 1帽子 2护肩 3护腕 4上衣 5腰带 6下裤 7下摆 8鞋子 9耳环 10戒指 11玉佩 12项链 13武器',
+  `strDesc` varchar(255) DEFAULT '' COMMENT '描述',
+  `strProp` json DEFAULT NULL COMMENT '属性',
+  `strImgPath` varchar(100) DEFAULT '' COMMENT '客户端图片路径',
+  PRIMARY KEY (`lId`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- ----------------------------
+-- Records of tb_role_equip
+-- ----------------------------
+
+-- ----------------------------
 -- Table structure for tb_role_skill
 -- ----------------------------
 DROP TABLE IF EXISTS `tb_role_skill`;
@@ -177,13 +213,14 @@ CREATE TABLE `tb_role_skill` (
   `nDuration` int(10) DEFAULT '0' COMMENT '持续时间 秒',
   `strEffectDesc` varchar(255) DEFAULT '' COMMENT '技能效果描述',
   `strProp` varchar(30) DEFAULT '' COMMENT '影响什么属性 （技能为buff时）',
+  `strImgPath` varchar(100) DEFAULT '' COMMENT '客户端图片路径',
   PRIMARY KEY (`lId`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4;
 
 -- ----------------------------
 -- Records of tb_role_skill
 -- ----------------------------
-INSERT INTO `tb_role_skill` VALUES ('1', '1', '1', '1', '霜寒', '1', '100', '1', '0', '11', '0', '0', '', '');
+INSERT INTO `tb_role_skill` VALUES ('1', '1', '1', '1', '霜寒', '1', '100', '1', '0', '11', '0', '0', '', '', '');
 
 -- ----------------------------
 -- Table structure for tb_skill
@@ -200,13 +237,14 @@ CREATE TABLE `tb_skill` (
   `nType` tinyint(2) DEFAULT '1' COMMENT '类型 1攻击 2状态',
   `nCastTime` int(10) DEFAULT '0' COMMENT '施法时间 秒',
   `nDuration` int(10) DEFAULT '0' COMMENT '持续时间 秒',
+  `strImgPath` varchar(100) DEFAULT '' COMMENT '客户端图片路径',
   PRIMARY KEY (`lId`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COMMENT='技能配置表';
 
 -- ----------------------------
 -- Records of tb_skill
 -- ----------------------------
-INSERT INTO `tb_skill` VALUES ('1', '', '霜寒', '', null, '0', '100', '1', '0', '0');
+INSERT INTO `tb_skill` VALUES ('1', '', '霜寒', '', null, '0', '100', '1', '0', '0', '');
 
 -- ----------------------------
 -- Table structure for tb_user
@@ -255,19 +293,3 @@ CREATE TABLE `tb_version` (
 INSERT INTO `tb_version` VALUES ('1', 'weq', '1.0.1', '/weqwe', '3434234234523', '1', '2018-12-20 10:51:47', '2018-12-20 10:51:47', '0');
 INSERT INTO `tb_version` VALUES ('2', 'fgh', '1.0.2', '/rtert', '6456576575', '2', '2018-12-25 10:51:52', '2018-12-25 10:51:52', '0');
 INSERT INTO `tb_version` VALUES ('3', 'weq', '1.0.1', '/weqwe', '3434234234523', '1', '2018-12-27 10:51:56', '2018-12-27 10:51:56', '0');
-
--- ----------------------------
--- Table structure for t_notice
--- ----------------------------
-DROP TABLE IF EXISTS `t_notice`;
-CREATE TABLE `t_notice` (
-  `lId` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '主键',
-  `strTitle` varchar(50) DEFAULT '',
-  `strDesc` text,
-  `dtCreateTime` datetime DEFAULT NULL,
-  PRIMARY KEY (`lId`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='公告表';
-
--- ----------------------------
--- Records of t_notice
--- ----------------------------

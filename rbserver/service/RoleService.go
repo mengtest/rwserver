@@ -82,6 +82,7 @@ func (s *Service) Attack(tcpClient *network.TcpClient, msg string) {
 		buff.StrProp=skill.StrProp
 		role.Action="attack_"+skill.StrSkillCode
 		buff.NValue=skill.NSkillValue
+		buff.StrImgPath=skill.StrImgPath
 
 		if req.TargetId == role.LId {
 			//目标为自己

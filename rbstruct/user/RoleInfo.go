@@ -108,7 +108,8 @@ type RoleSkill struct {
 	StrEffectDesc string        `db:"strEffectDesc" json:"strEffectDesc"`  //效果描述
 	NCastTime    int            `db:"nCastTime" json:"nCastTime"`     //施法时间
 	NDuration    int            `db:"nDuration" json:"nDuration"`     //持续时间
-	StrProp     string          `db:"strProp" json:"strProp"`        //影响角色的哪项属性
+	StrProp      string         `db:"strProp" json:"strProp"`        //影响角色的哪项属性
+	StrImgPath   string         `db:"strImgPath" json:"strImgPath"`  //技能图标路径
 	BChange      bool            //本条技能是否产生变化
 	ChangeType   int             //更新类型：1新增 2更新
 }
@@ -123,6 +124,7 @@ type RoleBuff struct {
 	NType        int            `json:"nType"`          //1增益型buf -1减益型buf
 	NValue       int            `json:"nValue"`         //增益值或减益值
 	NDuration    int            `json:"nDuration"`     //持续时间
+	StrImgPath   string         `json:"strImgPath"`  //技能图标路径
 }
 
 
