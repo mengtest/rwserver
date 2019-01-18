@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50723
 File Encoding         : 65001
 
-Date: 2019-01-16 15:46:34
+Date: 2019-01-18 17:48:33
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -175,15 +175,15 @@ CREATE TABLE `tb_role` (
 INSERT INTO `tb_role` VALUES ('1', '1', '慕临风', '一剑霜寒十四州', '0', '50', null, '45897228', '5849', '1209', '100', '257', '324', '547', '588', '432', '878', '0', '112', '210', '100', '60', '200', '70', '30', '100.00', '100.00', '100.00', '0.00', '0.00', '0.00', 'tzy', '11', '12', '1', '问剑阁', '0', null, null, '2019-01-05 12:16:58');
 
 -- ----------------------------
--- Table structure for tb_role_equip
+-- Table structure for tb_role_goods
 -- ----------------------------
-DROP TABLE IF EXISTS `tb_role_equip`;
-CREATE TABLE `tb_role_equip` (
+DROP TABLE IF EXISTS `tb_role_goods`;
+CREATE TABLE `tb_role_goods` (
   `lId` bigint(20) NOT NULL AUTO_INCREMENT,
   `lRoleId` bigint(20) DEFAULT NULL COMMENT '角色ID',
-  `lEquipId` bigint(20) DEFAULT NULL COMMENT '装备ID',
-  `strEquipName` varchar(50) DEFAULT '' COMMENT '装备名称',
-  `nEquipType` tinyint(2) DEFAULT '0' COMMENT '装备类型 1帽子 2护肩 3护腕 4上衣 5腰带 6下裤 7下摆 8鞋子 9耳环 10戒指 11玉佩 12项链 13武器',
+  `lGoodsId` bigint(20) DEFAULT NULL COMMENT '物品ID',
+  `strGoodsName` varchar(50) DEFAULT '' COMMENT '物品名称',
+  `nGoodsType` tinyint(2) DEFAULT '0' COMMENT '装备类型 1帽子 2护肩 3护腕 4上衣 5腰带 6下裤 7下摆 8鞋子 9耳环 10戒指 11玉佩 12项链 13武器',
   `strDesc` varchar(255) DEFAULT '' COMMENT '描述',
   `strProp` json DEFAULT NULL COMMENT '属性',
   `strImgPath` varchar(100) DEFAULT '' COMMENT '客户端图片路径',
@@ -191,7 +191,7 @@ CREATE TABLE `tb_role_equip` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- ----------------------------
--- Records of tb_role_equip
+-- Records of tb_role_goods
 -- ----------------------------
 
 -- ----------------------------
