@@ -113,4 +113,5 @@ func runSyncRoleInfoToDB(){
 		base.LogInfo("开始同步角色到数据库")
 		dao.SyncRoleToDB()
 	}
+	defer tick.Stop()
 }
