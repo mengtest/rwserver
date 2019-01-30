@@ -53,7 +53,7 @@ func SyncPlayerToAroundPlayers(currRoleId string,role user.RoleInfo,buff *user.R
 	if buff != nil {
 		player.Buffs=append(player.Buffs,*buff)
 	}
-
+     //Sync 表示同步消息命令 0代表立即执行
 	for _, roleId := range roleIds {
 		if roleId != "" && roleId !=currRoleId {
 			client := util.Clients.Get(roleId)
