@@ -96,5 +96,26 @@ func (s *Service) CreateRole(tcpClient *network.TcpClient, msg string)  {
 		tcpClient.Write(base.Struct2Json(R.TcpErrorMsg(req.Cmd, req.RequestId, "未授权，请先登录")))
 		return
 	}
-	dao.CreateRole()
+	roleInfo:=&user.RoleInfo{}
+	roleInfo.LUserId=tcpClient.GetUserId()
+	roleInfo.StrName=req.StrName
+	roleInfo.NSex=req.NSex
+	roleInfo.NOccId=req.NOccId
+	roleInfo.StrOccName=req.StrOccName
+	//新建角色默认出生在新手村
+	roleInfo.StrMapName=constant.MAP_NAME
+	roleInfo.FPosX=constant.ROLE_POSX
+	roleInfo.FPosY=constant.ROLE_POSY
+	roleInfo.FPosZ=constant.ROLE_POSZ
+	roleInfo.FDirX=constant.ROLE_DIRX
+	roleInfo.FDirY=constant.ROLE_DIRY
+	roleInfo.FDirZ=constant.ROLE_DIRZ
+	roleInfo.NChunkX=constant.ROLE_CHUNKX
+	roleInfo.NChunkY=constant.ROLE_CHUNKY
+	success:=dao.CreateRole(roleInfo)
+	if success {
+		tcpClient.Write(base.Struct2Json(R.TcpOK(req.Cmd, req.RequestId).SetData(roleInfo).OutLog()))
+	}else{
+		tcpClient.Write(base.Struct2Json(R.TcpErrorMsg(req.Cmd, req.RequestId, "创建角色失败，请重试")))
+	}
 }

@@ -57,7 +57,7 @@ type IncreaseExpReq struct {
 type CreateRoleReq struct {
 	Req
 	StrName        string      `json:"strName"`
-	NSex           string      `json:"nSex"`
+	NSex           int         `json:"nSex"`
 	NOccId         int         `json:"nOccId"`
 	StrOccName     string      `json:"strOccName"`
 }

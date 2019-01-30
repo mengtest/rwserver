@@ -7,14 +7,22 @@ import (
 	"../util"
 )
 
-func CreateRole() []user.RoleInfo {
-	roles:=[]user.RoleInfo{}
+func CreateRole(r *user.RoleInfo) bool {
 	tx := db.DB.MustBegin()
-	tx.MustExec("INSERT INTO tb_role(lUserId,strName,nSex,fPosX,fPosY,fPosZ,fDirX,fDirY,fDirZ,strMapName,nChunkX,nChunkY,nOccId,strOccName) VALUES ()")
-	sqlc:="INSERT INTO tb_role(lUserId,strName,nSex,fPosX,fPosY,fPosZ,fDirX,fDirY,fDirZ,strMapName,nChunkX,nChunkY,nOccId,strOccName) VALUES ()"
-	base.LogInfo("SQL:",sqlc)
-	//base.CheckErr(err)
-	return roles
+	sqlc:="INSERT INTO tb_role(lUserId,strName,nSex,fPosX,fPosY,fPosZ,fDirX,fDirY,fDirZ,strMapName,nChunkX,nChunkY,nOccId,strOccName) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)"
+	base.LogInfo("SQL:",sqlc,r.LUserId,r.StrName,r.NSex,r.FPosX,r.FPosY,r.FPosZ,r.FDirX,r.FDirY,r.FDirZ,r.StrMapName,r.NChunkX,r.NChunkY,r.NOccId,r.StrOccName)
+	rt:=tx.MustExec(sqlc,r.LUserId,r.StrName,r.NSex,r.FPosX,r.FPosY,r.FPosZ,r.FDirX,r.FDirY,r.FDirZ,r.StrMapName,r.NChunkX,r.NChunkY,r.NOccId,r.StrOccName)
+	count,err:=rt.RowsAffected()
+	base.CheckErr(err)
+	if count<=0 {
+		return false
+	}
+	sql2:="SELECT * FROM tb_role WHERE lId = (SELECT LAST_INSERT_ID())"
+	base.LogInfo(sql2)
+	err=tx.Get(r,sql2)
+	base.CheckErr(err)
+	tx.Commit()
+	return true
 }
 
 func GetRolesByUserId(userId int64) []user.RoleInfo {
