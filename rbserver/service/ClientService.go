@@ -3,6 +3,7 @@ package service
 import (
 	R "../../rbstruct/base"
 	"../../rbwork/network"
+	"../../rbstruct/net"
 	"../../rbstruct/user"
 	"../../rbwork/constant"
 	"../../rbwork/base"
@@ -19,6 +20,9 @@ type Service struct {
 //ping 心跳时间更新
 func (s *Service) Ping(tcpClient *network.TcpClient,msg string)  {
 	tcpClient.SetTime(time.Now().Unix())
+	req:=&net.Req{}
+	base.Json2Struct(msg,req)
+	tcpClient.Write(base.Struct2Json(R.TcpOK(req.Cmd, req.RequestId)))
 }
 
 //同步自己的信息给周围玩家，package内部调用

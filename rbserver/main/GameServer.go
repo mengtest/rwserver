@@ -88,7 +88,7 @@ func runHeartbeat() {
 	tick := time.NewTicker(time.Second * time.Duration(5))
 	for {
 		<-tick.C
-		base.LogInfo("开始发送心跳包")
+		//base.LogInfo("开始发送心跳包")
 		for _, tcpClient := range util.Clients.GetMap() {
 			timeb := time.Now().Unix() - tcpClient.GetTime() //计算秒
 			if timeb > 40 {
@@ -98,7 +98,7 @@ func runHeartbeat() {
 				util.Clients.Delete(tcpClient.GetStrRoleId())
 				base.LogInfo("IP->"+tcpClient.RemoteAddr(), "roleId->"+tcpClient.GetStrRoleId(), "超过40秒未收到心跳返回，已断开连接")
 			}
-			tcpClient.Write("{\"cmd\":\"ping\",\"requestId\":\"ping\"}")
+			//tcpClient.Write("{\"cmd\":\"ping\",\"requestId\":\"ping\"}")
 		}
 	}
 	defer tick.Stop()
