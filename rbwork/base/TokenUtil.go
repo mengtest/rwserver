@@ -10,7 +10,7 @@ const SecretKey = "tianqi2018xbc"
 
 func CreateToken(userId string, mac string) string {
 	claims := make(jwt.MapClaims)
-	claims["exp"] = time.Now().Add(time.Hour * time.Duration(360)).Unix() //360个小时有效
+	claims["exp"] = time.Now().Add(time.Hour * time.Duration(180)).Unix() //180个小时有效
 	claims["iat"] = time.Now().Unix()
 	claims["iss"] = "tq.iuoon.com"
 	claims["uid"] = userId

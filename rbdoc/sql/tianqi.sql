@@ -10,10 +10,27 @@ Target Server Type    : MYSQL
 Target Server Version : 50723
 File Encoding         : 65001
 
-Date: 2019-01-18 17:48:33
+Date: 2019-01-30 16:54:54
 */
 
 SET FOREIGN_KEY_CHECKS=0;
+
+-- ----------------------------
+-- Table structure for tb_goods
+-- ----------------------------
+DROP TABLE IF EXISTS `tb_goods`;
+CREATE TABLE `tb_goods` (
+  `lId` bigint(20) NOT NULL AUTO_INCREMENT,
+  `strName` varchar(255) DEFAULT NULL,
+  `strProp` json DEFAULT NULL COMMENT '属性',
+  `strIcon` varchar(100) DEFAULT '' COMMENT '图形logo',
+  `strDesc` varchar(255) DEFAULT '' COMMENT '描述',
+  PRIMARY KEY (`lId`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- ----------------------------
+-- Records of tb_goods
+-- ----------------------------
 
 -- ----------------------------
 -- Table structure for tb_level_config
@@ -118,8 +135,8 @@ CREATE TABLE `tb_occupation` (
 -- ----------------------------
 -- Records of tb_occupation
 -- ----------------------------
-INSERT INTO `tb_occupation` VALUES ('1', '问剑阁');
-INSERT INTO `tb_occupation` VALUES ('2', '雾隐山庄');
+INSERT INTO `tb_occupation` VALUES ('1', '凌霜阁');
+INSERT INTO `tb_occupation` VALUES ('2', '雾');
 
 -- ----------------------------
 -- Table structure for tb_role
@@ -175,6 +192,26 @@ CREATE TABLE `tb_role` (
 INSERT INTO `tb_role` VALUES ('1', '1', '慕临风', '一剑霜寒十四州', '0', '50', null, '45897228', '5849', '1209', '100', '257', '324', '547', '588', '432', '878', '0', '112', '210', '100', '60', '200', '70', '30', '100.00', '100.00', '100.00', '0.00', '0.00', '0.00', 'tzy', '11', '12', '1', '问剑阁', '0', null, null, '2019-01-05 12:16:58');
 
 -- ----------------------------
+-- Table structure for tb_role_equipment
+-- ----------------------------
+DROP TABLE IF EXISTS `tb_role_equipment`;
+CREATE TABLE `tb_role_equipment` (
+  `lId` bigint(20) NOT NULL AUTO_INCREMENT,
+  `lRoleId` bigint(20) DEFAULT NULL COMMENT '角色ID',
+  `lGoodsId` bigint(20) DEFAULT NULL COMMENT '物品ID',
+  `nType` tinyint(2) DEFAULT '0' COMMENT '装备类型 1帽子 2护肩 3护腕 4上衣 5腰带 6下裤 7下摆 8鞋子 9耳环 10戒指 11玉佩 12项链 13武器',
+  `strProp` json DEFAULT NULL COMMENT '属性',
+  `strIcon` varchar(100) DEFAULT '' COMMENT '图形logo',
+  `strDesc` varchar(255) DEFAULT '' COMMENT '描述',
+  `nDeleted` tinyint(1) DEFAULT '0' COMMENT '是否删除 0:否 1是',
+  PRIMARY KEY (`lId`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='角色装备表';
+
+-- ----------------------------
+-- Records of tb_role_equipment
+-- ----------------------------
+
+-- ----------------------------
 -- Table structure for tb_role_goods
 -- ----------------------------
 DROP TABLE IF EXISTS `tb_role_goods`;
@@ -182,13 +219,16 @@ CREATE TABLE `tb_role_goods` (
   `lId` bigint(20) NOT NULL AUTO_INCREMENT,
   `lRoleId` bigint(20) DEFAULT NULL COMMENT '角色ID',
   `lGoodsId` bigint(20) DEFAULT NULL COMMENT '物品ID',
-  `strGoodsName` varchar(50) DEFAULT '' COMMENT '物品名称',
-  `nGoodsType` tinyint(2) DEFAULT '0' COMMENT '装备类型 1帽子 2护肩 3护腕 4上衣 5腰带 6下裤 7下摆 8鞋子 9耳环 10戒指 11玉佩 12项链 13武器',
-  `strDesc` varchar(255) DEFAULT '' COMMENT '描述',
+  `nType` tinyint(2) DEFAULT '0' COMMENT '类型 1消耗品 2装备',
   `strProp` json DEFAULT NULL COMMENT '属性',
-  `strImgPath` varchar(100) DEFAULT '' COMMENT '客户端图片路径',
+  `strIcon` varchar(100) DEFAULT '' COMMENT '图形logo',
+  `nIndex` tinyint(4) DEFAULT '0' COMMENT '包裹位置',
+  `nNum` int(10) DEFAULT '1' COMMENT '叠加数量',
+  `strDesc` varchar(255) DEFAULT '' COMMENT '描述',
+  `nDeleted` tinyint(1) DEFAULT '0' COMMENT '是否删除 0:否 1是 （根据此字段在回收处回购）',
+  `nOccupationLimit` tinyint(2) DEFAULT '0' COMMENT '职业限制 0全门派 1问剑阁',
   PRIMARY KEY (`lId`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='角色包裹物品表';
 
 -- ----------------------------
 -- Records of tb_role_goods
