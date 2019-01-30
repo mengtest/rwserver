@@ -87,3 +87,14 @@ func (s *Service) LoginRole(tcpClient *network.TcpClient, msg string) {
     //告知好友上线了
 
 }
+
+//创建角色
+func (s *Service) CreateRole(tcpClient *network.TcpClient, msg string)  {
+	req:=&net.CreateRoleReq{}
+	base.Json2Struct(msg,req)
+	if !tcpClient.GetIsLogin() {
+		tcpClient.Write(base.Struct2Json(R.TcpErrorMsg(req.Cmd, req.RequestId, "未授权，请先登录")))
+		return
+	}
+	dao.CreateRole()
+}

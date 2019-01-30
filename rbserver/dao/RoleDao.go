@@ -7,6 +7,16 @@ import (
 	"../util"
 )
 
+func CreateRole() []user.RoleInfo {
+	roles:=[]user.RoleInfo{}
+	tx := db.DB.MustBegin()
+	tx.MustExec("INSERT INTO tb_role(lUserId,strName,nSex,fPosX,fPosY,fPosZ,fDirX,fDirY,fDirZ,strMapName,nChunkX,nChunkY,nOccId,strOccName) VALUES ()")
+	sqlc:="INSERT INTO tb_role(lUserId,strName,nSex,fPosX,fPosY,fPosZ,fDirX,fDirY,fDirZ,strMapName,nChunkX,nChunkY,nOccId,strOccName) VALUES ()"
+	base.LogInfo("SQL:",sqlc)
+	//base.CheckErr(err)
+	return roles
+}
+
 func GetRolesByUserId(userId int64) []user.RoleInfo {
 	roles:=[]user.RoleInfo{}
 	sqlc:="SELECT * FROM tb_role WHERE nDeleted=0 AND lUserId=? ORDER BY dtCreateTime DESC"
