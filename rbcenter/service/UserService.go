@@ -24,7 +24,12 @@ type User struct {
 
 type UserData struct {
 	Token string `json:"token"`
-	User User `json:"user"`
+	User UserResp `json:"user"`
+}
+
+type UserResp struct {
+	LId int64 `json:"lId"`
+	StrName string `json:"strName"`
 }
 
 func GetUserByMobile(mobile string) (User,int) {

@@ -40,7 +40,8 @@ func Login(w http.ResponseWriter, r *http.Request) {
 	token := base.CreateToken(string(user.LId), strMac)
 
 	userData := service.UserData{}
-	userData.User = user
+	userData.User.LId=user.LId
+	userData.User.StrName=user.StrName
 	userData.Token = token
 	hc.ReturnMsg(R.OK().SetData(userData))
 }
@@ -80,7 +81,8 @@ func Register(w http.ResponseWriter, r *http.Request) {
 	token := base.CreateToken(strconv.FormatInt(user.LId, 10), strMac)
 
 	userData := service.UserData{}
-	userData.User = user
+	userData.User.LId=user.LId
+	userData.User.StrName=user.StrName
 	userData.Token = token
 	hc.ReturnMsg(R.OK().SetData(userData))
 }
