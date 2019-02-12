@@ -37,10 +37,12 @@ func (s *Service) Move(tcpClient *network.TcpClient, msg string) {
 	role := tcpClient.GetRole()
 	//如果所处地图和地块发生变化,角色属性变化
 	if req.MapName != role.StrMapName || req.ChunkX != role.NChunkX || req.ChunkY != role.NChunkY {
+		//--在该旧地块上移除角色ID
 		redis.Client.SRem(constant.MapChunk+role.StrMapName+":"+strconv.Itoa(role.NChunkX)+"#"+strconv.Itoa(role.NChunkY), tcpClient.GetRoleId())
 		role.NChunkX = req.ChunkX
 		role.NChunkY = req.ChunkY
 		role.StrMapName = req.MapName
+		//--在新地块加入角色ID
 		redis.Client.SAdd(constant.MapChunk+role.StrMapName+":"+strconv.Itoa(role.NChunkX)+"#"+strconv.Itoa(role.NChunkY), tcpClient.GetRoleId())
 	}
 	role.FDirX = req.Dx

@@ -20,6 +20,7 @@ func (s *Service) Chat(tcpClient *network.TcpClient,msg string)  {
 		return
 	}
 
+
 	switch req.NChannel {
 	case 0:
 		//世界
@@ -55,7 +56,7 @@ func (s *Service) Chat(tcpClient *network.TcpClient,msg string)  {
 		//私聊
 	    toRoleId:=strconv.FormatInt(req.LToRoleId,10)
 		client:=util.Clients.Get(toRoleId)
-		c:=net.NewChat(tcpClient.GetRole().LId,tcpClient.GetRole().StrName,client.GetRole().LId,client.GetRole().StrName,msg,req.NChannel)
+		c:=net.NewChat(tcpClient.GetRole().LId,tcpClient.GetRole().StrName,client.GetRole().LId,"你",msg,req.NChannel)
 		client.Write(base.Struct2Json(R.TcpOK(req.Cmd,req.RequestId).SetData(c)))
 		return
 	default:
