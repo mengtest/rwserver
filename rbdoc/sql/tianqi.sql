@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50723
 File Encoding         : 65001
 
-Date: 2019-01-30 16:54:54
+Date: 2019-02-13 20:46:43
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -168,6 +168,7 @@ CREATE TABLE `tb_role` (
   `nStr` int(10) DEFAULT '0' COMMENT '力 影响物理伤害和命中 nMinAD+=2*nStr; nMaxAD=3*nStr  nHit+=1*nStr',
   `nAvoid` int(10) DEFAULT '0' COMMENT '避',
   `nSp` int(10) DEFAULT '0' COMMENT '法',
+  `nCritDef` int(10) DEFAULT '0' COMMENT '会心防护',
   `fPosX` double(10,2) DEFAULT NULL,
   `fPosY` double(10,2) DEFAULT NULL,
   `fPosZ` double(10,2) DEFAULT NULL,
@@ -189,7 +190,7 @@ CREATE TABLE `tb_role` (
 -- ----------------------------
 -- Records of tb_role
 -- ----------------------------
-INSERT INTO `tb_role` VALUES ('1', '1', '慕临风', '一剑霜寒十四州', '0', '50', null, '45897228', '5849', '1209', '100', '257', '324', '547', '588', '432', '878', '0', '112', '210', '100', '60', '200', '70', '30', '100.00', '100.00', '100.00', '0.00', '0.00', '0.00', 'tzy', '11', '12', '1', '问剑阁', '0', null, null, '2019-01-05 12:16:58');
+INSERT INTO `tb_role` VALUES ('1', '1', '慕临风', '一剑霜寒十四州', '0', '50', null, '45897228', '5849', '1209', '100', '257', '324', '547', '588', '432', '878', '0', '112', '210', '100', '60', '200', '70', '30', '0', '100.00', '100.00', '100.00', '0.00', '0.00', '0.00', 'tzy', '11', '12', '1', '问剑阁', '0', null, null, '2019-01-05 12:16:58');
 
 -- ----------------------------
 -- Table structure for tb_role_equipment

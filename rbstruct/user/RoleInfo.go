@@ -22,9 +22,6 @@ type RoleInfo struct {
 	NMaxHP       int            `db:"nMaxHP" json:"nMaxHP"`          //最大血气值
 	NTempMaxHP   int
 
-	NMaxMP       int            `db:"nMaxMP" json:"nMaxMP"`
-	NTempMaxMP   int
-
 	NMinAP       int            `db:"nMinAP" json:"nMinAP"`
 	NTempMinAP   int
 
@@ -69,6 +66,9 @@ type RoleInfo struct {
 
 	NSp          int            `db:"nSp" json:"nSp"`
 	NTempSp      int
+
+	NCritDef     int            `db:"nCritDef" json:"nCritDef"`
+	NTempCritDef int
 
 	FPosX        float64        `db:"fPosX" json:"fPosX"`
 	FPosY        float64        `db:"fPosY" json:"fPosY"`
