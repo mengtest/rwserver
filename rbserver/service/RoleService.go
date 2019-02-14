@@ -189,23 +189,24 @@ func (s *Service) IncreaseExp(tcpClient *network.TcpClient, msg string) {
 		//10以下自动升级
 		role.NLevel=role.NLevel+1
 		//各属性自动加1
-		role.NSp=role.NSp+1        //法     1法=10法攻 +  4MP     +  4命中 + 4法防
-		role.NStr=role.NStr+1      //力     1力=10物攻 +  4命中   +  2物防
-		role.NDex=role.NDex+1      //敏     1敏= 4施法 + 4会心   +  2闪避
-		role.NAvoid=role.NAvoid+1  //避     1避=10闪避 + 4会防 + 2物防 +2法防
-		role.NCon=role.NCon+1      //体     1体=10HP   + 4物防
+		role.NSp=role.NSp+1        //法     1法=4法攻  + 4法力   +  2命中 + 2法防
+		role.NStr=role.NStr+1      //力     1力=4物攻  + 2命中   +  2物防
+		role.NDex=role.NDex+1      //敏     1敏=4施法  + 4会心   +  2闪避
+		role.NAvoid=role.NAvoid+1  //避     1避=4闪避  + 4会防   +  2物防 + 2法防
+		role.NCon=role.NCon+1      //体     1体=10生命 + 2物防
 		//计算防御、攻击等值
 		role.NHP=role.NHP + 10
-		role.NPhyDef=role.NPhyDef + 4 + 2
-		role.NMagDef=role.NMagDef + 4 + 2
+		role.NPhyDef=role.NPhyDef + 2 + 2
+		role.NMagDef=role.NMagDef + 2 + 2
 		role.NMP=role.NMP + 4
 		role.NCrit=role.NCrit + 4
-		role.NHit=role.NHit + 4 + 4
-		role.NMaxAD=role.NMaxAD+10
-		role.NMinAD=role.NMinAD+5
-		role.NMaxAP=role.NMaxAP+10
-		role.NMinAP=role.NMinAP+5
+		role.NHit=role.NHit + 2 + 2
+		role.NMaxAD=role.NMaxAD+4
+		role.NMinAD=role.NMinAD+2
+		role.NMaxAP=role.NMaxAP+4
+		role.NMinAP=role.NMinAP+2
 		role.NCritDef=role.NCritDef+4
+		role.NDodge=role.NDodge+4
 	}else{
 		role.NExp=role.NExp+req.NExp
 		role.NCurtExp=role.NCurtExp+req.NExp
