@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50723
 File Encoding         : 65001
 
-Date: 2019-02-13 20:46:43
+Date: 2019-02-15 17:51:25
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -159,7 +159,7 @@ CREATE TABLE `tb_role` (
   `nMaxAD` int(10) DEFAULT '0' COMMENT 'Attack Damage 物理伤害',
   `nPhyDef` int(10) DEFAULT '0' COMMENT '物防',
   `nMagDef` int(10) DEFAULT '0' COMMENT '法防',
-  `nDodge` int(10) DEFAULT NULL COMMENT '回避值',
+  `nDodge` int(10) DEFAULT NULL COMMENT '回避值（闪避）',
   `nCastValue` int(10) DEFAULT '0' COMMENT '吟唱力，影响技能施法速度加成',
   `nCrit` int(10) DEFAULT '0' COMMENT '会心',
   `nHit` int(10) DEFAULT '0' COMMENT '命中',
@@ -200,11 +200,10 @@ CREATE TABLE `tb_role_equipment` (
   `lId` bigint(20) NOT NULL AUTO_INCREMENT,
   `lRoleId` bigint(20) DEFAULT NULL COMMENT '角色ID',
   `lGoodsId` bigint(20) DEFAULT NULL COMMENT '物品ID',
-  `nType` tinyint(2) DEFAULT '0' COMMENT '装备类型 1帽子 2护肩 3护腕 4上衣 5腰带 6下裤 7下摆 8鞋子 9耳环 10戒指 11玉佩 12项链 13武器',
+  `nCode` varchar(2) DEFAULT '' COMMENT '装备类型 1帽子 2护肩 3护腕 4上衣 5腰带 6下裤 7下摆 8鞋子 9耳环 10戒指 11玉佩 12项链 13武器',
   `strProp` json DEFAULT NULL COMMENT '属性',
   `strIcon` varchar(100) DEFAULT '' COMMENT '图形logo',
   `strDesc` varchar(255) DEFAULT '' COMMENT '描述',
-  `nDeleted` tinyint(1) DEFAULT '0' COMMENT '是否删除 0:否 1是',
   PRIMARY KEY (`lId`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='角色装备表';
 
@@ -221,6 +220,7 @@ CREATE TABLE `tb_role_goods` (
   `lRoleId` bigint(20) DEFAULT NULL COMMENT '角色ID',
   `lGoodsId` bigint(20) DEFAULT NULL COMMENT '物品ID',
   `nType` tinyint(2) DEFAULT '0' COMMENT '类型 1消耗品 2装备',
+  `nCode` int(10) DEFAULT '0' COMMENT '编码 （根据类型编码表来）',
   `strProp` json DEFAULT NULL COMMENT '属性',
   `strIcon` varchar(100) DEFAULT '' COMMENT '图形logo',
   `nIndex` tinyint(4) DEFAULT '0' COMMENT '包裹位置',
@@ -264,6 +264,24 @@ CREATE TABLE `tb_role_skill` (
 INSERT INTO `tb_role_skill` VALUES ('1', '1', '1', '1', '霜寒', '1', '100', '1', '0', '11', '0', '0', '', '', '');
 
 -- ----------------------------
+-- Table structure for tb_role_task
+-- ----------------------------
+DROP TABLE IF EXISTS `tb_role_task`;
+CREATE TABLE `tb_role_task` (
+  `lId` bigint(20) DEFAULT NULL,
+  `lRoleId` bigint(20) DEFAULT NULL,
+  `lPreTaskId` bigint(20) DEFAULT '0' COMMENT '前置任务Id',
+  `lTaskId` bigint(20) DEFAULT '0' COMMENT '任务ID',
+  `nStatus` tinyint(2) DEFAULT '1' COMMENT '状态 1进行中 2已完成 3已提交 3已过期',
+  `dtUpdateTime` datetime DEFAULT NULL,
+  `dtCreateTime` datetime DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- ----------------------------
+-- Records of tb_role_task
+-- ----------------------------
+
+-- ----------------------------
 -- Table structure for tb_skill
 -- ----------------------------
 DROP TABLE IF EXISTS `tb_skill`;
@@ -286,6 +304,26 @@ CREATE TABLE `tb_skill` (
 -- Records of tb_skill
 -- ----------------------------
 INSERT INTO `tb_skill` VALUES ('1', '', '霜寒', '', null, '0', '100', '1', '0', '0', '');
+
+-- ----------------------------
+-- Table structure for tb_task_config
+-- ----------------------------
+DROP TABLE IF EXISTS `tb_task_config`;
+CREATE TABLE `tb_task_config` (
+  `lId` bigint(20) NOT NULL COMMENT '主键',
+  `lPreId` bigint(20) DEFAULT NULL COMMENT '前置任务ID',
+  `strTitle` varchar(100) DEFAULT '' COMMENT '任务名称',
+  `nType` tinyint(2) DEFAULT '1' COMMENT '任务类型 1:主线任务 2支线任务 3日常任务 4周常任务',
+  `strContent` varchar(255) DEFAULT '' COMMENT '任务内容',
+  `strDesc` varchar(255) DEFAULT '' COMMENT '任务描述',
+  `dtUpdateTime` datetime DEFAULT NULL COMMENT '更新时间',
+  `dtCreateTime` datetime DEFAULT NULL COMMENT '创建时间',
+  PRIMARY KEY (`lId`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- ----------------------------
+-- Records of tb_task_config
+-- ----------------------------
 
 -- ----------------------------
 -- Table structure for tb_user
