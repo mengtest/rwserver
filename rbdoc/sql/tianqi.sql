@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50723
 File Encoding         : 65001
 
-Date: 2019-02-15 17:51:25
+Date: 2019-03-08 16:30:07
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -160,7 +160,7 @@ CREATE TABLE `tb_role` (
   `nPhyDef` int(10) DEFAULT '0' COMMENT '物防',
   `nMagDef` int(10) DEFAULT '0' COMMENT '法防',
   `nDodge` int(10) DEFAULT NULL COMMENT '回避值（闪避）',
-  `nCastValue` int(10) DEFAULT '0' COMMENT '吟唱力，影响技能施法速度加成',
+  `nCast` int(10) DEFAULT '0' COMMENT '吟唱速度，影响技能施法速度加成',
   `nCrit` int(10) DEFAULT '0' COMMENT '会心',
   `nHit` int(10) DEFAULT '0' COMMENT '命中',
   `nCon` int(10) DEFAULT '0' COMMENT '体 影响nHP+=10*nCon 影响物防nPhyDef+=3*nCon',
@@ -169,6 +169,7 @@ CREATE TABLE `tb_role` (
   `nAvoid` int(10) DEFAULT '0' COMMENT '避',
   `nSp` int(10) DEFAULT '0' COMMENT '法',
   `nCritDef` int(10) DEFAULT '0' COMMENT '会心防护',
+  `nPot` int(10) DEFAULT '0' COMMENT '潜能点（未分配）',
   `fPosX` double(10,2) DEFAULT NULL,
   `fPosY` double(10,2) DEFAULT NULL,
   `fPosZ` double(10,2) DEFAULT NULL,
@@ -181,7 +182,7 @@ CREATE TABLE `tb_role` (
   `nOccId` int(10) DEFAULT '1' COMMENT '职业ID',
   `strOccName` varchar(20) DEFAULT NULL COMMENT '职业名称',
   `nDeleted` tinyint(1) DEFAULT '0' COMMENT '是否删除',
-  `dtDeleteDate` datetime DEFAULT NULL COMMENT '角色删除时间',
+  `dtDeleteTime` datetime DEFAULT NULL COMMENT '角色删除时间',
   `dtUpdateTime` datetime DEFAULT NULL COMMENT '更新时间',
   `dtCreateTime` datetime DEFAULT NULL COMMENT '创建时间',
   PRIMARY KEY (`lId`)
@@ -190,7 +191,7 @@ CREATE TABLE `tb_role` (
 -- ----------------------------
 -- Records of tb_role
 -- ----------------------------
-INSERT INTO `tb_role` VALUES ('1', '1', '慕临风', '一剑霜寒十四州', '0', '50', null, '45897228', '5849', '1209', '100', '257', '324', '547', '588', '432', '878', '0', '112', '210', '100', '60', '200', '70', '30', '0', '100.00', '100.00', '100.00', '0.00', '0.00', '0.00', 'tzy', '11', '12', '1', '问剑阁', '0', null, null, '2019-01-05 12:16:58');
+INSERT INTO `tb_role` VALUES ('1', '1', '慕临风', '一剑霜寒十四州', '0', '50', null, '45897228', '5849', '1209', '100', '257', '324', '547', '588', '432', '878', '0', '112', '210', '100', '60', '200', '70', '30', '0', null, '100.00', '100.00', '100.00', '0.00', '0.00', '0.00', 'tzy', '11', '12', '1', '问剑阁', '0', null, null, '2019-01-05 12:16:58');
 
 -- ----------------------------
 -- Table structure for tb_role_equipment

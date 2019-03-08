@@ -74,7 +74,7 @@ func SyncRoleToDB()  {
 			sql+="nPhyDef=?,"
 			sql+="nMagDef=?,"
 			sql+="nDodge=?,"
-			sql+="nCastValue=?,"
+			sql+="nCast=?,"
 			sql+="nCrit=?,"
 			sql+="nHit=?,"
 			sql+="nCon=?,"
@@ -82,6 +82,8 @@ func SyncRoleToDB()  {
 			sql+="nStr=?,"
 			sql+="nAvoid=?,"
 			sql+="nSp=?,"
+			sql+="nCritDef=?,"
+			sql+="nPot=?,"
 			sql+="fPosX=?,"
 			sql+="fPosY=?,"
 			sql+="fPosZ=?,"
@@ -94,7 +96,7 @@ func SyncRoleToDB()  {
 			sql+="dtUpdateTime=NOW()"
 			sql+="WHERE lId=?"
 			tx.MustExec(sql,r.StrName,r.StrTitle,r.NLevel,r.NCurtExp,r.NExp,r.NHP-r.NTempHP,r.NMP-r.NTempMP,r.NMinAP-r.NTempMinAP,r.NMinAD-r.NTempMinAD,r.NMaxAP-r.NTempMaxAP,r.NMaxAD-r.NTempMaxAD,
-				r.NPhyDef-r.NTempPhyDef,r.NMagDef-r.NTempMagDef,r.NDodge-r.NTempDodge,r.NCastValue-r.NTempCastValue,r.NCrit-r.NTempCrit,r.NHit-r.NTempHit,r.NCon-r.NTempCon,r.NDex-r.NTempCon,r.NStr-r.NTempStr,r.NAvoid-r.NTempAvoid,r.NSp-r.NTempSp,r.FPosX,r.FPosY,r.FPosZ,r.FDirX,r.FDirY,r.FDirZ,r.StrMapName,r.NChunkX,r.NChunkY,r.LId)
+				r.NPhyDef-r.NTempPhyDef,r.NMagDef-r.NTempMagDef,r.NDodge-r.NTempDodge,r.NCast-r.NTempCast,r.NCrit-r.NTempCrit,r.NHit-r.NTempHit,r.NCon-r.NTempCon,r.NDex-r.NTempCon,r.NStr-r.NTempStr,r.NAvoid-r.NTempAvoid,r.NSp-r.NTempSp,r.NCritDef,r.NPot,r.FPosX,r.FPosY,r.FPosZ,r.FDirX,r.FDirY,r.FDirZ,r.StrMapName,r.NChunkX,r.NChunkY,r.LId)
 		}
 		//同步角色技能到数据库
 		if client.GetRole().BChangeSkill {

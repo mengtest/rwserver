@@ -43,8 +43,8 @@ type RoleInfo struct {
 	NDodge       int            `db:"nDodge" json:"nDodge"`
 	NTempDodge   int
 
-	NCastValue   int            `db:"nCastValue" json:"nCastValue"`
-	NTempCastValue int
+	NCast        int            `db:"nCast" json:"nCast"`
+	NTempCast    int
 
 	NCrit        int            `db:"nCrit" json:"nCrit"`
 	NTempCrit    int
@@ -69,6 +69,8 @@ type RoleInfo struct {
 
 	NCritDef     int            `db:"nCritDef" json:"nCritDef"`
 	NTempCritDef int
+
+	NPot          int           `db:"nPot" json:"nPot"`
 
 	FPosX        float64        `db:"fPosX" json:"fPosX"`
 	FPosY        float64        `db:"fPosY" json:"fPosY"`
