@@ -2,7 +2,6 @@ package util
 
 import (
 	"../../rbwork/network"
-	"../../rbstruct/config"
 	"sync"
 )
 
@@ -69,5 +68,6 @@ func (m *ClientMap) Delete(k string) {
 }
 
 //---------------------------------------普通map----------------------------------------------
-var LevelConfig = make(map[int]*config.LevelConfig)
+//经验升级配置
+var LevelConfig = make(map[int]int64)
 
