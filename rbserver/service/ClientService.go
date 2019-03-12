@@ -7,7 +7,7 @@ import (
 	"../../rbstruct/user"
 	"../../rbwork/constant"
 	"../../rbwork/base"
-	"../util"
+	Gloal "../util"
 	"time"
 	"../../rbwork/redis"
 	"strconv"
@@ -60,7 +60,7 @@ func SyncPlayerToAroundPlayers(currRoleId string,role user.RoleInfo,buff *user.R
      //Sync 表示同步消息命令 0代表立即执行
 	for _, roleId := range roleIds {
 		if roleId != "" && roleId !=currRoleId {
-			client := util.Clients.Get(roleId)
+			client := Gloal.Clients.Get(roleId)
 			client.Write(base.Struct2Json(R.TcpOK("Sync", "0").SetData(player).OutLog()))
 		}
 	}

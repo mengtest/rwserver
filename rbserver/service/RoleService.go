@@ -8,7 +8,7 @@ import (
 	"../../rbwork/constant"
 	"../../rbwork/network"
 	"../../rbwork/redis"
-	"../util"
+	Gloal "../util"
 	"strconv"
 )
 
@@ -18,11 +18,31 @@ func (s *Service) Upgrade(tcpClient *network.TcpClient, msg string) {
 	base.Json2Struct(msg, req)
 	role := tcpClient.GetRole()
 	newLevel:=role.NLevel+1
-	levelC:=util.LevelMap[newLevel]
+	levelC:=Gloal.LevelConfig[newLevel]
 
 	if newLevel<=60 && levelC !=nil && role.NCurtExp>=levelC.NExp {
-		role.NLevel=newLevel
-		role.NCurtExp=role.NCurtExp-levelC.NExp
+		role.NCurtExp=role.NCurtExp-Gloal.LevelConfig[role.NLevel].NExp
+		//10以下自动升级
+		role.NLevel=role.NLevel+1
+		//各属性自动加1
+		role.NSp=role.NSp+1        //法     1法=4法攻  + 4技力   +  2法防
+		role.NStr=role.NStr+1      //力     1力=4物攻  + 4命中
+		role.NDex=role.NDex+1      //敏     1敏=4施法  + 4会心   +  2闪避
+		role.NAvoid=role.NAvoid+1  //避     1避=4闪避  + 4会防
+		role.NCon=role.NCon+1      //体     1体=10生命 + 4物防
+		//计算防御、攻击等值
+		role.NHP=role.NHP + 10
+		role.NPhyDef=role.NPhyDef + 4
+		role.NMagDef=role.NMagDef + 2
+		role.NMP=role.NMP + 4
+		role.NCrit=role.NCrit + 4
+		role.NHit=role.NHit + 4
+		role.NMaxAD=role.NMaxAD+4
+		role.NMinAD=role.NMinAD+2
+		role.NMaxAP=role.NMaxAP+4
+		role.NMinAP=role.NMinAP+2
+		role.NCritDef=role.NCritDef+4
+		role.NDodge=role.NDodge+4
 		tcpClient.Write(base.Struct2Json(R.TcpOK(req.Cmd, req.RequestId)))
 	}else{
 		tcpClient.Write(base.Struct2Json(R.TcpError(req.Cmd, req.RequestId)))
@@ -65,7 +85,7 @@ func (s *Service) Attack(tcpClient *network.TcpClient, msg string) {
 		return
 	}
 	role:=tcpClient.GetRole()
-	targetClient:=util.Clients.Get(strconv.FormatInt(req.TargetId,10))
+	targetClient:=Gloal.Clients.Get(strconv.FormatInt(req.TargetId,10))
 	skill:=user.RoleSkill{}
 	for _,sk:= range role.Skills  {
 		if sk.LSkillId == req.SkillId {
@@ -185,8 +205,8 @@ func (s *Service) IncreaseExp(tcpClient *network.TcpClient, msg string) {
 	role:=tcpClient.GetRole()
 	role.NExp=role.NExp+req.NExp
 	tExp:=role.NCurtExp+req.NExp
-	if role.NLevel < 10 && util.LevelMap[role.NLevel].NExp < tExp {
-		role.NCurtExp=tExp-util.LevelMap[role.NLevel].NExp
+	if role.NLevel < 10 && Gloal.LevelConfig[role.NLevel].NExp < tExp {
+		role.NCurtExp=tExp-Gloal.LevelConfig[role.NLevel].NExp
 		//10以下自动升级
 		role.NLevel=role.NLevel+1
 		//各属性自动加1

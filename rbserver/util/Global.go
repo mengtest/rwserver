@@ -69,5 +69,5 @@ func (m *ClientMap) Delete(k string) {
 }
 
 //---------------------------------------普通map----------------------------------------------
-var LevelMap = make(map[int]*config.LevelConfig)
+var LevelConfig = make(map[int]*config.LevelConfig)
 

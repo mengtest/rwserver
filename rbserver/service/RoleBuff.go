@@ -2,7 +2,7 @@ package service
 
 import (
 	"../../rbstruct/user"
-	"../util"
+	Gloal "../util"
 	"time"
 )
 
@@ -25,16 +25,12 @@ func BuffCalculation(roleId string, second int, buff user.RoleBuff) {
 	}
 	select {
 	case <-t.C:
-		role := util.Clients.Get(roleId).GetRole()
+		role := Gloal.Clients.Get(roleId).GetRole()
 		v := buff.NValue * buff.NType
 		switch buff.StrProp {
 		case "nMaxHP":
 			role.NTempMaxHP -= v
 			role.NMaxHP -= v
-			break
-		case "nMaxMP":
-			role.NTempMaxMP -= v
-			role.NMaxMP -= v
 			break
 		case "nMinAP":
 			role.NTempMinAP -= v
@@ -65,8 +61,8 @@ func BuffCalculation(roleId string, second int, buff user.RoleBuff) {
 			role.NDodge -= v
 			break
 		case "nCastValue":
-			role.NTempCastValue -= v
-			role.NCastValue -= v
+			role.NTempCast -= v
+			role.NCast -= v
 			break
 		case "nCrit":
 			role.NTempCrit -= v
@@ -104,18 +100,18 @@ func BuffCalculation(roleId string, second int, buff user.RoleBuff) {
 		//清除角色的buff
 		DeleteRoleBuff(roleId, buff)
 		//改变后的状态同步给周围玩家
-		SyncPlayerToAroundPlayers(roleId, *util.Clients.Get(roleId).GetRole(), nil)
+		SyncPlayerToAroundPlayers(roleId, *Gloal.Clients.Get(roleId).GetRole(), nil)
 	}
 	defer t.Stop()
 }
 
 func DeleteRoleBuff(roleId string, buff user.RoleBuff) {
-	buffs := util.Clients.Get(roleId).GetRole().Buffs
+	buffs := Gloal.Clients.Get(roleId).GetRole().Buffs
 	for i, b := range buffs {
 		if b.LSkillId == buff.LSkillId {
 			buffs = append(buffs[:i], buffs[i+1:]...)
 			break
 		}
 	}
-	util.Clients.Get(roleId).GetRole().Buffs = buffs
+	Gloal.Clients.Get(roleId).GetRole().Buffs = buffs
 }

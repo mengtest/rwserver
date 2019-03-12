@@ -7,7 +7,7 @@ import (
 	"../../rbwork/constant"
 	"../../rbwork/network"
 	"../../rbwork/redis"
-	"../util"
+	Gloal "../util"
 	"strconv"
 )
 
@@ -25,7 +25,7 @@ func (s *Service) Chat(tcpClient *network.TcpClient,msg string)  {
 	case 0:
 		//世界
 		c:=net.NewChat(tcpClient.GetRoleId(),tcpClient.GetRole().StrName,0,"",req.StrMsg,req.NChannel)
-		for _,t:= range util.Clients.GetMap() {
+		for _,t:= range Gloal.Clients.GetMap() {
 			t.Write(base.Struct2Json(R.TcpOK(req.Cmd,req.RequestId).SetData(c)))
 		}
 		return
@@ -48,14 +48,14 @@ func (s *Service) Chat(tcpClient *network.TcpClient,msg string)  {
 	case 6:
 		//系统通知
 		c:=net.NewChat(tcpClient.GetRoleId(),tcpClient.GetRole().StrName,0,"",req.StrMsg,req.NChannel)
-		for _,t:= range util.Clients.GetMap() {
+		for _,t:= range Gloal.Clients.GetMap() {
 			t.Write(base.Struct2Json(R.TcpOK(req.Cmd,req.RequestId).SetData(c)))
 		}
 		return
 	case 10:
 		//私聊
 	    toRoleId:=strconv.FormatInt(req.LToRoleId,10)
-		client:=util.Clients.Get(toRoleId)
+		client:=Gloal.Clients.Get(toRoleId)
 		c:=net.NewChat(tcpClient.GetRole().LId,tcpClient.GetRole().StrName,client.GetRole().LId,client.GetRole().StrName,msg,req.NChannel)
 		client.Write(base.Struct2Json(R.TcpOK(req.Cmd,req.RequestId).SetData(c)))
 		return
@@ -77,7 +77,7 @@ func ChatToAroundPlayers(tcpClient *network.TcpClient,cmd string,requestId strin
 	//---- 发送信息
 	for _, roleId := range roleIds {
 		if roleId != "" {
-			client:=util.Clients.Get(roleId)
+			client:=Gloal.Clients.Get(roleId)
 			c:=net.NewChat(role.LId,role.StrName,client.GetRole().LId,client.GetRole().StrName,msg,channel)
 			client.Write(base.Struct2Json(R.TcpOK(cmd,requestId).SetData(c)))
 		}
