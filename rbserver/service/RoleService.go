@@ -44,7 +44,7 @@ func (s *Service) Upgrade(tcpClient *network.TcpClient, msg string) {
 		role.NDodge=role.NDodge+4
 		tcpClient.Write(base.Struct2Json(R.TcpOK(req.Cmd, req.RequestId)))
 	}else{
-		tcpClient.Write(base.Struct2Json(R.TcpErrorMsg(req.Cmd, req.RequestId,"阅历未达到提升要求")))
+		tcpClient.Write(base.Struct2Json(R.TcpErrorMsg(req.Cmd, req.RequestId,"阅历未达到提升等级要求")))
 	}
 }
 

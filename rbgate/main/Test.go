@@ -8,7 +8,7 @@ import (
 )
 
 func main()  {
-	mb,_:=RwUtil.Encode("{3456712}")
+	mb,_:=RwUtil.EncodeHead4Byte("{3456712}")
 	fmt.Println(mb)
 
 	// 7: 读取缓冲区中数据字节数(只有执行读才会使用到缓冲区, 否则是没有的)
