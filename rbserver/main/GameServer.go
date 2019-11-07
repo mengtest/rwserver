@@ -7,8 +7,8 @@ import (
 	"../../rbwork/redis"
 	"../dao"
 	"../handle"
-	Gloal "../util"
 	"../service"
+	Gloat "../util"
 	"net"
 	"os"
 	"time"
@@ -46,7 +46,7 @@ func main() {
 		//将连接加入全局map 此时该连接没有经过认证，待心跳检测超时无返回时则中断该连接，并从map清除
 		//登录认证的用户重新设置用户ID为主键
 
-		Gloal.Clients.Set(client.RemoteAddr(), client)
+		Gloat.Clients.Set(client.RemoteAddr(), client)
 		//使用协程处理并发请求
 		go handleConnection(client)
 
@@ -63,8 +63,8 @@ func handleConnection(tcpClient *network.TcpClient) {
 			base.LogError(err)
 			//监听到客户端退出，关闭连接
 			tcpClient.Close()
-			Gloal.Clients.Delete(tcpClient.RemoteAddr())
-			Gloal.Clients.Delete(tcpClient.GetStrRoleId())
+			Gloat.Clients.Delete(tcpClient.RemoteAddr())
+			Gloat.Clients.Delete(tcpClient.GetStrRoleId())
 			return
 		}
 		//输出收到的日志信息
@@ -89,13 +89,13 @@ func runHeartbeat() {
 	for {
 		<-tick.C
 		//base.LogInfo("开始发送心跳包")
-		for _, tcpClient := range Gloal.Clients.GetMap() {
+		for _, tcpClient := range Gloat.Clients.GetMap() {
 			timeb := time.Now().Unix() - tcpClient.GetTime() //计算秒
 			if timeb > 40 {
 				//40s内未收到心跳返回,剔除用户
 				tcpClient.Close()
-				Gloal.Clients.Delete(tcpClient.RemoteAddr())
-				Gloal.Clients.Delete(tcpClient.GetStrRoleId())
+				Gloat.Clients.Delete(tcpClient.RemoteAddr())
+				Gloat.Clients.Delete(tcpClient.GetStrRoleId())
 				base.LogInfo("IP->"+tcpClient.RemoteAddr(), "roleId->"+tcpClient.GetStrRoleId(), "超过40秒未收到心跳返回，已断开连接")
 			}
 			//tcpClient.Write("{\"cmd\":\"ping\",\"requestId\":\"ping\"}")
@@ -105,7 +105,7 @@ func runHeartbeat() {
 }
 
 //同步角色信息到DB
-func runSyncRoleInfoToDB(){
+func runSyncRoleInfoToDB() {
 	//每10秒执行一次
 	tick := time.NewTicker(time.Second * time.Duration(10))
 	for {
